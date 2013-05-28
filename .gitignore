@@ -1,0 +1,37 @@
+# C++ objects and libs
+
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
+
+# vs studio
+*.sdf
+*.suo
+*.vcxproj.user
+*.opensdf
+*.aps
+
+
+build/
+presets/
+
+
+# Qt-es
+
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+qrc_*.cpp
+Makefile
+*-build-*
+
+.DS_Store
+
+
+*.autosave

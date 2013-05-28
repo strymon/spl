@@ -1,0 +1,20 @@
+
+OSX Deployment Notes
+====
+
+Check if a Qt app package has been prepared for deployment by looking at the framework paths embedded in the binary.
+Here's a bit of script that will do this:
+
+> otool -L dcpl.app/Contents/MacOS/dcpl | grep -c executable_path
+
+If 0 is returned, then macdeploy must be run.
+
+
+Before an OSX application bundle can be deployed, the Qt frameworks and plugin dependancies should be copied to the bundle 
+and the binary needs a bit of fix-up.  Qt comes with a tool for this.  Here's how it's run on dcpl.app.
+
+
+> <path_to_qt>/Qt5.0.2/5.0.2/clang_64/bin/macdeployqt dcpl.app
+
+
+

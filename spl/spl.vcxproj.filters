@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{9d0a12d9-973c-45ba-a8a2-cda04ef89001}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{aedf2291-1f49-40ac-a0b9-de86b7dcf027}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="QRtMidi">
+      <UniqueIdentifier>{c2915441-9af9-46f5-bc1a-623b1551144a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\XP_Release">
+      <UniqueIdentifier>{3385a74e-56e0-4e47-b034-a6dd0bf91c35}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DcPresetLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\QRtMidi\QRtMidiData.cpp">
+      <Filter>QRtMidi</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\QRtMidi\QRtMidiIn.cpp">
+      <Filter>QRtMidi</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\QRtMidi\QRtMidiOut.cpp">
+      <Filter>QRtMidi</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\QRtMidi\RtMidi\RtMidi.cpp">
+      <Filter>QRtMidi</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\QRtMidi\QRtMidi.cpp">
+      <Filter>QRtMidi</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\QRtMidi\QRtMidiSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DcState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DcListWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\qrc_dcpl.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_RenameDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_RenameDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_RenameDialog.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_QRtMidiSettings.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_QRtMidiSettings.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_QRtMidiSettings.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_QRtMidiOut.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_QRtMidiOut.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_QRtMidiOut.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_QRtMidiIn.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_QRtMidiIn.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_QRtMidiIn.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_QRtMidi.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_QRtMidi.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_QRtMidi.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_MoveDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_MoveDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_MoveDialog.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_IoProgressDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_IoProgressDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_IoProgressDialog.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_DcXferMachine.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_DcXferMachine.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_DcXferMachine.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_DcState.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_DcState.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_DcState.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_DcPresetLib.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_DcPresetLib.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_DcPresetLib.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DcConsoleForm.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_DcConsoleForm.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_DcConsoleForm.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_DcConsoleForm.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DcStateMachineHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DcXferMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IoProgressDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenameDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DcConArgs.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DcFileDownloader.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\XP_Release\moc_DcFileDownloader.cpp">
+      <Filter>Generated Files\XP_Release</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Debug\moc_DcFileDownloader.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="build\GeneratedFiles\Release\moc_DcFileDownloader.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="DcPresetLib.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcPresetLib.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lib\QRtMidi\QRtMidiIn.h">
+      <Filter>QRtMidi</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lib\QRtMidi\QRtMidiOut.h">
+      <Filter>QRtMidi</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lib\QRtMidi\QRtMidi.h">
+      <Filter>QRtMidi</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lib\QRtMidi\QRtMidiSettings.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lib\QRtMidi\MidiPortSelect.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcState.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RenameDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MoveDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="RenameDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MoveDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="IoProgressDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="IoProgressDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcXferMachine.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="dcpl.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcplAbout.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcConsoleForm.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcConsoleForm.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DcFileDownloader.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\QRtMidi\QRtMidiData.h">
+      <Filter>QRtMidi</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\QRtMidi\RtMidi\RtError.h">
+      <Filter>QRtMidi</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\QRtMidi\RtMidi\RtMidi.h">
+      <Filter>QRtMidi</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_DcPresetLib.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_MidiPortSelect.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DcMidiDevDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DcStateMachineHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PresetLibSMDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_MoveDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_RenameDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_IoProgressDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DcListWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DcDeviceDetails.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_DcplAbout.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="build\GeneratedFiles\ui_DcConsoleForm.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DcConArgs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DcConItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\devunknown_100.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\mobius_100.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\timeline_100.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon1.ico" />
+    <Image Include="platform\win\dcpl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="win.rc" />
+  </ItemGroup>
+</Project>
