@@ -20,7 +20,7 @@ Version: 0.9.0.8 <br>
 Date: 5/28/2013 <br>
 
 OSX ( http://www.strymon.net/downloads/spl/strymon_lib_setup0.9.0.8.dmg ) <br>
-Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup0.9.0.8.exe ) <br>
+Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup0.9.0.8.zip ) <br>
 
 
 
