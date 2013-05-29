@@ -26,6 +26,6 @@ Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup0.9.0.8.exe ) <b
 
 ## License
 
-Copyright © 2013 Damage Controll Engineering, LLC
+Copyright © 2013 Damage Control Engineering, LLC
 
 Licensed under the Apache License, Version 2.0 
