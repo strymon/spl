@@ -152,7 +152,7 @@
       <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="text">
-      <string>Copyright 2013, Damage Controll Engineering, LLC</string>
+      <string>Copyright 2013, Damage Control Engineering, LLC</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
