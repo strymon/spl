@@ -447,6 +447,7 @@
     <ClCompile Include="IoProgressDialog.cpp" />
     <ClCompile Include="lib\QRtMidi\QRtMidi.cpp" />
     <ClCompile Include="lib\QRtMidi\QRtMidiData.cpp" />
+    <ClCompile Include="lib\QRtMidi\QRtMidiIdent.cpp" />
     <ClCompile Include="lib\QRtMidi\QRtMidiIn.cpp" />
     <ClCompile Include="lib\QRtMidi\QRtMidiOut.cpp" />
     <ClCompile Include="lib\QRtMidi\RtMidi\RtMidi.cpp" />
@@ -568,6 +569,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\build\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\build\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D__WINDOWS_MM__ -DUNICODE -DWIN32 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -DQT_NETWORK_LIB  "-I.\lib" "-I." "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-I.\build\GeneratedFiles\$(ConfigurationName)\." "-I.\build\GeneratedFiles" "-I$(QTDIR)\include\QtNetwork"</Command>
     </CustomBuild>
+    <ClInclude Include="lib\QRtMidi\QRtMidiIdent.h" />
     <ClInclude Include="resource.h" />
     <CustomBuild Include="RenameDialog.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing RenameDialog.h...</Message>
@@ -1050,7 +1052,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\build\GeneratedFiles" MocDir=".\build\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\build\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="5.0.2_VS2010" Qt5Version_x0020_x64="Qt5.0" />
+      <UserProperties UicDir=".\build\GeneratedFiles" MocDir=".\build\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\build\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="5.0.2_32" Qt5Version_x0020_x64="Qt5.0" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -15,8 +15,9 @@
 
 *-------------------------------------------------------------------------*/
 #pragma once
+#include "QRtMidi\QRtMidiIdent.h"
 
-struct DcDeviceDetails
+struct DcDeviceDetails : public QRtMidiDevIdent
 {
     DcDeviceDetails() 
     {
@@ -25,41 +26,41 @@ struct DcDeviceDetails
     
     void clear()
     {
-        Manufacture.clear();
+        QRtMidiDevIdent::clear();
         PresetHdr.clear();
         DataInNACK.clear();
-        ReadPresetTemplate.clear();
         DevSOX.clear();
-        Name = "Unknown";
-        PresetsPerBank = 2;
+        PresetDataByteOffset = 0;
+        PresetSize = 0;
+        PresetCount = 0;
+        BankCount = 0;
+        PresetsPerBank = 0;
     }
+
     bool isEmpty()
     {
-        return DevSOX.length() == 0;
+        return QRtMidiDevIdent::isEmpty();
     }
 
     QString getUid()
     {
-        return Name + FwVersion;
+        // TODO: this is not very "uuid"
+        return Name + QRtMidiDevIdent::FwVersion;
     }
 
     quint8 PresetDataByteOffset;
     quint16 PresetSize;
     quint16 PresetCount;
     quint16 BankCount;
-    QRtMidiData Manufacture;
+    int     PresetsPerBank;
+    
+    QRtMidiData DevSOX;
     QRtMidiData PresetHdr;
     QRtMidiData DataInNACK;
-    QRtMidiData DevSOX;
-    QString Name;
-    QString FwVersion;
-    
+    QString     Name;
     QByteArray ReadPresetTemplate;
-    unsigned char SyxCh;
-    QRtMidiData Family;
-    QRtMidiData Product;
-    QRtMidiData ShortHdr;
-    int PresetsPerBank;
+
+
 };
 
 

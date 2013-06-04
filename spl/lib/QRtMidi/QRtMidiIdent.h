@@ -1,5 +1,25 @@
-#ifndef QRTMIDIDEFS_H
-#define QRTMIDIDEFS_H
+/*-------------------------------------------------------------------------
+	    Copyright 2013 Damage Control Engineering, LLC
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*-------------------------------------------------------------------------*/
+#ifndef QRtMidiIdent_h__
+#define QRtMidiIdent_h__
+
+#include <QHash>
+#include <QString>
+#include "QRtMidi/QRtMidiData.h"
 
 static const char* kIdentReply = "F0 7E XX 06 02";
 
@@ -171,7 +191,7 @@ static QRtMidiId_t kMidiIdArray[] =\
     {0x0152,"Mobileer"},
     {0x0153,"Synthogy"},
     {0x0154,"Lynx Studio Technology Inc."},
-    {0x0155,"Damage Control Engineering LLC"},
+    {0x0155,"Strymon"},
     {0x0156,"Yost Engineering, Inc."},
     {0x0157,"Brooks & Forsman Designs LLC / DrumLite"},
     {0x0158,"Infinite Response"},
@@ -210,6 +230,7 @@ static QRtMidiId_t kMidiIdArray[] =\
     {0x0179,"DJTechTools.com"},
     {0x017A,"Rezonance Labs"},
     {0x017B,"Decibel Eleven"},
+    {0x2008,"M-Audio"},
     {0x2029,"Focusrite/Novation"},
     {0x202A,"Samkyung Mechatronics"},
     {0x202B,"Medeli Electronics Co."},
@@ -334,7 +355,25 @@ public:
 
 };
 
-static QRtMidiIdsHash DcMidiIds;
+static QRtMidiIdsHash MidiNameToIds;
 
 
-#endif // QRTMIDIDEFS_H
+struct QRtMidiDevIdent
+{
+    QRtMidiDevIdent();
+    QRtMidiDevIdent(const QRtMidiData &data);
+
+    void clear();
+    bool isEmpty();
+    QString getManufactureName();
+
+    QRtMidiData Manufacture;
+    QString FwVersion;
+    unsigned char SyxCh;
+    QRtMidiData Family;
+    QRtMidiData Product;
+    QRtMidiData ShortHdr;
+};
+
+
+#endif // QRtMidiIdent_h__
