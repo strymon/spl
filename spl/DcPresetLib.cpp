@@ -59,7 +59,7 @@
 
 #include "ui_DcplAbout.h"
 #include <QApplication>
-#include "QRtMidi/QRtMidiDefs.h"
+#include "QRtMidi/QRtMidiIdent.h"
 
 #include "DcConsoleForm.h"
 
@@ -87,6 +87,8 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     _lastErrorMsg.setString(&_lastErrorMsgStr);
     
     _midiSettings = new QRtMidiSettings(this);
+    _midiSettings->addSupportedIdentity(kTimeLineIdent);
+    _midiSettings->addSupportedIdentity(kMobiusIdent);
 
     _workListControls << ui.renameButton << ui.moveButton << ui.loadOneButton << ui.saveOneButton;
     _workListActions  << ui.actionSave_One << ui.actionLoad_One << ui.actionRename << ui.actionMove;
@@ -370,8 +372,6 @@ void DcPresetLib::recvIdData( const QRtMidiData &data )
       13/15  0xv4
       14/16  0xF7
 */
-    QString version;
-
     // If the Manufacturer's Id is the optional 3 bytes, then adjust the 
     // byte position of the identity data by the extra two bytes.
      int adj = (data.at(5) == 0) ? 2 : 0;
