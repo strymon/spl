@@ -67,7 +67,6 @@ QRtMidiSettings::QRtMidiSettings( QWidget *parent /*= 0*/ )
 
      ui.resultLabel->setText("no result");
      ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 170, 0);}");
-     //pLabel->setStyleSheet("QLabel { background-color : red; color : blue; }");
 
       this->setWindowIcon(QIcon(":/images/res/dcpm_256x256x32.png"));
 
@@ -82,6 +81,8 @@ void QRtMidiSettings::on_testButton_clicked()
     // Shutdown MIDI 
     _midiIn.destroy();
     _midiOut.destroy();
+
+    _unkownDevList.clear();
 
     // Now restart MIDI
 
@@ -152,28 +153,31 @@ void QRtMidiSettings::recvDataForTest(const QRtMidiData &data)
 
     QRtMidiDevIdent ident(data);
 
+
     //QString d = data.toString();
 
     // Make sure the incoming data is an Identity response, if not, no need
     // to bother - the watchdog timer is still running so there's not hang.
     if(!ident.isEmpty())
     {
-        _timer.stop();
         if(hasDevSupport(data))
         {
+            _timer.stop();
             _testResult = QRtTestResults::Success;
-            qDebug() << "success";
+            _timer.start(0);
         }
         else
         {
             _testResult = QRtTestResults::UnknownDevice;
+            _unkownDevList.append(ident);
+
           
             qDebug() << "unknown: " << data.data();
         }
 
         // The timer event hander looks at the _testResult member and takes appropriate action
         // Restart the timer so this will happen.
-        _timer.start(0);
+
     }
 
 }
@@ -229,6 +233,12 @@ void QRtMidiSettings::updateTestResult()
     }
     else if(_testResult == QRtTestResults::UnknownDevice)
     {
+        foreach(QRtMidiDevIdent id, _unkownDevList)
+        {
+            qDebug() << id.getManufactureName();
+            qDebug() << id.Product.toString(' ');
+        }
+
         ui.resultLabel->setText("unknown");
         ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
 

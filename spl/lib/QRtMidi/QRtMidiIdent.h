@@ -375,5 +375,6 @@ struct QRtMidiDevIdent
     QRtMidiData ShortHdr;
 };
 
+typedef QList<QRtMidiDevIdent> QRtMidiIdentList_t;
 
 #endif // QRtMidiIdent_h__

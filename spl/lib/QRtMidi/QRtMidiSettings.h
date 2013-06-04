@@ -80,6 +80,7 @@ private:
     QRtMidiOut _midiOut;
     QSet<const char*> _supportSet;
 
+    QRtMidiIdentList_t _unkownDevList;
 
     QRtTestResults::Result _testResult;
     QTimer _timer;
