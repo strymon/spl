@@ -112,7 +112,13 @@ public:
     // Set the 2 byte 14 bit MIDI value at the given byte offset, 
     // if the offset is out of range, false is returned.
     bool set14bit(int offset, int val);
-    
+
+    // Convert the specified range to an integer.  Each MIDI byte
+    // is accumulated as an 8bit value.
+    int toInt(int offset, int cnt, int defaultValue = 0 ) const;
+
+
+
 /*
 
     QRtMidiData &prepend(char c)
@@ -200,22 +206,35 @@ public:
 // 
 // 
 // 
-     QRtMidiData operator+(const QByteArray &ba)
-      { 
-          _data += ba;
-          return *this;
-      }
-     QRtMidiData operator+(const QRtMidiData &md)
-     { 
-         _data += md._data;
-         return *this;
-     }
-     
-     QRtMidiData operator+(const char* s)
-     { 
-         append(s);
-         return *this;
-     }
+//      QRtMidiData operator+(const QByteArray &ba)
+//       { 
+//           _data += ba;
+//           return *this;
+//       }
+
+//      QRtMidiData &operator+=(const QRtMidiData &a)
+//      {
+//          this->append(a);
+//          return *this;
+//      }
+// 
+//      QRtMidiData &operator+=(const QByteArray &ba)
+//      {
+//          this->_data.append(ba);
+//          return *this;
+//      }
+
+//      QRtMidiData operator+(const QRtMidiData &md)
+//      { 
+//          _data += md._data;
+//          return *this;
+//      }
+//      
+//      QRtMidiData operator+(const char* s)
+//      { 
+//          append(s);
+//          return *this;
+//      }
 
      //      inline const QRtMidiData operator+(const QRtMidiData &a1, const char *a2)
 //      { return QRtMidiData(a1) += a2; }
@@ -253,6 +272,20 @@ private:
     QByteArray _data;
 };
 
+inline const QRtMidiData  operator+(const QRtMidiData  &md1, const QRtMidiData  &md2)
+{ 
+    return QRtMidiData(md1.toByteArray() + md2.toByteArray()); 
+}
+
+inline const QRtMidiData  operator+(const QRtMidiData  &a1, const char* c)
+{ 
+    return QRtMidiData(a1.toByteArray() + c); 
+}
+
+inline const QRtMidiData  operator+(const QRtMidiData  &a1, const QByteArray  &a2)
+{ 
+    return QRtMidiData(QRtMidiData(a1.toByteArray() + a2)); 
+}
 //-------------------------------------------------------------------------
 unsigned char QRtMidiData::fromEnd( int n)
 {

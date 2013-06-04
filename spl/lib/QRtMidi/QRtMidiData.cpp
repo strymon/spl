@@ -501,6 +501,30 @@ void QRtMidiData::vSetData( const char* fmt, va_list args )
     }
 }
 
+//-------------------------------------------------------------------------
+int QRtMidiData::toInt( int offset, int cnt, int defaultValue /*= 0 */ ) const
+{
+   int val = defaultValue;
+
+   if(cnt > 0 && cnt <= 4)
+   {
+       if( offset+cnt <= _data.length())
+       {
+           int newVal = 0;
+           int sft = 0;
+           for (int i = cnt - 1; i >= 0 ; i--)
+           {
+               newVal += _data.at(offset+i) << (8*sft++);
+           }
+           val = newVal;
+       }
+   }
+
+    return val;
+
+}
+
+
 
 
 //-------------------------------------------------------------------------
