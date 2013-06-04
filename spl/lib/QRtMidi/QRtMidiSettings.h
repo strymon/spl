@@ -18,9 +18,12 @@
 
 #include <QDialog>
 #include <QTimer>
+#include <QSet>
 
 #include "QRtMidi/QRtMidiIn.h"
 #include "QRtMidi/QRtMidiOut.h"
+
+#include "QRtMidi/QRtMidiIdent.h"
 
 #include "ui_MidiPortSelect.h"
 
@@ -45,6 +48,7 @@ public:
 
     QString getInPortName();
     QString getOutPortName();
+    void addSupportedIdentity( const char* id );
 
 signals:
     void midiReject();
@@ -63,16 +67,19 @@ public slots:
     void recvDataForTest(const QRtMidiData &data);
 
     bool hasDevSupport( const QRtMidiData &data );
-
+    
 
 protected:
     void checkPortSelections();
     void showEvent(QShowEvent *e);
     
+
 private:
 
     QRtMidiIn  _midiIn;
     QRtMidiOut _midiOut;
+    QSet<const char*> _supportSet;
+
 
     QRtTestResults::Result _testResult;
     QTimer _timer;

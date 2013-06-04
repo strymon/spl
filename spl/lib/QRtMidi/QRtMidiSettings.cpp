@@ -20,7 +20,10 @@
 #include <QSettings>
 #include <QThread>
 
-#include "QRtMidi/QRtMidiDefs.h"
+#include <QSetIterator>
+
+#include "QRtMidi/QRtMidiIdent.h"
+#include "DcDeviceDetails.h"
 
 
 QRtMidiSettings::QRtMidiSettings( QWidget *parent /*= 0*/ )
@@ -147,24 +150,29 @@ void QRtMidiSettings::recvDataForTest(const QRtMidiData &data)
         return;    
     }
 
+    QRtMidiDevIdent ident(data);
+
     //QString d = data.toString();
 
     // Make sure the incoming data is an Identity response, if not, no need
     // to bother - the watchdog timer is still running so there's not hang.
-    if(data.contains(kIdentReply))
+    if(!ident.isEmpty())
     {
         _timer.stop();
         if(hasDevSupport(data))
         {
-        
             _testResult = QRtTestResults::Success;
             qDebug() << "success";
         }
         else
         {
             _testResult = QRtTestResults::UnknownDevice;
+          
             qDebug() << "unknown: " << data.data();
         }
+
+        // The timer event hander looks at the _testResult member and takes appropriate action
+        // Restart the timer so this will happen.
         _timer.start(0);
     }
 
@@ -196,24 +204,12 @@ void QRtMidiSettings::checkPortSelections()
 //-------------------------------------------------------------------------
 void QRtMidiSettings::on_midiInCombo_currentIndexChanged()
 {
-//     if(_midiIn.open(ui.midiInCombo->currentText()))
-//     {
-//         // TODO: change the combo box text to green or something
-//         ui.resultLabel->setText("In Port Open");
-//     }
-    
     checkPortSelections();
 }
 
 //-------------------------------------------------------------------------
 void QRtMidiSettings::on_midiOutCombo_currentIndexChanged()
 {
-//     if(_midiOut.open(ui.midiOutCombo->currentText()))
-//     {
-//         // TODO: change the combo box text to green or something - 
-//         ui.resultLabel->setText("Out Port Open");
-//     }
-//     
     checkPortSelections();
 }
 
@@ -257,7 +253,6 @@ QString QRtMidiSettings::getOutPortName()
 {
     QSettings settings;
     return settings.value("midi/outport-name").toString();
-
 }
 
 //-------------------------------------------------------------------------
@@ -284,12 +279,29 @@ bool QRtMidiSettings::hasDevSupport( const QRtMidiData &data )
     // TODO: supported devices shall be defined outside of this module and added to the test class
     // externally then kept in a list.
     // For now - we hard code the constance.
-    
-    const char* TimeLineIdent = "F0 7E XX 06 02 00 01 55 12 00 01";  // Partial TimeLine Identity Response
-    const char* MobiusIdent   = "F0 7E XX 06 02 00 01 55 12 00 02";    // Partial Mobius Identity Response 
+//     
+//     const char* TimeLineIdent = "F0 7E XX 06 02 00 01 55 12 00 01";  // Partial TimeLine Identity Response
+//     const char* MobiusIdent   = "F0 7E XX 06 02 00 01 55 12 00 02";    // Partial Mobius Identity Response 
 
-    return data.contains(TimeLineIdent) || data.contains(MobiusIdent);
+    QSetIterator<const char*> i(_supportSet);
+    while (i.hasNext())
+    {
+        if(data.contains(i.next()))
+        {
+            return true;
+        }
+    }
+    return false;
+// 
+//     return data.contains(TimeLineIdent) || data.contains(MobiusIdent);
 }
+
+//-------------------------------------------------------------------------
+void QRtMidiSettings::addSupportedIdentity( const char* id )
+{
+   _supportSet.insert(id);
+}
+
 
 
 
