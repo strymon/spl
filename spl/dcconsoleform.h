@@ -46,6 +46,9 @@ class DcConsoleForm : public QWidget
 {
     Q_OBJECT
 
+private:
+    Ui::DcConsoleForm *ui;
+
     struct ConStream 
     {
         ConStream() : ts(&buffer, QIODevice::WriteOnly), space(false) {}
@@ -208,7 +211,7 @@ protected:
 
 
 private:
-    Ui::DcConsoleForm *ui;
+
     
     // Commands
     QMultiHash<QString,DcConItem> _cmdHash; // user commands

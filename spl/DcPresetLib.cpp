@@ -124,6 +124,8 @@ DcPresetLib::~DcPresetLib()
 //-------------------------------------------------------------------------
 void DcPresetLib::dclog( const QString str )
 {
+    Q_UNUSED(str);
+
     //*_con << str << "\n";
     //qDebug() << str << "\n";
 }
@@ -188,6 +190,7 @@ void DcPresetLib::testRtMidiData()
     QRtMidiData mdt2("F0 F6 7F F7");
 
     bool t = mdt1 == mdt2;
+
     t = mdt2 == "F0F67FF7";
     t = mdt2 == "F0F67F";
     t = mdt1 == "F0 F6 7F F7";
