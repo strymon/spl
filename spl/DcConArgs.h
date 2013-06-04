@@ -154,7 +154,7 @@ public:
       grab the command name, doc string, and usage from the command.
     */ 
     bool isQuery() {return _query;}
-    bool setQuery() {_query = true;}
+    void setQuery() {_query = true;}
     
     /*!
         Put object in a clean uninitialized state.
