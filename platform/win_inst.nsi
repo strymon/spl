@@ -5,7 +5,8 @@
 # NOTE: There are other dependencies other than a proper NSIS installation
 # 1) Script assumes that spl.exe is located ..\build\bin\Win32\XP_Release
 
-OutFile ..\build\strymon_lib_setup_0.9.0.8.exe
+# INPUT ARG: Invoke this script by passing the var VER_STR in the format Maj.Min.Inc.Bld
+OutFile "..\build\strymon_lib_setup_$%VER_STR%.exe"
 
 installDir $PROGRAMFILES\Strymon
 
