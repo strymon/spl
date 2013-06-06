@@ -365,7 +365,7 @@ bool QRtMidiData::set14bit(int offset, int val)
         rtval = true;
     }
 
-    return val;
+    return rtval;
 }
 
 //-------------------------------------------------------------------------
@@ -530,14 +530,14 @@ int QRtMidiData::toInt( int offset, int cnt, int defaultValue /*= 0 */ ) const
 //-------------------------------------------------------------------------
 void testRtMidiData()
 {
-    static const char* tdata = "0xF01233";
-    QRtMidiData mdt1("F0F67FF7");
-    QRtMidiData mdt2("F0 F6 7F F7");
+//    static const char* tdata = "0xF01233";
+//    QRtMidiData mdt1("F0F67FF7");
+//    QRtMidiData mdt2("F0 F6 7F F7");
 
-    bool t = mdt1 == mdt2;
-    t = mdt2 == "F0F67FF7";
-    t = mdt2 == "F0F67F";
-    t = mdt1 == "F0 F6 7F F7";
-    t = mdt1 == "0xF0 0xF6 0x7F 0xF7";
-    QRtMidiData mdt3(tdata);
+//    bool t = mdt1 == mdt2;
+//    t = mdt2 == "F0F67FF7";
+//    t = mdt2 == "F0F67F";
+//    t = mdt1 == "F0 F6 7F F7";
+//    t = mdt1 == "0xF0 0xF6 0x7F 0xF7";
+//    QRtMidiData mdt3(tdata);
 }

@@ -47,8 +47,10 @@ QString DcConArgs::strScan()
     for (i; i < len ; i++)
     {
         if("\"" == _args.at(i).toString())
+        {
             start = i++;
             break;
+        }
     }
 
     for (i; i < len ; i++)

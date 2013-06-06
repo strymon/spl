@@ -8,7 +8,7 @@ HEADERS += \
     $$PWD/QRtMidiOut.h \
     $$PWD/QRtMidiData.h \
     $$PWD/QRtMidiSettings.h \
-    lib/QRtMidi/QRtMidiDefs.h
+    $$PWD/QRtMidiIdent.h
 
 SOURCES += \
     $$PWD/RtMidi/RtMidi.cpp \
@@ -17,17 +17,18 @@ SOURCES += \
     $$PWD/QRtMidiOut.cpp \
     $$PWD/QRtMidiData.cpp \
     $$PWD/QRtMidiSettings.cpp \
+    $$PWD/QRtMidiIdent.cpp
 
 FORMS += $$PWD/MidiPortSelect.ui
 
 win32 {
+    DEFINES +=__WINDOWS_MM__
 
-#        DEFINES += __WINDOWS_KS__
-#        LIBS += setupapi.lib ksuser.lib
-
-        DEFINES +=__WINDOWS_MM__
+    mingw {
+        LIBS +=  -lwinmm
+    } else {
         LIBS +=  WinMM.Lib
-        message(Including WinMM lib for QRtMidi)
+    }
 }
 
 macx {

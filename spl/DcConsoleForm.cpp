@@ -432,6 +432,8 @@ bool DcConsoleForm::addCmd(QString name, const QObject *receiver, const char *me
 bool DcConsoleForm::addCmd( QString name, const QObject *receiver, 
                            const char *member, QString useage,QString helpString )
 {
+    Q_UNUSED(useage);
+    // TODO: add the useage data
     return addCmd(name, receiver,member,helpString);
 }
 
@@ -562,12 +564,15 @@ bool DcConsoleForm::execCmd( DcConArgs &args )
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_clear( DcConArgs args )
 {
+    Q_UNUSED(args);
     clear();
 }
 
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_help( DcConArgs args )
 {
+    Q_UNUSED(args);
+
     QString s;
     QTextStream txtStrm(&s);
     if(false == _con_html)
@@ -837,7 +842,7 @@ void DcConsoleForm::cmd_defLoad( DcConArgs  args )
 // specified file.
 void DcConsoleForm::cmd_lsDef( DcConArgs  args )
 {
-
+    Q_UNUSED(args);
     QString s;
     QTextStream txtStrm(&s);
 
@@ -867,7 +872,7 @@ void DcConsoleForm::cmd_lsDef( DcConArgs  args )
     {
         x.next();
         txtStrm.setPadChar('.');
-        txtStrm << x.key().trimmed() + "(ro)";
+        txtStrm << x.key().trimmed();
         txtStrm.setPadChar(' ');
         txtStrm << " | " + x.value();
         *this << s << "\n";
@@ -960,7 +965,7 @@ void DcConsoleForm::cmd_append( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_history( DcConArgs args )
 {
-
+    Q_UNUSED(args);
     for (int i = 0; i < _history.size(); ++i) 
     {
         *this << _history.at(i) << "\n";
@@ -1013,8 +1018,15 @@ void DcConsoleForm::requestRefresh()
 
     // -------------------------------------------
     // FILTER OUTPUT
+
     // Messages can be filtered from the display.
-    
+    if(stream->buffer.contains("F8\n"))
+    {
+        stream->buffer.clear();
+        return;
+    }
+
+
     // Example, filter Active Sense MIDI messages
     if(stream->buffer.contains("FE\n"))
     {
@@ -1049,10 +1061,6 @@ void DcConsoleForm::requestRefresh()
             buf.replace("OUT: ","<font color = \"#C9223E\">");
             buf.append("</font>");
         }
-
-        // Example, format a specific MIDI status byte 
-         // buf.replace(QRegExp("F0"),"<b>F0</b>");
-         // buf.replace(QRegExp("F7"),"<b>F7</b>");
     }
 
     _textOutputLines.append(stream->buffer);
@@ -1068,6 +1076,7 @@ void DcConsoleForm::requestRefresh()
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_exit(DcConArgs args)
 {
+    Q_UNUSED(args);
     QApplication::quit();
 }
 
@@ -1081,7 +1090,7 @@ void DcConsoleForm::clear()
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_ver( DcConArgs args )
 {
-
+    Q_UNUSED(args);
     *this << QApplication::applicationVersion() << "\n";
 }
 
@@ -1094,6 +1103,7 @@ void DcConsoleForm::cmd_echo(DcConArgs args )
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_aboutQt( DcConArgs args )
 {
+    Q_UNUSED(args);
     QApplication::aboutQt();
 }
 
@@ -1121,6 +1131,7 @@ void DcConsoleForm::cmd_doc( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_ts( DcConArgs args )
 {
+    Q_UNUSED(args);
     quint64 now = QDateTime::currentMSecsSinceEpoch();
     quint64 delta = now - _lastTs;
     _lastTs = now;

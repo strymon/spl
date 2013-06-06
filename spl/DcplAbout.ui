@@ -160,9 +160,6 @@
      <property name="openExternalLinks">
       <bool>true</bool>
      </property>
-     <property name="buddy">
-      <cstring></cstring>
-     </property>
     </widget>
    </item>
   </layout>
