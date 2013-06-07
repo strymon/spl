@@ -234,21 +234,21 @@ bool DcConsoleForm::eventFilter(QObject* obj, QEvent *e)
                 return true;
 
             }
-            else if (keyEvent->key() == Qt::Key_QuoteLeft)
-            {
-                if(!isVisible())
-                {
-                    setVisible(true);
-                    //showDbgOutput();
-                    ui->lineEdit->setFocus();
-                }
-                else
-                {
-                    setVisible(false);
-                }
-                e->accept();
-                return true;
-            }
+//             else if (keyEvent->key() == Qt::Key_QuoteLeft)
+//             {
+//                 if(!isVisible())
+//                 {
+//                     setVisible(true);
+//                     //showDbgOutput();
+//                     ui->lineEdit->setFocus();
+//                 }
+//                 else
+//                 {
+//                     setVisible(false);
+//                 }
+//                 e->accept();
+//                 return true;
+//             }
         }
         else if (e->type() == QEvent::KeyRelease)
         {
@@ -261,15 +261,25 @@ bool DcConsoleForm::eventFilter(QObject* obj, QEvent *e)
     }
     else if(obj == ui->textEdit)
     {
-        if (e->type() == QEvent::KeyPress)
+   
+        
+        if (e->type() == QEvent::KeyRelease) //e->type() == QEvent::KeyPress)
         {
-            // If keypress while in textEdit, then set focus to lineEdit and copy char over
-            ui->lineEdit->setFocus();
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-            ui->lineEdit->setText(ui->lineEdit->text() + keyEvent->text());
+                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+                if(keyEvent->key() == Qt::Key_Down)
+                {
+                    ui->lineEdit->setFocus();
+                    e->accept();
+                    return true;
+                    
+                }        
+            
+//             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+//             ui->lineEdit->setText(ui->lineEdit->text() + keyEvent->text());
 
         }
-    }
+ 
+     }
 
     return false;
 }
