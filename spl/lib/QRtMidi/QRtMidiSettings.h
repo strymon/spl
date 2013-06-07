@@ -49,6 +49,7 @@ public:
     QString getInPortName();
     QString getOutPortName();
     void addSupportedIdentity( const char* id );
+    void addSupportedIdentities( QSet<const char*> &devSet);
 
 signals:
     void midiReject();

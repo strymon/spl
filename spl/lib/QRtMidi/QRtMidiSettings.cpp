@@ -233,14 +233,16 @@ void QRtMidiSettings::updateTestResult()
     }
     else if(_testResult == QRtTestResults::UnknownDevice)
     {
+        QString lastUnkownInList = "unknown";
         foreach(QRtMidiDevIdent id, _unkownDevList)
         {
             qDebug() << id.getManufactureName();
             qDebug() << id.Product.toString(' ');
+            lastUnkownInList = "Unsupported: " + id.getManufactureName() + " Product: " + id.Product.toString();
         }
-
-        ui.resultLabel->setText("unknown");
-        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
+        
+        ui.resultLabel->setText(lastUnkownInList);
+        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 255, 102);}");
 
     }
     else if(_testResult == QRtTestResults::NotFoundTimeout)
@@ -285,14 +287,6 @@ void QRtMidiSettings::cleanup()
 //-------------------------------------------------------------------------
 bool QRtMidiSettings::hasDevSupport( const QRtMidiData &data )
 {
- 
-    // TODO: supported devices shall be defined outside of this module and added to the test class
-    // externally then kept in a list.
-    // For now - we hard code the constance.
-//     
-//     const char* TimeLineIdent = "F0 7E XX 06 02 00 01 55 12 00 01";  // Partial TimeLine Identity Response
-//     const char* MobiusIdent   = "F0 7E XX 06 02 00 01 55 12 00 02";    // Partial Mobius Identity Response 
-
     QSetIterator<const char*> i(_supportSet);
     while (i.hasNext())
     {
@@ -302,8 +296,6 @@ bool QRtMidiSettings::hasDevSupport( const QRtMidiData &data )
         }
     }
     return false;
-// 
-//     return data.contains(TimeLineIdent) || data.contains(MobiusIdent);
 }
 
 //-------------------------------------------------------------------------
@@ -311,6 +303,13 @@ void QRtMidiSettings::addSupportedIdentity( const char* id )
 {
    _supportSet.insert(id);
 }
+
+//-------------------------------------------------------------------------
+void QRtMidiSettings::addSupportedIdentities ( QSet<const char*> &devSet )
+{
+    _supportSet = devSet;
+}
+
 
 
 
