@@ -19,7 +19,7 @@
 #include <QHash>
 #include <QByteArray>
 
-/* Identity Request
+/* Identity Request Response
     0xF0  SysEx
     0x7E  Non-real time
     0x7F  The SysEx channel. Could be from 0x00 to 0x7F.  7F indicates "disregard channel".
@@ -37,16 +37,14 @@
     0xF7  End of SysEx
 */
 
-
-
-
 // Strymon Pedal Specific
 static const char* kStrymonDevice = "F0 00 01 55";
 static const char* kTimeLineIdent = "F0 7E XX 06 02 00 01 55 12 00 01";  // Partial TimeLine Identity Response
 static const char* kMobiusIdent   = "F0 7E XX 06 02 00 01 55 12 00 02";    // Partial Mobius Identity Response 
 static const char* kGlassNexus    = "F0 7E XX 06 02 00 01 55 01 00 02";    // Partial Glass Nexus Identity Response
 // Strymon TimeLine Commands:
-static const char* kStatusMsg = "F0 00 01 55 12 01 22 F7";
+//static const char* kStatusMsg = "F0 00 01 55 12 01 22 F7";
+
 
 // Some important Sysex Offset
 #define MIDI_SYSEX_PATCH_OFFSET		7
@@ -91,11 +89,11 @@ static const char* kStatusMsg = "F0 00 01 55 12 01 22 F7";
 // Strymon Example MIDI Data
     
 // TimeLine - Identity Response:
+/*
 static const char* kTimeLineIdentResponceExample = "\
     F0 7E 00 06 02 00 01 55 12 00 01 00 3B 31 32 34 F7";
 
-//    Mobius Preset Data:
-static const char* kMobiusPresetExample = "\
+//    Example Mobius Preset Data:
     F0 00 01 55 12 02 62 00 00 07 20 3F 7B 01 7F 2C \
     40 4E 56 29 0B 0C 0D 0E 0F 10 01 11 0A 02 00 00 \
     01 02 00 01 02 01 01 01 01 01 00 07 49 01 00 7F \
@@ -137,7 +135,7 @@ static const char* kMobiusPresetExample = "\
     7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F 7F \
     7F 7F 7F 7F 7F 7F 7F 02 43 41 4C 4C 20 54 48 45 \
     20 43 4F 50 53 20 20 20 55 F7";
-
+*/
 
 static const int kPresetNameOffset = 632;
 static const int kPresetNameLen    = 16;
