@@ -73,22 +73,22 @@ static QRtMidiId_t kMidiIdArray[] =\
     {0x43,"Yamaha"},
     {0x44,"Casio"},
     {0x45,"Akai"},
-    {0x40,"Kawai Musical Instruments MFG. CO. Ltd"},
-    {0x41,"Roland Corporation"},
-    {0x42,"Korg Inc."},
-    {0x43,"Yamaha Corporation"},
-    {0x44,"Casio Computer Co. Ltd"},
-    {0x46,"Kamiya Studio Co. Ltd"},
-    {0x47,"Akai Electric Co. Ltd."},
-    {0x48,"Victor Company of Japan, Ltd."},
+    {0x40,"Kawai"},
+    {0x41,"Roland"},
+    {0x42,"Korg"},
+    {0x43,"Yamaha"},
+    {0x44,"Casio"},
+    {0x46,"Kamiya"},
+    {0x47,"Akai"},
+    {0x48,"Victor"},
     {0x4B,"Fujitsu Limited"},
-    {0x4C,"Sony Corporation"},
-    {0x4E,"Teac Corporation"},
-    {0x50,"Matsushita Electric Industrial Co. , Ltd"},
-    {0x51,"Fostex Corporation"},
-    {0x52,"Zoom Corporation"},
-    {0x54,"Matsushita Communication Industrial Co., Ltd."},
-    {0x55,"Suzuki Musical Instruments MFG. Co., Ltd."},
+    {0x4C,"Sony"},
+    {0x4E,"Teac"},
+    {0x50,"Matsushita"},
+    {0x51,"Fostex"},
+    {0x52,"Zoom"},
+    {0x54,"Matsushita"},
+    {0x55,"Suzuki Musical Instruments"},
     {0x56,"Fuji Sound Corporation Ltd."},
     {0x57,"Acoustic Technical Laboratory, Inc."},
     {0x59,"Faith, Inc."},
@@ -373,6 +373,10 @@ struct QRtMidiDevIdent
     QRtMidiData Family;
     QRtMidiData Product;
     QRtMidiData ShortHdr;
+    int MfjIdSize;
+
+    void fromIdentData( const QRtMidiData & data );
+
 };
 
 typedef QList<QRtMidiDevIdent> QRtMidiIdentList_t;

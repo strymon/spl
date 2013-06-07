@@ -26,26 +26,8 @@ QRtMidiDevIdent::QRtMidiDevIdent()
 QRtMidiDevIdent::QRtMidiDevIdent(const QRtMidiData &data )
 {
     clear();
+    fromIdentData(data);
 
-    int len = data.length();
-
-    // Parse the MIDI identity data
-    if(data.contains(kIdentReply) && len >= 13)
-    {
-        // If the Manufacturer's Id is the optional 3 bytes, then adjust the 
-        // byte position of the identity data by the extra two bytes.
-        int adj = (data.at(5) == 0) ? 2 : 0;
-        if(len >= 13+adj)
-        {
-            // See the comment above to understand the byte positions of this data
-            Manufacture = data.mid(5,3);
-            SyxCh       = data.at(2);
-            Family      = data.mid(6+adj,2);
-            Product     = data.mid(8+adj,2);
-            ShortHdr    = Manufacture + Family.mid(0,1) + Product.mid(0,1);
-            FwVersion.sprintf("%c.%c.%c.%c",data.at(10+adj),data.at(11+adj),data.at(12+adj),data.at(13+adj));
-        }
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -57,6 +39,7 @@ void QRtMidiDevIdent::clear()
     Family.clear();
     Product.clear();
     ShortHdr.clear();
+    MfjIdSize = 1;
 }
 
 //-------------------------------------------------------------------------
@@ -72,12 +55,43 @@ QString QRtMidiDevIdent::getManufactureName()
 
     if(!isEmpty())
     {
-        int id = Manufacture.toInt(0,3,-1);
+        int id = Manufacture.toInt(0,MfjIdSize,-1);
         if(id > -1)
         {
             n = MidiNameToIds[id];
+            if(n.isEmpty())
+            {
+                n.sprintf("unknown %0X",id);
+            }
         }
     }
 
     return n;
+}
+
+//-------------------------------------------------------------------------
+void QRtMidiDevIdent::fromIdentData( const QRtMidiData & data )
+{
+    int len = data.length();
+
+    // Parse the MIDI identity data
+    if(data.contains(kIdentReply) && len >= 13)
+    {
+        // If the Manufacturer's Id is the optional 3 bytes, then adjust the 
+        // byte position of the identity data by the extra two bytes.
+        int adj = (data.at(5) == 0) ? 2 : 0;
+        MfjIdSize = adj+1;
+
+        if(len >= 13+adj)
+        {
+            // See the comment above to understand the byte positions of this data
+            Manufacture = data.mid(5,MfjIdSize);
+
+            SyxCh       = data.at(2);
+            Family      = data.mid(6+adj,2);
+            Product     = data.mid(8+adj,2);
+            ShortHdr    = Manufacture + Family.mid(0,1) + Product.mid(0,1);
+            FwVersion.sprintf("%c.%c.%c.%c",data.at(10+adj),data.at(11+adj),data.at(12+adj),data.at(13+adj));
+        }
+    }
 }
