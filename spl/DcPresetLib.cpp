@@ -86,9 +86,11 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
     _lastErrorMsg.setString(&_lastErrorMsgStr);
     
+    _supportedDevicesSet.insert(kTimeLineIdent);
+    _supportedDevicesSet.insert(kMobiusIdent);
+
     _midiSettings = new QRtMidiSettings(this);
-    _midiSettings->addSupportedIdentity(kTimeLineIdent);
-    _midiSettings->addSupportedIdentity(kMobiusIdent);
+    _midiSettings->addSupportedIdentities(_supportedDevicesSet);
 
     _workListControls << ui.renameButton << ui.moveButton << ui.loadOneButton << ui.saveOneButton;
     _workListActions  << ui.actionSave_One << ui.actionLoad_One << ui.actionRename << ui.actionMove;
@@ -131,6 +133,7 @@ void DcPresetLib::dclog( const QString str )
 }
 
 //-------------------------------------------------------------------------
+/*
 bool DcPresetLib::eventFilter(QObject* obj, QEvent *e)
 {
     Q_UNUSED(obj);
@@ -148,6 +151,7 @@ bool DcPresetLib::eventFilter(QObject* obj, QEvent *e)
 
     return false;
 }
+*/
 
 //-------------------------------------------------------------------------
 void DcPresetLib::closeEvent( QCloseEvent *e )
@@ -278,6 +282,8 @@ void DcPresetLib::detectDevice_entered()
     bool success = false;
     
     _devDetails.clear();
+    _con->clearRoSymDefs();
+
 
     if(!in_port.isEmpty() && !out_port.isEmpty())
     {
@@ -315,6 +321,19 @@ void DcPresetLib::detectDevice_entered()
 
 }
 
+
+bool DcPresetLib::hasDevSupport( const QRtMidiData &data )
+{
+    QSetIterator<const char*> i(_supportedDevicesSet);
+    while (i.hasNext())
+    {
+        if(data.contains(i.next()))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 //-------------------------------------------------------------------------
 // This singleShot slot is used to detect a timeout during the detectDevice
 // state.  It will always run, but the timeout is avoided if the recvIdData
@@ -322,13 +341,17 @@ void DcPresetLib::detectDevice_entered()
 void DcPresetLib::devIdWatchDog()
 {
     _watchdog_timer.stop();
-
-    // If this is not set, then we timed out
-    if(_devDetails.isEmpty())
-    {
+// 
+//     // If this is not set, then we timed out
+//     if(_devDetails.isEmpty())
+//     {
         QObject::disconnect(&_midiIn, &QRtMidiIn::dataIn, this, &DcPresetLib::recvIdData);
         emit deviceNotFound();
-    }
+//     }
+//     else
+//     {
+// 
+//     }
 }
 //-------------------------------------------------------------------------
 void DcPresetLib::recvIdData( const QRtMidiData &data )
@@ -336,57 +359,19 @@ void DcPresetLib::recvIdData( const QRtMidiData &data )
     // Ignore any message that's not an MIDI Identity reply
     if(!data.contains(kIdentReply))
         return;
+
+    // Parse the Identify response
+    _devDetails.fromIdentData(data);
+    
+    // Now, see if the program supports this device
+    if(!hasDevSupport(data))
+        return;
+    
     
     // Shutdown the watchdog timer and disconnect this handler from the MIDI IN port
     _watchdog_timer.stop();
     QObject::disconnect(&_midiIn, &QRtMidiIn::dataIn, this, &DcPresetLib::recvIdData);
     
-    // Clear device specific details
-    _devDetails.clear();
-    _con->clearRoSymDefs();
-
-    // Assume a supported device is found.
-    bool foundSupportedDevice = true;
-    
-    // Parse the Identify response
-
-/*  
-       0  0xF0  SOX
-       1  0x7E  Non-Realtime
-       2  0x7F  The SysEx channel. Could be from 0x00 to 0x7F.
-       3  0x06  Sub-ID -- General Information
-       4  0x02  Sub-ID2 -- Identity Reply
-
-       5  0xID  Manufacturer's ID
-          (ID is one byte for codes between 1 and 7F, if the 5th byte is zero
-           there will be two more ID bytes, e.g. 01 55 for Strymon)
-        /6 0xID1
-        /7  0xID2
-
-       6/8  0xf1  The f1 and f2 bytes make up the family code. Each
-       7/9  0xf2  manufacturer assigns different family codes to his products.
-        
-       8/10  0xp1  The p1 and p2 bytes make up the model number. Each
-       9/11  0xp2  manufacturer assigns different model numbers to his products.
-        
-      10/12  0xv1  The v1, v2, v3 and v4 bytes make up the version number.
-      11/13  0xv2
-      12/14  0xv3
-      13/15  0xv4
-      14/16  0xF7
-*/
-    // If the Manufacturer's Id is the optional 3 bytes, then adjust the 
-    // byte position of the identity data by the extra two bytes.
-     int adj = (data.at(5) == 0) ? 2 : 0;
-
-    // See the comment above to understand the byte positions of this data
-    _devDetails.Manufacture = data.mid(5,3);
-    _devDetails.SyxCh       = data.at(2);
-    _devDetails.Family      = data.mid(6+adj,2);
-    _devDetails.Product     = data.mid(8+adj,2);
-    _devDetails.ShortHdr    = _devDetails.Manufacture + _devDetails.Family.mid(0,1) + _devDetails.Product.mid(0,1);
-    _devDetails.FwVersion.sprintf("%c.%c.%c.%c",data.at(10+adj),data.at(11+adj),data.at(12+adj),data.at(13+adj));
-
     // TODO: Put all the device details in a persistent Map of some kind allowing
     // for new devices to be supported.
 
@@ -435,30 +420,16 @@ void DcPresetLib::recvIdData( const QRtMidiData &data )
         _devDetails.BankCount            = 100;
         _devDetails.PresetDataByteOffset = 7;
     }
-    else
-    {
-        pm = QPixmap(":/images/res/devunknown_100.png");
-        foundSupportedDevice = false;
-    }
     
     ui.devInfoLabel->setText(_devDetails.Name);
     ui.devImgLabel->setToolTip(_devDetails.FwVersion);
     ui.devImgLabel->setPixmap(pm);
-
-    if(foundSupportedDevice)
-    {
-        // Adding device specific details to the console
-        _con->addRoSymDef("hdr",_devDetails.ShortHdr.toString(' '));
-        _con->addRoSymDef("dev.ver",_devDetails.FwVersion);
-        _con->addRoSymDef("dev.sox",_devDetails.DevSOX.toString(' '));
-        _con->addRoSymDef("dev.name",_devDetails.Name);
-
-        emit deviceReady();
-    }
-    else
-    {
-        emit deviceNotFound();
-    }
+    // Adding device specific details to the console
+    _con->addRoSymDef("hdr",_devDetails.ShortHdr.toString(' '));
+    _con->addRoSymDef("dev.ver",_devDetails.FwVersion);
+    _con->addRoSymDef("dev.sox",_devDetails.DevSOX.toString(' '));
+    _con->addRoSymDef("dev.name",_devDetails.Name);
+     emit deviceReady();
 }
 
 //-------------------------------------------------------------------------
@@ -629,9 +600,19 @@ void DcPresetLib::noDevice_entered()
 {
     _con->clearRoSymDefs();
     QPixmap pm = QPixmap(":/images/res/devunknown_100.png");
+
     ui.devImgLabel->setPixmap(pm);
     ui.devInfoLabel->setText("");
     ui.devImgLabel->setToolTip("");
+
+    if(!_devDetails.Family.isEmpty())
+    {
+        *_con << "Unknown Device:\n";
+        *_con <<  "  Manufacture: " + _devDetails.getManufactureName() + "\n";
+        *_con <<  "  Family: 0x" + _devDetails.Family.toString() + "\n";
+        *_con <<  "  Product: 0x" + _devDetails.Product.toString() + "\n";
+        *_con <<  "  FwVer: " + _devDetails.FwVersion + "\n";
+    }
 } 
 
 //-------------------------------------------------------------------------
@@ -1811,38 +1792,9 @@ void DcPresetLib::downloadDone()
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//-------------------------------------------------------------------------
+void DcPresetLib::on_actionShow_Console_triggered()
+{
+   _con->toggleVisible();
+}
 

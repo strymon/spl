@@ -164,7 +164,7 @@ public:
     }
 
 
-    bool operator==(const QRtMidiData &d1)
+    bool operator==(const QRtMidiData &d1) const
     { 
         return d1._data == _data; 
     }

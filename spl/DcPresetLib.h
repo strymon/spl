@@ -96,6 +96,8 @@ private slots:
     void on_actionMove_triggered();
     void on_actionRename_triggered();
     void on_actionLoad_One_triggered();
+    void on_actionShow_Console_triggered();
+         
 
 
     void dispLastErrorMsgBox();
@@ -232,6 +234,9 @@ private:
     DcFileDownloader* _fileDownloader;
     QStringList _stateTrace;
 
+    // A set of devices
+    QSet<const char*> _supportedDevicesSet;
+
 protected:
 
     /*!
@@ -243,7 +248,7 @@ protected:
     QString presetToName(QRtMidiData& p);
     QString presetToBankPatchName(QRtMidiData& p);
 
-    bool eventFilter(QObject *o, QEvent *evt);
+//    bool eventFilter(QObject *o, QEvent *evt);
 
     void dclog(const QString str);
 
@@ -266,6 +271,7 @@ protected:
     void backupWorklist();
     
     bool loadSysexFile( const QString &fileName,QList<QRtMidiData>& dataList  );
+    bool hasDevSupport( const QRtMidiData &data );
 
 };
 
