@@ -38,9 +38,9 @@ void DcXferMachine::sendNext_entered()
     }
     else
     {
-        QRtMidiData cmd = _cmdList.takeFirst();
+        _activeCmd = _cmdList.takeFirst();
         _watchdog.start(_timeout);
-        _midiOut->dataOut(cmd);
+        _midiOut->dataOut(_activeCmd);
     }
 }
 //-------------------------------------------------------------------------
@@ -51,6 +51,15 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
     // out preset transfer - like controller messages
     if(data.contains(kStrymonDevice))
     {
+        if(data == _activeCmd)
+        {
+            // If the data coming back is the same as what was sent, 
+            // it was echoed back to us, just ignore as it was probably due
+            // to a device with MIDI "soft" THRU (midi-merge)
+            return;
+        }
+
+
         // cancel the watchdog timer
         _watchdog.stop();
 

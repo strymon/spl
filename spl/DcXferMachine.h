@@ -84,4 +84,5 @@ private:
     QRtMidiOut*     _midiOut;
     QList<QRtMidiData>  _cmdList;
     QList<QRtMidiData>  _midiDataList;
+    QRtMidiData _activeCmd;
 };
