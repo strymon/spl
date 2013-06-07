@@ -131,7 +131,7 @@ qDebug() << "setupAfterOpen - callback registered";
     }
 #endif
 
-    _rtMidiIn->ignoreTypes( false, true, true);
+    _rtMidiIn->ignoreTypes( false, false, false );
         
 }
 
