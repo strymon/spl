@@ -21,7 +21,7 @@
 #include <QtGlobal>
 #include "DcConArgs.h"
 
-static const char* kDcVersionString = "0.9.1.0";
+static const char* kDcVersionString = "0.9.1.1";
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -69,5 +69,3 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
-
-
