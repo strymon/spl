@@ -1,13 +1,17 @@
-# This tool can increment version numbers within a text file if the version
-# number is of a specific format. The format must be: <ver_symbol> "Maj.min.inc.build"
+# This tool can return or increment version number strings within a text file for a 
+# specific name/value format.  The tool is useful for creating automated build scripts
+# that can update versing definitions in source and .plist (xml) files.
 #
-# Format example: static const char* myver="1.2.3.4"; or #define MYVER "0.12.3.45"
-#
+#  Examples of tested formats:
+#  const char* myver="1.2.3.4";
+#  #define MYVER "1.2.3.4"
+#  <string>1.2.3.4</string>
+# 
 # Usage:
-#    inc_version.py -v MY_VER -f my_prog.h --inc_maj
-#       The above will look for MY_VER "0.0.0.0" and increment the Major number.
-#       Version numbers are defined as Major.minor.incremental.buidnumber
-
+#    inc_version.py -v myver -f myprog.h --inc_maj
+#       The above will look for 'myver' "0.0.0.0" and increment the "major" number
+#       in the version string.  Version numbers are defined as Major.minor.incremental.buid
+#       
 import re
 import string
 import os
@@ -15,6 +19,13 @@ import sys
 
 from optparse import OptionParser
 
+# ----------------------------------------------------------------
+# Returns a python regular express that will identify the name/version string pair.
+# The name is specified in var_name.
+# Note: Extending 
+def makeRegex(var_name):
+    return r'(.*\s*' + var_name + '\s*=?>?\s*\"?\s*)(\d+\.\d+\.\d+\.[a-z0-9]+)(\"?;?<?.*)'
+#
 # ----------------------------------------------------------------
 def set_version(filename,var_name,ver_str):
     if not os.path.exists(filename):
@@ -24,7 +35,7 @@ def set_version(filename,var_name,ver_str):
     f = open(filename,'r')
     fdata = f.read().strip()
 
-    regstr = r"(.*\s*" + var_name + "\s*=?\s*\"\s*)(\d+\.\d+\.\d+\.[a-z0-9]+)(\";?)"
+    regstr = makeRegex(var_name)
     regex = re.compile(regstr, re.MULTILINE)
     m = re.search(regstr, fdata)
     if not m or len(m.groups()) < 3:
@@ -33,6 +44,8 @@ def set_version(filename,var_name,ver_str):
     new_ver = m.group(1) + ver_str + m.group(3)
     fdata = re.sub(regex, new_ver, fdata)
     f = open(filename,'w')
+    #add newline at EOF
+    fdata += '\n';
     f.write(fdata)
 
 # ----------------------------------------------------------------
@@ -43,7 +56,8 @@ def get_version(filename,var_name):
 
     f = open(filename,'r')
     fdata = f.read().strip()
-    regstr = r"(.*\s*" + var_name + "\s*=?\s*\"\s*)(\d+\.\d+\.\d+\.[a-z0-9]+)(\";?)"
+
+    regstr = makeRegex(var_name)
     m = re.search(regstr,fdata)
     if m:
         return m.group(2)

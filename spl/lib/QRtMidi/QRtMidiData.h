@@ -279,7 +279,7 @@ inline const QRtMidiData  operator+(const QRtMidiData  &md1, const QRtMidiData  
 
 inline const QRtMidiData  operator+(const QRtMidiData  &a1, const char* c)
 { 
-    return QRtMidiData(a1.toByteArray() + c); 
+    return QRtMidiData(a1 + QRtMidiData(c)); 
 }
 
 inline const QRtMidiData  operator+(const QRtMidiData  &a1, const QByteArray  &a2)

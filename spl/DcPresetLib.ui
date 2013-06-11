@@ -810,7 +810,7 @@
     <string>Show Console</string>
    </property>
    <property name="shortcut">
-    <string>`</string>
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>
