@@ -44,6 +44,8 @@ def set_version(filename,var_name,ver_str):
     new_ver = m.group(1) + ver_str + m.group(3)
     fdata = re.sub(regex, new_ver, fdata)
     f = open(filename,'w')
+    #add newline at EOF
+    fdata += '\n';
     f.write(fdata)
 
 # ----------------------------------------------------------------
