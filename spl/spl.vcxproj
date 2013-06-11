@@ -1052,7 +1052,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\build\GeneratedFiles" MocDir=".\build\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\build\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="5.0.2_32" Qt5Version_x0020_x64="Qt5.0" />
+      <UserProperties UicDir=".\build\GeneratedFiles" MocDir=".\build\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\build\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="5.0.2_VS2010" Qt5Version_x0020_x64="Qt5.0" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
