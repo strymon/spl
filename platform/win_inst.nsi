@@ -6,7 +6,7 @@
 # 1) Script assumes that spl.exe is located ..\build\bin\Win32\XP_Release
 
 # INPUT ARG: Invoke this script by passing the var VER_STR in the format Maj.Min.Inc.Bld
-OutFile "..\build\strymon_lib_setup_$%VER_STR%.exe"
+OutFile $%INST_EXE%
 
 installDir $PROGRAMFILES\Strymon
 
@@ -42,7 +42,8 @@ Section
   File .\win\redist\msvcr100.dll
 
   # Main Executable
-  File ..\build\bin\Win32\XP_Release\spl.exe
+  File $%APP_EXE%
+ # ..\build\bin\Win32\XP_Release\spl.exe
 
   # Create some shortcuts
   CreateShortCut "$SMPROGRAMS\Strymon\Librarian.lnk" "$INSTDIR\Librarian\spl.exe" "" "$INSTDIR\Librarian\spl.exe" 0
