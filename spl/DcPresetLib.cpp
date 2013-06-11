@@ -1606,15 +1606,17 @@ void DcPresetLib::setupConsole()
     _con->setVisible(false);
     _con->addCmd("fetch",ui.fetchButton,SLOT(clicked( )),"Execute a fetch");
     _con->addCmd("sync",ui.syncButton,SLOT(clicked( )),"Synchronize worklist with device (write preset changes)");
+
     _con->addCmd("show.bf",ui.buttonFrame,SLOT(show()),"Show the button frame");
     _con->addCmd("hide.bf",ui.buttonFrame,SLOT(hide()),"Hide the button frame");
     _con->addCmd("show.kf",ui.knobFrame,SLOT(show()),"Show the knob frame");
     _con->addCmd("hide.kf",ui.knobFrame,SLOT(hide()),"Hide the knob frame");
+
     _con->addCmd("fetch",this,SLOT(conCmd_Fetch(DcConArgs)),"<count> [<offset>] - Fetch count presets start at optional offset");
     _con->addCmd("mon",this,SLOT(conCmd_MidiMonCtrl(DcConArgs)),"<on|off> - display MIDI IN and OUT");
     _con->addCmd("out",this,SLOT(conCmd_MidiOut(DcConArgs)),"<midi hex bytes> - write midi bytes to connected device");
-    _con->addCmd("writefile",this,SLOT(conCmd_MidiWriteFile(DcConArgs)),"[<filename>] - write the file to connected device");
-    _con->addCmd("geturl",this,SLOT(conCmd_GetUrl(DcConArgs)),"<url> - file to download" );
+    _con->addCmd("writefile",this,SLOT(conCmd_MidiWriteFile(DcConArgs)),"[<filename>] - open file and write to connected device");
+    _con->addCmd("geturl",this,SLOT(conCmd_GetUrl(DcConArgs)),"download specified URL" );
     _con->addCmd("qss",this,SLOT(conCmd_qss(DcConArgs)),"Load the qss file" );
     _con->addCmd("lswl",this,SLOT(conCmd_lswl(DcConArgs)),"list the working list" );
     _con->setBaseDir(_dataPath);
@@ -1795,6 +1797,6 @@ void DcPresetLib::downloadDone()
 //-------------------------------------------------------------------------
 void DcPresetLib::on_actionShow_Console_triggered()
 {
-   _con->toggleVisible();
+   _con->setVisible(ui.actionShow_Console->isChecked());
 }
 
