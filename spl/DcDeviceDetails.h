@@ -15,7 +15,7 @@
 
 *-------------------------------------------------------------------------*/
 #pragma once
-#include "QRtMidi\QRtMidiIdent.h"
+#include "QRtMidi/QRtMidiIdent.h"
 
 struct DcDeviceDetails : public QRtMidiDevIdent
 {
