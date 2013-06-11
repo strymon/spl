@@ -44,7 +44,7 @@ QString DcConArgs::strScan()
     int start = 0, cnt = 0;
     int i = 1;
 
-    for (i; i < len ; i++)
+    for (; i < len ; i++)
     {
         if("\"" == _args.at(i).toString())
         {
@@ -53,7 +53,7 @@ QString DcConArgs::strScan()
         }
     }
 
-    for (i; i < len ; i++)
+    for (; i < len ; i++)
     {
         if("\"" != _args.at(i).toString())
         {
