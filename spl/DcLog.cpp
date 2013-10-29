@@ -1,3 +1,22 @@
+/*-------------------------------------------------------------------------
+	    Copyright 2013 Damage Control Engineering, LLC
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*-------------------------------------------------------------------------*/
+/*!
+ \file DcLog.cpp
+--------------------------------------------------------------------------*/
 #include "DcLog.h"
 #include "DcQUtils.h"
 #include <QApplication>
@@ -9,8 +28,8 @@
 QString* DcLog::LogPath = 0;
 bool gDcLogShortPath = true;
 
-static const quint64 kMaxLogSize = 1024;
-static const int kMaxLogBackupCount = 2;
+const quint64 DcLog::kLogSizeLimit = 1024;
+const int DcLog::kLogFileHistoryCount = 2;
 
 void muteMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -83,10 +102,10 @@ DcLog::DcLog(QString logPath)
     QFileInfo logInfo(logPath);
 
     qint64 fs = logInfo.size();
-    if(fs  > kMaxLogSize)
+    if(fs  > kLogSizeLimit)
     {
         // Recursively backup the log file
-        backUp(setFileOrdinal(logPath,kMaxLogBackupCount-1),kMaxLogBackupCount);
+        backUp(setFileOrdinal(logPath,kLogFileHistoryCount-1),kLogFileHistoryCount);
     }
     
     
