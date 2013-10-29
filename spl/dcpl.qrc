@@ -6,5 +6,10 @@
         <file>res/dcpm_256x256x32.png</file>
         <file>res/mobius_100.png</file>
         <file>res/timeline_100.png</file>
+        <file>res/test_device_100.png</file>
+        <file>res/round_check.png</file>
+        <file>res/round_check_green.png</file>
+        <file>res/tri_bang.png</file>
+        <file>res/bigsky_100.png</file>
     </qresource>
 </RCC>
