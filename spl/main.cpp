@@ -21,36 +21,41 @@
 #include <QtGlobal>
 #include "DcConArgs.h"
 
-static const char* kDcVersionString = "0.9.1.1";
 
-void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+static const char* kDcVersionString = "0.9.3.1";
+
+
+
+
+void muteMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+    Q_UNUSED(type);
     Q_UNUSED(context);
-
-    QByteArray localMsg = msg.toLocal8Bit();
-    switch (type) {
-    case QtDebugMsg:
-    // fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-        break;
-    case QtWarningMsg:
-       // fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-        break;
-    case QtCriticalMsg:
-        //fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-        break;
-    case QtFatalMsg:
-        //fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-        abort();
-    }
+    Q_UNUSED(msg);
 }
+
+// QByteArray localMsg = msg.toLocal8Bit();
+// switch (type) 
+// {
+// case QtDebugMsg:
+//     // fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//     break;
+// case QtWarningMsg:
+//     // fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//     break;
+// case QtCriticalMsg:
+//     //fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//     break;
+// case QtFatalMsg:
+//     //fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//     abort();
+// }
+
+
 int main(int argc, char *argv[])
 {
+    qInstallMessageHandler (muteMessageOutput);
 
-    
-//#ifndef DC_NO_QDEBUG
-    qInstallMessageHandler (myMessageOutput);
-//#endif
-    
     QApplication a(argc, argv);
 
     qRegisterMetaType<QRtMidiData>();
