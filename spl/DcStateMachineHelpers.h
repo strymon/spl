@@ -23,8 +23,6 @@
 #include <QAbstractTransition>
 #include <QEvent>
 
-#include "lib/QRtMidi/QRtMidiData.h"
-
 template<int offset>
 class DcSimpleEvent : public QEvent
 {
