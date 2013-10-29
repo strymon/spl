@@ -38,13 +38,24 @@
 */
 
 // Strymon Pedal Specific
-static const char* kStrymonDevice = "F0 00 01 55";
-static const char* kTimeLineIdent = "F0 7E XX 06 02 00 01 55 12 00 01";  // Partial TimeLine Identity Response
-static const char* kMobiusIdent   = "F0 7E XX 06 02 00 01 55 12 00 02";    // Partial Mobius Identity Response 
-static const char* kGlassNexus    = "F0 7E XX 06 02 00 01 55 01 00 02";    // Partial Glass Nexus Identity Response
-// Strymon TimeLine Commands:
-//static const char* kStatusMsg = "F0 00 01 55 12 01 22 F7";
 
+// Strymon TimeLine Commands:
+
+class DcMidiDevDefs
+{
+public:
+
+    DcMidiDevDefs();
+
+    // Strymon Pedal Specific
+    static const char* kStrymonDevice;
+    static const char* kTimeLineIdent;
+    static const char* kMobiusIdent;
+    static const char* kBigSkyIdent;
+    static const char* kTestDevice;
+    static const char* kStatusMsg; /* = "F0 00 01 55 12 01 22 F7"; */
+    static const char* kIdentReply;
+};
 
 // Some important Sysex Offset
 #define MIDI_SYSEX_PATCH_OFFSET		7
@@ -144,4 +155,5 @@ static const int kPresetDataOffset  = 9;
 static const int kPresetDataLength  =  650-9-2;
 static const int kPresetChecksumOffset =  648;
 static const int kPreseChecksumOffset      = kPreseLength - 1;
+
 
