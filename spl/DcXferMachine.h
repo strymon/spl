@@ -66,7 +66,7 @@ public slots:
   void setCancel() { _cancel = true; }
   void setProgressDialog( IoProgressDialog* progressDialog );
 
-  void go();
+  void go(int maxPacketSize = -1, int delayPerPacket = 0);
 
   void append( QRtMidiData& cmdStr );
   void reset();
@@ -85,4 +85,8 @@ private:
     QList<QRtMidiData>  _cmdList;
     QList<QRtMidiData>  _midiDataList;
     QRtMidiData _activeCmd;
+    int _pacPerCmd;
+    
+    int _msPerPacket;
+    int _maxPacketSize;
 };

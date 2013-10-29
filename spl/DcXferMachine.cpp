@@ -24,6 +24,7 @@
 #include <QThread>
 #include "DcMidiDevDefs.h"
 
+//-------------------------------------------------------------------------
 void DcXferMachine::sendNext_entered()
 {
     if(_progressDialog->cancled())
@@ -39,8 +40,8 @@ void DcXferMachine::sendNext_entered()
     else
     {
         _activeCmd = _cmdList.takeFirst();
+        _midiOut->dataOutSplit(_activeCmd,_maxPacketSize,_msPerPacket);
         _watchdog.start(_timeout);
-        _midiOut->dataOut(_activeCmd);
     }
 }
 //-------------------------------------------------------------------------
@@ -48,8 +49,8 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
 {
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
-    // out preset transfer - like controller messages
-    if(data.contains(kStrymonDevice))
+    // the transfer - like controller messages, etc...
+    if(data.contains(DcMidiDevDefs::kStrymonDevice))
     {
         if(data == _activeCmd)
         {
@@ -57,14 +58,14 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
             // it was echoed back to us, just ignore as it was probably due
             // to a device with MIDI "soft" THRU (midi-merge)
             return;
-        }
+        } 
 
 
         // cancel the watchdog timer
         _watchdog.stop();
 
         // Check for a Negative Acknowledgment of the data in request
-        if(data.contains("F0 00 01 55 XX XX 47 F7"))
+        if( data.contains("F0 00 01 55 XX XX 47 F7") )
         {
             _progressDialog->setError("Device Rejected Command");
             _machine->postEvent(new DataXfer_NACKEvent());
@@ -77,6 +78,7 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
         }
         else
         {
+            qDebug() << "replySlotForDataIn - error, unexpected msg: " << data.toString(' ');
             // Getting here means an unexpected message was received.
             say("Unexpected messaged received - transfer protocol violation - sadness");
             _progressDialog->setError("The device responded incorrectly to the read request, sorry!");
@@ -91,7 +93,7 @@ void DcXferMachine::replySlotForDataOut( const QRtMidiData &data )
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
     // out preset transfer - like controller messages
-    if(data.contains(kStrymonDevice))
+    if(data.contains(DcMidiDevDefs::kStrymonDevice))
     {
         // cancel the watchdog timer
         _watchdog.stop();
@@ -180,9 +182,8 @@ DcState* DcXferMachine::setupStateMachine(QStateMachine* m,QRtMidiOut* out,DcSta
 void DcXferMachine::setProgressDialog( IoProgressDialog* progressDialog )
 {
     _progressDialog = progressDialog;
-    _progressDialog->setMax(_cmdList.length());    
     _progressDialog->reset();
-
+    _progressDialog->setMax(_cmdList.length());    
 }
 
 //-------------------------------------------------------------------------
@@ -201,8 +202,11 @@ void DcXferMachine::reset()
 }
 
 //-------------------------------------------------------------------------
-void DcXferMachine::go()
+void DcXferMachine::go(int maxPacketSize/*=-1*/, int delayPerPacket /*=0*/)
 {
+    _maxPacketSize = maxPacketSize;
+    _msPerPacket = delayPerPacket;
+
     _timeout = 2000;
     _cancel = false;
     _progressDialog->setProgress(0);
