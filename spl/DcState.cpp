@@ -20,6 +20,7 @@
 
 QStringList* gStateTrace = 0;
 
+#define VERBOSE_STATE_TRACE 0
 
 //-------------------------------------------------------------------------
 void DcState::SetTraceStringList( QStringList* sl )
@@ -81,7 +82,9 @@ void DcState::onEntry( QEvent* e )
 
     DcState::trace(_prefix + " Enter: " + state);
 
+#if (VERBOSE_STATE_TRACE == 1)
     qDebug() << _prefix << "Entering state:" << state;
+#endif // VERBOSE_STATE_TRACE
 }
 
 void DcState::onExit( QEvent* e )
@@ -98,7 +101,9 @@ void DcState::onExit( QEvent* e )
     }
     DcState::trace(_prefix + " Leave: " + state);
 
-    qDebug() << _prefix << "Leaving state:" << state;
+#if (VERBOSE_STATE_TRACE == 1)
+        qDebug() << _prefix << "Leaving state:" << state;
+#endif
 }
 
 
