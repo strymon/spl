@@ -28,8 +28,6 @@
 QString* DcLog::LogPath = 0;
 bool gDcLogShortPath = true;
 
-const quint64 DcLog::kLogSizeLimit = 1024;
-const int DcLog::kLogFileHistoryCount = 2;
 
 void muteMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {

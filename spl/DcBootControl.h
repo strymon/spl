@@ -241,8 +241,8 @@ public:
     }
 
     /*!
-      Returns true if the attached device is in Bootcode. */
-    */ 
+      Returns true if the attached device is in Bootcode. 
+    */
     bool isBootcode();
 
     /*!
