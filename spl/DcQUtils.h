@@ -1,5 +1,4 @@
 #pragma once
-#include "qstring.h"
 /*-------------------------------------------------------------------------
 	    Copyright 2013 Damage Control Engineering, LLC
 
