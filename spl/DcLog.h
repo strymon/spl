@@ -61,6 +61,7 @@ private:
 };
 
 #define DCLOG   qDebug
+#define DCERROR qWarning
 #define DCWARN  qWarning
 #define DCCRIT  qCritical
 
