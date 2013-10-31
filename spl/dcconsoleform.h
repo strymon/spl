@@ -48,6 +48,8 @@ class DcConsoleForm : public QWidget
 
 private:
     Ui::DcConsoleForm *ui;
+    
+    
 
     struct ConStream 
     {
@@ -111,10 +113,12 @@ public:
     /*!
       Execute given command string
     */ 
-    void execCmd(const QString cmd);
+    void execCmd(const QString cmd,bool blocking = false);
 
     // Text output
     void flush();
+     
+    void autoCmd(QString cmd);
 
     // Inspired by QDebug, implement stram operators for console text output.
     bool autoInsertSpaces() const { return stream->space; }
@@ -192,8 +196,8 @@ protected:
     void replaceCurrentCommand( QString cmd );
     QString getCurrentCommand();
     
-    bool executeCmdStr(const QString cmdLine);
-    bool execCmd( DcConArgs &args );    
+    bool executeCmdStr(const QString cmdLine,bool blocking = false);
+    bool execCmd( DcConArgs &args, bool direct = false);
     bool checkArgCnt( DcConArgs &args, int minCnt = 0);
     /*!
       Returns true if the command string is defined in the 
@@ -204,12 +208,12 @@ protected:
         return _fnSym.contains(cmd);
     }
     
-    void applySymbols( DcConArgs &args,  const QMap<QString,QString>& syms );
+    void applySymbols( DcConArgs &args,  const QMap<QString,QString>& syms);
     void print( DcConArgs &args, int offset = 0);
 
     void clear();
 
-
+    
 private:
 
     
@@ -245,7 +249,7 @@ private:
     void setNoClrOnReturnOnce(bool val) { _noClrOnReturnOnce = val; }
     QStringList tokenize(QString& sexp);
     DcFnSymDef parseFn(QString sexp);
-
+   
 };
 
 #endif // DCCONSOLEFORM_H

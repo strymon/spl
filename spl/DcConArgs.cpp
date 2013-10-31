@@ -23,6 +23,37 @@ QString DcConArgs::hexJoin( int offset /*= 1*/, int len /*= 0*/ )
 }
 
 //-------------------------------------------------------------------------
+QString DcConArgs::decJoin( int offset /*= 1*/, int len /*= 0*/ )
+{
+    QString st;
+    len += count();
+    for (int i = offset; i < len ; i++)
+    {
+        QString strArg = _args.at(i).toString();
+        if(strArg.contains("0x"))
+        {
+            if(strArg.length() > 2)
+            {
+
+                st.append(strArg.mid(2) + " ");
+            }
+        }
+        else
+        {
+            bool ok;
+            int val = (unsigned char)_args.at(i).toInt(&ok);
+            if(ok)
+            {
+                QString s;
+                s.sprintf("%02X ",val);
+                st.append(s);
+            }
+        }
+    }
+    return st.trimmed();
+}
+
+//-------------------------------------------------------------------------
 QString DcConArgs::strJoin( int offset /*= 1*/, int len /*= 0*/ )
 {
     QString st;
@@ -81,20 +112,41 @@ QString DcConArgs::toString()
 }
 
 //-------------------------------------------------------------------------
-QVariant DcConArgs::first()
+QStringList DcConArgs::argsAsStringList()
 {
-    return _args.at(1);
+    QStringList rtval;
+
+    for (int idx = 1; idx < _args.count() ; idx++)
+    {
+    	rtval << _args.at(idx).toString();
+    }
+    return rtval;
 }
 
 //-------------------------------------------------------------------------
-QVariant DcConArgs::second()
+QVariant DcConArgs::first(QVariant def)
 {
-    return _args.at(2);
+    if(_args.count() > 1)
+        return _args.at(1);
+    return def;
+}
+
+//-------------------------------------------------------------------------
+QVariant DcConArgs::second(QVariant def)
+{
+    if(_args.count() > 2)
+        return _args.at(2);
+
+    return def;
+    
 }
 //-------------------------------------------------------------------------
-QVariant DcConArgs::third()
+QVariant DcConArgs::third(QVariant def)
 {
-    return _args.at(3);
+    if(_args.count() > 3)
+        return _args.at(3);
+
+    return def;
 }
 
 //-------------------------------------------------------------------------
@@ -143,13 +195,33 @@ bool DcConArgs::queryCmd( QString name, QString useage, QString doc )
 }
 
 //-------------------------------------------------------------------------
-void DcConArgs::parseCmdLine( const QString &str )
+void DcConArgs::parseCmdLine( const QString &cmd )
 {
-    QStringList lst =  str.split(" ",QString::SkipEmptyParts);
-    for (int i = 0; i < lst.count() ; i++)
-    {
-        _args.append(lst.at(i));
-    }
+    // Credit: http://www.qtcentre.org/threads/37304-Split-strings-using-QStringList-split()-but-ignore-quotes
+
+    if(cmd.isEmpty())
+        return;
+
+    bool inside = (cmd.at(0) == '\"'); //true if the first character is "
+    QStringList tmpList = cmd.split(QRegExp("\""), QString::SkipEmptyParts); // Split by " and make sure you don't have an empty string at the beginning
+    foreach (QString s, tmpList) {
+        if (inside) { // If 's' is inside quotes ...
+            _args.append(s); // ... get the whole string
+        } else { // If 's' is outside quotes ...
+            QStringList lst = s.split(" ", QString::SkipEmptyParts); // ... get the spitted string
+            for (int i = 0; i < lst.count() ; i++)
+            {
+                _args.append(lst.at(i));
+            }
+        }
+        inside = !inside;
+    }   
+//     
+//     QStringList lst =  str.split(" ",QString::SkipEmptyParts);
+//     for (int i = 0; i < lst.count() ; i++)
+//     {
+//         _args.append(lst.at(i));
+//     }
 }
 
 

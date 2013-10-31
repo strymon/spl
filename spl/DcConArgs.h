@@ -75,9 +75,15 @@ public:
     
     /*!
       Converts the arguments into a string of base 16 values (hex), for example,
-      if the command line was 'mycmd 5 10 17' then hexJoin(1) would produce: "05 0A 11" 
+      if the command line was 'mycmd 5 10 17' then hexJoin(1) would produce: "05 0A 17"
     */
     QString hexJoin(int offset = 1, int len = 0);
+
+    /*!
+      Converts the arguments into a string of base 10 values (dec), to hex.  for example,
+      if the command line was 'mycmd 5 10 17' then decJoin() would produce: "05 0A 11"
+    */
+     QString decJoin(int offset = 1, int len = 0);
 
     /*!
       Converts the arguments into a string stating at the given argument offset.
@@ -114,15 +120,15 @@ public:
     /*!
       Returns the first argument
     */ 
-    QVariant first();
+    QVariant first(QVariant def = 0);
     /*!
       Returns the second argument
     */ 
-    QVariant second();
+    QVariant second(QVariant def = 0);
     /*!
       Returns the third argument
     */ 
-    QVariant third();
+    QVariant third(QVariant def = 0);
 
     inline bool firstTruthy()
     {
@@ -146,8 +152,14 @@ public:
     */ 
     void setMeta(QString key,QVariant val);
     
+     
+    /*!
+      Returns a StringList containing the args
+    */ 
+    QStringList argsAsStringList();
     
     void setCmdName( QString name );
+    QString getCmdName() { return _cmdName; }
     /*!
       Returns true if this argument object is a query.
       A query is a house keeping call by the command parser to 
@@ -162,6 +174,7 @@ public:
     void clear();
     inline bool is( const char* c ) { return cmd() == c;}
     inline bool is( QString& qs ) { return cmd() == qs;}
+   
 
 private:
     QList<QVariant>         _args;

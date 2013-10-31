@@ -64,10 +64,11 @@ DcConsoleForm::DcConsoleForm(QWidget *parent) :
     _clearOutput = false;
     QObject::connect(&_updateTimer,SIGNAL(timeout()),this,SLOT(refreshTextOutput()));
 
-     _depth = 300;
+     _depth = 100;
      
     
      ui->lineEdit->installEventFilter(this);
+     ui->lineEdit->setAttribute(Qt::WA_MacShowFocusRect, false);
      ui->textEdit->installEventFilter(this);
 
      _noClrOnReturnOnce = false;
@@ -113,13 +114,24 @@ void DcConsoleForm::refreshTextOutput()
         stream->buffer.clear();
         _textOutputLines.clear();
         _clearOutput = false;
+
+
+        int fsz = QFontMetrics(ui->textEdit->currentFont()).height();
+        int lcnt = ui->textEdit->maximumViewportSize().height()/fsz;
         
-        for (int line = 0; line < _depth ; line++)
+        
+        int dcnt = qMax(lcnt,_depth);
+
+        for (int line = 0; line < dcnt; line++)
         {
-        	QString s;
-            s.sprintf("\n");
-            _textOutputLines.append(s);
+//         	QString s;
+//             s.sprintf("\n");
+            if(_con_html)
+                _textOutputLines.append("<br>\n");
+            else
+                _textOutputLines.append("\n");
         }
+
     }
     else
     {
@@ -127,6 +139,7 @@ void DcConsoleForm::refreshTextOutput()
     
     if(this->isVisible())
     {
+       
         ui->textEdit->clear();
         
         QString o = _textOutputLines.join("");
@@ -188,7 +201,12 @@ void DcConsoleForm::saveHistory()
     }
     settings.endArray();
 }
-
+void DcConsoleForm::autoCmd(QString cmd)
+{
+    ui->lineEdit->setText(cmd);
+    ui->lineEdit->setFocus();
+    on_lineEdit_returnPressed();
+}
 //-------------------------------------------------------------------------
 void DcConsoleForm::on_lineEdit_returnPressed()
 {
@@ -197,8 +215,11 @@ void DcConsoleForm::on_lineEdit_returnPressed()
     executeCmdStr(str);
     
     // Update the command line history
-    _history.append(str);
-    _historyIndex = _history.size();
+    if(!str.isEmpty())
+    {
+        _history.append(str);
+        _historyIndex = _history.size();
+    }
     
     if(!_noClrOnReturnOnce)
     {
@@ -292,6 +313,7 @@ void DcConsoleForm::setVisible( bool visible )
     {
         this->requestRefresh();
         ui->lineEdit->setFocus();
+        executeCmdStr("");
     }
 }
 
@@ -463,11 +485,21 @@ QStringList DcConsoleForm::tokenize(QString& sexp)
 }
 
 //-------------------------------------------------------------------------
-bool DcConsoleForm::executeCmdStr(const QString cmdLine)
+bool DcConsoleForm::executeCmdStr(const QString cmdLine, bool direct /*=false*/)
 {
     bool rtval = true;
     DcConArgs args(cmdLine);
     // Expand any symbols defined with 'def'
+    
+    
+    if(args.cmd() == "doc")
+    {
+        args.setCmdName(args.first().toString());
+    }
+    else
+    {
+        args.setCmdName(args.cmd());
+    }
 
     // Unless this is a command 'def'
     if(args.cmd() != "def" && args.cmd() != "undef")
@@ -505,6 +537,7 @@ bool DcConsoleForm::executeCmdStr(const QString cmdLine)
             }
         }
         
+        
         applySymbols(args,_roSym);
         
         // Convert the fnSyms into a map applySymbols can understand.
@@ -515,9 +548,10 @@ bool DcConsoleForm::executeCmdStr(const QString cmdLine)
         }
         
         applySymbols(args,m);
+        
     }
 
-    if(!execCmd(args))
+    if(!execCmd(args,direct))
     {
         print(args);   
         rtval = false;
@@ -528,7 +562,7 @@ bool DcConsoleForm::executeCmdStr(const QString cmdLine)
 
 
 //-------------------------------------------------------------------------
-bool DcConsoleForm::execCmd( DcConArgs &args )
+bool DcConsoleForm::execCmd( DcConArgs &args,bool direct /* = false */ )
 {
     bool rtval = false;
 
@@ -552,17 +586,17 @@ bool DcConsoleForm::execCmd( DcConArgs &args )
             }        
         }
         rtval = true;
-
+        args.setMeta("doc",conItem.helpString);
         if(conItem.methodArgCnt == 1)
         {
             // Assume that all one argument commands take a DcConAgrs param
             QMetaObject::invokeMethod(const_cast<QObject *>(conItem.reciver), 
-                conItem.methodName.constData(), Qt::QueuedConnection,Q_ARG(DcConArgs,args));
+                conItem.methodName.constData(), direct ? Qt::DirectConnection : Qt::QueuedConnection,Q_ARG(DcConArgs,args));
         }
         else if(conItem.methodArgCnt == 0)
         {
             QMetaObject::invokeMethod(const_cast<QObject *>(conItem.reciver), 
-                conItem.methodName.constData(), Qt::QueuedConnection);
+                conItem.methodName.constData(), direct ? Qt::DirectConnection : Qt::QueuedConnection);
         }
         else
         {
@@ -636,6 +670,7 @@ void DcConsoleForm::cmd_depth( DcConArgs args )
     {
         // Display the depth
         *this << "depth is " << _depth << " lines\n";
+        *this << "current console lines: " << ui->textEdit << "\n";
     }
     else if(args.oneArg())
     {
@@ -792,7 +827,7 @@ void DcConsoleForm::cmd_defSave( DcConArgs args )
     // Write a header with a "magic number" and a version
     out << (quint32)DcConsoleForm::kDefSymMagicNumber;
     out << (qint32)1;
-    out.setVersion(QDataStream::Qt_4_9);
+    out.setVersion(QDataStream::Qt_5_1);
     out << _fnSym;
     
 }
@@ -809,9 +844,9 @@ void DcConsoleForm::cmd_defLoad( DcConArgs  args )
     }
 
     QString fullFName = QDir::toNativeSeparators(_basePath + args.at(1).toString());
-
     QFile file(fullFName);
     file.open(QIODevice::ReadOnly);
+    
     QDataStream in(&file);
 
     // Read and check the header
@@ -820,6 +855,7 @@ void DcConsoleForm::cmd_defLoad( DcConArgs  args )
     if (magic != kDefSymMagicNumber)
     {
         *this << "invalid file signature\n";
+        _fnSym.clear();
         return;
     }
 
@@ -831,7 +867,7 @@ void DcConsoleForm::cmd_defLoad( DcConArgs  args )
         *this << "file version too old\n";
         return;
     }
-    if (version > 1)
+    if (version > 2)
     {
         *this << "file version too old\n";        
         return;
@@ -840,6 +876,10 @@ void DcConsoleForm::cmd_defLoad( DcConArgs  args )
     if (version == 1)
     {
         in.setVersion(QDataStream::Qt_4_9);
+    }
+    else if(version == 2)
+    {
+        in.setVersion(QDataStream::Qt_5_1);
     }
 
     // Read the data
@@ -898,13 +938,13 @@ void DcConsoleForm::setBaseDir( QString& basePath )
 }
 
 //-------------------------------------------------------------------------
-void DcConsoleForm::execCmd( const QString cmd )
+void DcConsoleForm::execCmd( const QString cmd,bool direct /*=false */ )
 {
-    executeCmdStr(cmd);
+    executeCmdStr(cmd,direct);
 }
 
 //-------------------------------------------------------------------------
-void DcConsoleForm::applySymbols( DcConArgs &args, const QMap<QString,QString>& syms )
+void DcConsoleForm::applySymbols( DcConArgs &args, const QMap<QString,QString>& syms)
 {
     if(syms.count() <= 0)
         return;
@@ -933,6 +973,7 @@ void DcConsoleForm::applySymbols( DcConArgs &args, const QMap<QString,QString>& 
         if(expanded)
         {
             DcConArgs args2(args.toString());
+            args2.setCmdName(args.getCmdName());
             args = args2;
         }
     } while (expanded);
@@ -1073,10 +1114,15 @@ void DcConsoleForm::requestRefresh()
         }
     }
 
-    _textOutputLines.append(stream->buffer);
+    _textOutputLines.push_back(stream->buffer);
     stream->buffer.clear();
 
-    if(_textOutputLines.count()>_depth)
+    // Calculate the number of lines viewable
+    int fsz = QFontMetrics(ui->textEdit->currentFont()).height();
+    int lcnt = ui->textEdit->maximumViewportSize().height()/fsz;
+    int dcnt = qMax(lcnt,_depth);
+
+    while(_textOutputLines.count() >dcnt )
     {
         _textOutputLines.removeFirst();
     }
@@ -1122,7 +1168,8 @@ void DcConsoleForm::cmd_doc( DcConArgs args )
 {
     if(args.argCount())
     {
-        QString c = args.first().toString();
+        QString c = args.getCmdName();
+
         if (_fnSym.contains(c))
         {
             DcFnSymDef fnDef = _fnSym.value(c);
@@ -1132,6 +1179,10 @@ void DcConsoleForm::cmd_doc( DcConArgs args )
         {
              DcConItem conItem = _cmdHash.value(c);
              args.setMeta("doc",conItem.helpString);
+        }
+        else
+        {
+            args.setMeta("doc","readonly symbol");
         }
     
         *this << c << " : " << args.meta("doc") << "\n";
