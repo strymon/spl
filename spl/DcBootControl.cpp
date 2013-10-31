@@ -45,11 +45,11 @@ DcBootControl::DcBootControl( QRtMidiIn& i, QRtMidiOut& o )
 
 #if defined(Q_OS_WIN32)
     _maxDataOut = 128;
+    _delayBetweenDataOut = 42; // ms (~320us/B * 128B)
 #else
     _maxDataOut = 0;
+    _delayBetweenDataOut = 0; // ms (~320us/B * 128B)
 #endif
-
-    _delayBetweenDataOut = 0;
 }
 
 
