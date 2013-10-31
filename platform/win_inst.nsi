@@ -18,32 +18,38 @@ Section
    
   SetOutPath $INSTDIR\Librarian
 
-  # Qt libs
-  File .\win\redist\D3DCompiler_43.dll
-  File .\win\redist\Qt5Core.dll
-  File .\win\redist\Qt5Gui.dll
-  File .\win\redist\Qt5Network.dll
-  File .\win\redist\Qt5Widgets.dll
-  File .\win\redist\icudt49.dll
-  File .\win\redist\icuin49.dll
-  File .\win\redist\icuuc49.dll
-  File .\win\redist\libEGL.dll
-  File .\win\redist\libGLESv2.dll
-  File .\lgpl.txt
+  # Delete everything and start over.
+  # This will have issues if the application is still running
+  Delete "D3DCompiler_43.dll"
+  Delete "D3DCompiler_46.dll"
+  Delete "Qt5Core.dll"
+  Delete "Qt5Gui.dll"
+  Delete "Qt5Network.dll"
+  Delete "Qt5Widgets.dll"
+  Delete "icudt49.dll"
+  Delete "icuin49.dll"
+  Delete "icuuc49.dll"
+  Delete "icudt51.dll"
+  Delete "icuin51.dll"
+  Delete "icuuc51.dll"
+  Delete "libEGL.dll"
+  Delete "libGLESv2.dll"
+  Delete "platforms\qwindows.dll"
+  Delete "msvcp100.dll"
+  Delete "msvcr100.dll"
+  Delete "msvcp110.dll"
+  Delete "msvcr110.dll"
+  Delete "spl.exe"
+  Delete "lgpl.txt"
+  Delete "uninstall.exe"
 
-  # Copy the Qt platform file
-  CreateDirectory $INSTDIR\Librarian\platforms
-  SetOutPath $INSTDIR\Librarian\platforms
-  File .\win\redist\platforms\qwindows.dll
+   
+# Bring in the runtime files
+!include ..\..\build\redist.ins
 
-  # The C++ Runtime
   SetOutPath $INSTDIR\Librarian
-  File .\win\redist\msvcp100.dll
-  File .\win\redist\msvcr100.dll
-
   # Main Executable
   File $%APP_EXE%
- # ..\build\bin\Win32\XP_Release\spl.exe
 
   # Create some shortcuts
   CreateShortCut "$SMPROGRAMS\Strymon\Librarian.lnk" "$INSTDIR\Librarian\spl.exe" "" "$INSTDIR\Librarian\spl.exe" 0
@@ -81,12 +87,16 @@ Section "Uninstall"
   Delete "icudt49.dll"
   Delete "icuin49.dll"
   Delete "icuuc49.dll"
+  Delete "icudt51.dll"
+  Delete "icuin51.dll"
+  Delete "icuuc51.dll"
   Delete "libEGL.dll"
   Delete "libGLESv2.dll"
   Delete "platforms\qwindows.dll"
   Delete "msvcp100.dll"
   Delete "msvcr100.dll"
   Delete "spl.exe"
+  Delete "lgpl.txt"
   Delete "uninstall.exe"
   
   ; Delete the program folders  
