@@ -23,6 +23,9 @@
 #include "PresetLibSMDefs.h"
 #include <QThread>
 #include "DcMidiDevDefs.h"
+#include "DcDeviceDetails.h"
+#include "DcLog.h"
+
 
 //-------------------------------------------------------------------------
 void DcXferMachine::sendNext_entered()
@@ -50,7 +53,7 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
     // the transfer - like controller messages, etc...
-    if(data.contains(DcMidiDevDefs::kStrymonDevice))
+    if(data.contains(_devDetails->SOXHdr))
     {
         if(data == _activeCmd)
         {
@@ -60,28 +63,33 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
             return;
         } 
 
-
         // cancel the watchdog timer
         _watchdog.stop();
 
         // Check for a Negative Acknowledgment of the data in request
-        if( data.contains("F0 00 01 55 XX XX 47 F7") )
+        if( data.match(_devDetails->PresetRdResponce_NACK,true) )
         {
             _progressDialog->setError("Device Rejected Command");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
-        else if(data.contains("F0 00 01 55 XX XX 62")) // A preset opcode is 62h
+        else if( data.contains(_devDetails->PresetWriteHdr) )
         {
-            _progressDialog->inc();
-            _midiDataList.append(data);
-            _machine->postEvent(new DataXfer_ACKEvent());
+            if( verifyPresetData(data,_progressDialog,_devDetails) == true )
+            {
+                _progressDialog->inc();
+                _midiDataList.append(data);
+                _machine->postEvent(new DataXfer_ACKEvent());
+            }
+            else
+            {
+                _machine->postEvent(new DataXfer_NACKEvent()); 
+            }
         }
         else
         {
-            qDebug() << "replySlotForDataIn - error, unexpected msg: " << data.toString(' ');
-            // Getting here means an unexpected message was received.
-            say("Unexpected messaged received - transfer protocol violation - sadness");
-            _progressDialog->setError("The device responded incorrectly to the read request, sorry!");
+            DCLOG() << "Unexpected data received after preset read";
+            DCLOG() << data.toString();
+            _progressDialog->setError("Unexpected data received after requesting the preset.");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
     }
@@ -93,17 +101,18 @@ void DcXferMachine::replySlotForDataOut( const QRtMidiData &data )
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
     // out preset transfer - like controller messages
-    if(data.contains(DcMidiDevDefs::kStrymonDevice))
+    if(data.contains(_devDetails->SOXHdr))
     {
-        // cancel the watchdog timer
+        // Cancel the watchdog timer
         _watchdog.stop();
-        // Check for a Negative Acknowledgment of the data in request
-        if(data.contains("F0 00 01 55 XX XX XX XX 46 F7"))
+        
+        // Check for write preset Negative Acknowledgment
+        if( data.match(_devDetails->PresetWrResponce_NACK) )
         {
             _progressDialog->setError("Device Rejected Write Command");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
-        else if(data.contains("F0 00 01 55 XX XX XX XX 45 F7"))
+        else if( data.match(_devDetails->PresetWrResponce_ACK) )
         {
             _progressDialog->inc();
             _machine->postEvent(new DataXfer_ACKEvent());
@@ -111,8 +120,9 @@ void DcXferMachine::replySlotForDataOut( const QRtMidiData &data )
         else
         {
             // Getting here means an unexpected message was received.
-            say("Unexpected messaged received - transfer protocol violation - sadness");
-            _progressDialog->setError("The device responded incorrectly to the write request, sorry!");
+            DCLOG() << "Unexpected data received after preset write";
+            DCLOG() << data.toString();
+            _progressDialog->setError("Unexpected data after preset write");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
     }
@@ -123,15 +133,9 @@ void DcXferMachine::xferTimeout()
 {
     _watchdog.stop();
     
-    _progressDialog->setError("Sorry, the device is not responding");
-    say("DcXferMachine::xferTimeout()");
+    _progressDialog->setError("Unable to communicate with the device.");
+    DCLOG() << "Transfer Timeout";
     _machine->postEvent(new DataXfer_TimeoutEvent());
-}
-
-//-------------------------------------------------------------------------
-void DcXferMachine::say( QString s )
-{
-    qDebug() << s;
 }
 
 //-------------------------------------------------------------------------
@@ -143,9 +147,7 @@ DcState* DcXferMachine::setupStateMachine(QStateMachine* m,QRtMidiOut* out,DcSta
     _midiOut = out;
 
     DcState *sendNext        = new DcState(QString("sendNext"));
-
-    //DcState *dataXferComplete            = new DcState(QString("dataXferComplete"),QState::ExclusiveStates);
-    
+  
     _machine->addState(sendNext);
 
     QObject::connect(sendNext, SIGNAL(entered()), this, SLOT(sendNext_entered())); // IN
@@ -202,8 +204,10 @@ void DcXferMachine::reset()
 }
 
 //-------------------------------------------------------------------------
-void DcXferMachine::go(int maxPacketSize/*=-1*/, int delayPerPacket /*=0*/)
+void DcXferMachine::go(DcDeviceDetails* devDetails, int maxPacketSize/*=-1*/, int delayPerPacket /*=0*/)
 {
+    _devDetails = devDetails;
+
     _maxPacketSize = maxPacketSize;
     _msPerPacket = delayPerPacket;
 
@@ -212,4 +216,52 @@ void DcXferMachine::go(int maxPacketSize/*=-1*/, int delayPerPacket /*=0*/)
     _progressDialog->setProgress(0);
     _progressDialog->setMax(_cmdList.length());
     _progressDialog->show();
+}
+
+//-------------------------------------------------------------------------
+bool DcXferMachine::verifyPresetData( const QRtMidiData &data, IoProgressDialog* progDialog, const DcDeviceDetails* devinfo )
+{
+    // Verify Data transfer:
+    bool rtval = false;
+
+    // Verify: data must end with a EOX (F7)
+    if( data.at(data.length()-1) != 0xF7 )
+    {
+        // Incomplete data response
+        DCLOG() << "Data transfer IN - incomplete preset received, never say EOX";
+        progDialog->setError("Received incomplete preset data");
+    }
+    else 
+    {
+        if( data.length() != devinfo->PresetSize )
+        {
+            DCLOG() << "Data transfer IN - packet size mismatch: expected " << devinfo->PresetSize << " got " << data.length();
+            DCLOG() << "Bad Packet: " << data.toString();
+
+            if(devinfo->PresetSize > data.length())
+            {
+                progDialog->setError("The preset data received is corrupt and too small");
+            }
+            else
+            {
+                progDialog->setError("The preset data received is too large");
+            }
+        }
+        else 
+        {
+            // Verify the checksum
+            int sum = data.sumOfSection(devinfo->PresetStartOfDataOffset,devinfo->PresetDataLength);
+            int dataVal = data.at(devinfo->PresetChkSumOffset);
+            if(sum != dataVal)
+            {
+                DCLOG() << "The preset data received is corrupt, checksum Error.";
+                DCLOG() << data.toString();
+            }
+            else
+            {
+                rtval = true;                      
+            }
+        }
+    }
+    return rtval;
 }

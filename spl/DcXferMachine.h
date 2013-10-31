@@ -25,6 +25,9 @@
 #include "DcState.h"
 #include "IoProgressDialog.h"
 
+
+struct DcDeviceDetails;
+
 typedef QList<QRtMidiData> DcMidiDataList;
 
 class DcXferMachine : public QObject
@@ -38,26 +41,39 @@ public:
 
 public slots:
 
-  // Called to setup the transfer engine
+ /*!
+ 	Called to setup the transfer engine
+ */
  DcState* setupStateMachine(QStateMachine* m,QRtMidiOut* out,DcState* doneState,DcState* errorState,DcState* cancelState);
 
   // State Handlers
   void sendNext_entered();
     
-  // Data input slot for reading data and the expected
-  // input is a block of MIDI data or a NACK message.
+  /*!
+      Data input slot for reading data and the expected
+	  input is a block of MIDI data or a NACK message.
+  */
   void replySlotForDataIn( const QRtMidiData &data );
+
   
-  // Data input slot used when writing data - the expected
-  // input is an acknowledge (ACK) or negatively acknowledge 
-  // (NACK) MIDI message.
+  /*!
+    Verify preset data.  The method expects that a complete
+    preset is given.
+  */ 
+  bool verifyPresetData( const QRtMidiData &data, IoProgressDialog* progDialog, const DcDeviceDetails* devinfo);
+
+
+  /*!
+	  Data input slot used when writing data - the expected
+	  input is an acknowledge (ACK) or negatively acknowledge 
+	  (NACK) MIDI message.
+  */
   void replySlotForDataOut( const QRtMidiData &data );
 
-  // Timer handler - triggered on device timeout
+  /*!
+  	Timer handler - triggered on device timeout
+  */
   void xferTimeout();
- 
-  void say( QString s );
-
   int getTimeout() const { return _timeout; }
   void setTimeout(int val) { _timeout = val; }
   
@@ -66,14 +82,14 @@ public slots:
   void setCancel() { _cancel = true; }
   void setProgressDialog( IoProgressDialog* progressDialog );
 
-  void go(int maxPacketSize = -1, int delayPerPacket = 0);
+  void go(DcDeviceDetails* _devDetails, int maxPacketSize = -1, int delayPerPacket = 0);
 
   void append( QRtMidiData& cmdStr );
-  void reset();
- 
 
+  void reset();
 
 private:
+
     int _timeout;
     QTimer _watchdog;
 
@@ -89,4 +105,5 @@ private:
     
     int _msPerPacket;
     int _maxPacketSize;
+    DcDeviceDetails* _devDetails;
 };
