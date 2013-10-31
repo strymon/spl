@@ -34,7 +34,17 @@
 #include "DcDeviceDetails.h"
 #include "DcFileDownloader.h"
 
-class QRtMidiSettings;
+#include "dcconbool.h"
+
+#include <QMutex>
+#include "DcMidiIoTester.h"
+#include "DcQSio.h"
+#include "DcQUtils.h"
+#include "DcLog.h"
+
+
+class MidiSettings;
+
 
 class DcPresetLib : public QMainWindow
 {
@@ -43,9 +53,14 @@ class DcPresetLib : public QMainWindow
 public:
     DcPresetLib(QWidget *parent = 0);
 
-    void setupConsole();
-
     ~DcPresetLib();
+    
+    void setupConsole();
+    bool enableMidiMonitor(bool enable);
+    void resetReadOnlySymbolDefines();
+    void updatePresetChecksum(QRtMidiData &md);
+
+
 
 
 signals:
@@ -70,12 +85,26 @@ signals:
     void test_signal();
 
 private slots:
+    void devImgClicked();
 
     void conCmd_MidiMonCtrl(DcConArgs args);
     void conCmd_MidiOut(DcConArgs args);
     void conCmd_MidiWriteFile(DcConArgs args);
+
+    // Write each QRtMidiData in the list to the current device.
+    void midiListToDevice( QList<QRtMidiData> &sysexList );
+
+    void conCmd_ExportWorklistPresets(DcConArgs args);
+    void conCmd_SplitPresetBundle( DcConArgs args );
+
+    void exportPresetBundleToPath( QString fileName, QString &destPath );
+
     void conCmd_GetUrl(DcConArgs args);
     void conCmd_Fetch(DcConArgs args);
+
+    bool isBankPresetString( QString s );
+
+    int bankPresetToNum( QString s );
 
     // Work list and it's buttons 
     void on_workList_itemSelectionChanged();
@@ -97,10 +126,8 @@ private slots:
     void on_actionRename_triggered();
     void on_actionLoad_One_triggered();
     void on_actionShow_Console_triggered();
-         
 
-
-    void dispLastErrorMsgBox();
+    void dispErrorMsgBox(const char* msg =  0);
 
     void on_actionSave_One_triggered();
 
@@ -109,19 +136,36 @@ private slots:
 
     // StateMachine - Transition Slots
     void detectDevice_entered();
-
+    void erroRecovery_entered();
+    void cancelXfer_entered();
     void shutdownMidiIo();
 
 
     void appDataClear();
 
     void recvIdData(const QRtMidiData &data);
+
+   
+    bool updateDeviceDetails( const QRtMidiData &data,DcDeviceDetails& details );
+
+    void setFamilyDetails( DcDeviceDetails &details );
+
+    QString getEffectType( const QRtMidiData &data);
+    void recvIdDataTrigger(void* mt);
+
     void midiDataInToConHandler(const QRtMidiData &data);
     void midiDataOutToConHandler(const QRtMidiData &data);
     void devIdWatchDog();
     void userCanFetch_entered();
     void noDevice_entered();
+
+    void setupIdResponceTrigger();
+
     void setupReadPresetXfer_entered();
+
+    // Remove all slot connections from midiIn
+    void clearMidiInConnections();
+
     void readPresetsComplete_entered();
     void writePresetsComplete_entered();
 
@@ -151,9 +195,38 @@ private slots:
     void conCmd_qss( DcConArgs args );
     void conCmd_lswl( DcConArgs args );
     void conCmd_exec( DcConArgs args );
+    void conCmd_showlog( DcConArgs args );
+    void conCmd_char( DcConArgs args );
+    void conCmd_uuid( DcConArgs args );
+    void conCmd_outn( DcConArgs args );
+    void conCmd_timeCall( DcConArgs args );
+    void conCmd_delay( DcConArgs args );
+    void conCmd_getBootCodeInfo( DcConArgs args );
+    void conCmd_switchToBootcode( DcConArgs args );
+    void conCmd_exitBootcode( DcConArgs args );
+    void conCmd_changeActiveBootBank( DcConArgs args );
     void conCmd_smtrace( DcConArgs args );
-    
-    void downloadDone();
+    void conCmd_ioConfig( DcConArgs args );
+    void conCmd_pinit( DcConArgs args );
+    void conCmd_cpsel( DcConArgs args );
+    void conCmd_fwupdate( DcConArgs args );
+
+    bool updateFirmware( DcDeviceDetails& devDetails, QString filename );
+
+    // For the given list of midi data, create a text file.
+    bool midiDataToTextFile( QString fileName, QList<QRtMidiData> dataList);
+    bool midiDataToTextFile( QString fileName, QRtMidiData data);
+
+    bool binaryCal(int minMsgSz, int maxSz, int delayTime);
+
+    int verifyMidiIo( int byteCnt );
+
+    void conDownloadDone();
+    void updateFetchComplete();
+
+    void on_actionShow_Update_Pandel_triggered();
+
+    void clearWorklist();
 
 private:
     
@@ -166,6 +239,7 @@ private:
 
 
 
+    DcLog* _log;
 
     Ui::DcPresetLibClass ui;
 
@@ -176,7 +250,10 @@ private:
 
     QRtMidiIn           _midiIn;
     QRtMidiOut          _midiOut;
-    QRtMidiSettings*    _midiSettings;
+    QMutex              _midiSyncMutex;
+
+    MidiSettings*       _midiSettings;
+
     
     // State Machine
     QStateMachine _machine;
@@ -228,6 +305,7 @@ private:
     QString _worklistBackupPath;
     QString _devlistBackupPath;
     QString _dataPath;
+    QString _updatesPath;
     bool _backupEnabled;
     QStringList _styleHistory;
 
@@ -237,6 +315,10 @@ private:
     // A set of devices
     QSet<const char*> _supportedDevicesSet;
 
+    DcConBool*  _midiOutDecimalMode;
+    int _maxMsgSize;
+    int _delayPerMsgChunk;
+    
 protected:
 
     /*!
@@ -244,25 +326,22 @@ protected:
     */ 
     QStringList presetListToBankPatchName(QList<QRtMidiData>& listData);
     QString presetNumberToBankNum(int i);
-    QString presetToBankNum(const QRtMidiData& preset );
+    QString getPresetBankPresetNumber(const QRtMidiData& preset );
+
+    quint16 getPresetNumber( const QRtMidiData &preset );
+
     QString presetToName(QRtMidiData& p);
     QString presetToBankPatchName(QRtMidiData& p);
 
-//    bool eventFilter(QObject *o, QEvent *evt);
-
-    void dclog(const QString str);
-
     void closeEvent(QCloseEvent *e);
 
-    // Logging 'QsLog'
     void setupFilePaths();
     
     // QSettings helpers
     void writeSettings();
     void readSettings();
 
-    // Test Helper
-    void testRtMidiData();
+
     bool savePresetBinary(const QString &fileName,const QList<QRtMidiData>& dataList);
     bool savePresetBinary(const QString &fileName,const QRtMidiData& md);
     bool loadPresetBinary(const QString &fileName,QList<QRtMidiData>& dataList);
@@ -270,8 +349,26 @@ protected:
     void backupDeviceList();
     void backupWorklist();
     
-    bool loadSysexFile( const QString &fileName,QList<QRtMidiData>& dataList  );
+    bool loadSysexFile( const QString &fileName,QList<QRtMidiData>& dataList, QList<QRtMidiData>* pRejectDataList  = 0 );
     bool hasDevSupport( const QRtMidiData &data );
+    void initInvalidPresets();
+   
+    QString getPresetName(QRtMidiData &md);
+    void setPresetName(QRtMidiData &md, QString name);
+    bool fetchFileFromUrl(QString u, QString d);
+    QByteArray makeProductUID(DcDeviceDetails& details);
+    bool programSysexFile(QString fileName);
+    void copySelectedPresets(QString destWLIndex);
+    bool midiDataToBinFile( QString fileName, QRtMidiData data );
+    bool stringListToTextFile( QString fileName, QStringList strList );
+
+    QRtMidiTrigger* _idResponceTrigger;
+
+#ifdef DCSIO_FEATURE
+        DcQSio* _sio;
+#endif
+
+
 
 };
 
