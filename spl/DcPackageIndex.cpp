@@ -19,6 +19,7 @@
 --------------------------------------------------------------------------*/
 #include "DcPackageIndex.h"
 #include <QSettings>
+#include "DcLog.h"
 
 const char* DcPackageIndex::kNullId = "0";
 
@@ -31,7 +32,8 @@ bool DcPackageIndex::init(QString idxPath)
 
     if(!QFile::exists(idxPath))
     {
-        _lastError << "index file was not found: " << idxPath << "\n";        
+        _lastError << "index file was not found: " << idxPath;        
+        DCERROR() << getLastError();
         return false;
     }
 
@@ -39,7 +41,8 @@ bool DcPackageIndex::init(QString idxPath)
 
     if(!_idxFile)
     {
-        _lastError << "unable to create QSettings file from: " << idxPath << "\n";
+        _lastError << "unable to create QSettings file from: " << idxPath;
+        DCERROR() << getLastError();
         return false;
     }
 
@@ -48,7 +51,8 @@ bool DcPackageIndex::init(QString idxPath)
     // Check the file signature
     if(signature != "31.25")
     {
-        _lastError << "index file signature file failure: wanted \"31.25\", got: " << signature << "\n";
+        _lastError << "index file signature file failure: wanted \"31.25\", got: " << signature;
+        DCERROR() << getLastError();
         uninit();
     }
 
@@ -78,13 +82,15 @@ bool DcPackageIndex::getProductIds(QStringList& lst)
     }
     else
     {
-        _lastError << __FUNCTION__ << " error - object not initialized";
+        _lastError << "error - object not initialized";
+        DCERROR() << getLastError();
         return false;
     }
     
     if(lst.isEmpty())
     {
-        _lastError << __FUNCTION__ << " product list is empty";
+        _lastError << "product list is empty";
+        DCERROR() << getLastError();
         return false;
     }
 
@@ -100,13 +106,15 @@ bool DcPackageIndex::getVersions( DcProductIdStr pid,QStringList& lst )
 
     if(!isOk())
     {
-        _lastError << __FUNCTION__ << " error - object not initialized";
+        _lastError << "error - object not initialized";
+        DCERROR() << getLastError();
         return false;
     }
 
     if(!_idxFile->childGroups().contains(pid))
     {
-        _lastError << __FUNCTION__ << " specified product id (" << pid << ") was not found\n";
+        _lastError << "Specified product id (" << pid << ") was not found";
+        DCERROR() << getLastError();
         return false;
     }
 
@@ -116,7 +124,8 @@ bool DcPackageIndex::getVersions( DcProductIdStr pid,QStringList& lst )
 
     if(lst.isEmpty())
     {
-        _lastError << __FUNCTION__ << " version list is empty for product: " << pid << "\n";
+        _lastError << "Version list is empty for product: " << pid;
+        DCERROR() << getLastError();
         return false;
     }
 
@@ -133,14 +142,16 @@ bool DcPackageIndex::initPackageDesc( DcVersionStr version, DcProductIdStr pid, 
 
     if(!isOk())
     {
-        _lastError << __FUNCTION__ << " error - object not initialized";
+        _lastError  << " error - object not initialized";
+        DCLOG() << getLastError();
     }
     else if(version.isEmpty() || version.count() >= 4)
     {
         bool ok = desc.value.fromString(version);
         if(!ok)
         {
-            _lastError << __FUNCTION__ << " - can't convert version to integer: " << version << "\n";
+            _lastError << " - can't convert version to integer: " << version;
+            DCLOG() << getLastError();
         }
         else
         {
@@ -150,7 +161,8 @@ bool DcPackageIndex::initPackageDesc( DcVersionStr version, DcProductIdStr pid, 
     }
     else
     {
-        _lastError << __FUNCTION__ << " - format of 'version' is incorrect: " << version << "\n";
+        _lastError << " - format of 'version' is incorrect: " << version;
+        DCLOG() << getLastError();
     }
     
     return rtval;
@@ -161,24 +173,27 @@ bool DcPackageIndex::getLatest(DcProductIdStr pid, DcPackageDesc& latest,bool us
     bool ok;
     bool rtval = false;
     latest.clear();
-
+    
     if(!isOk())
     {
-        _lastError << __FUNCTION__ << " error - object not initialized";
+        _lastError << " error - object not initialized";
+        DCLOG() << getLastError();
     }
     else
     {
         int latestRelease = _idxFile->value(pid + "/latest").toInt(&ok);
         if(!ok && !useBeta)
         {
-            _lastError << __FUNCTION__ << " error - product was not found";
+            _lastError << " error - product was not found";
+            DCLOG() << getLastError();
         }
         else if(useBeta)
         {
             int latestBeta = _idxFile->value(pid + "/beta/latest").toInt(&ok);
             if(!ok && (0 == latestRelease))
             {
-                _lastError << __FUNCTION__ << " error - product was not found";
+                _lastError << " error - product was not found";
+                DCLOG() << getLastError();
             }
 
             if(latestRelease >= latestBeta)
@@ -242,7 +257,8 @@ bool DcPackageIndex::findNewer( DcProductIdStr pid, DcVersionStr version, bool u
         }
         else
         {
-             _lastError << __FUNCTION__ << " error - failed to convert version to a value: " << version << "\n";
+             _lastError << " error - failed to convert version to a value: " << version;
+             DCLOG() << getLastError();
         }
     }
 
@@ -261,7 +277,8 @@ QStringList DcPackageIndex::getFileList( DcPackageDesc& desc )
 
     if(!isOk())
     {
-        _lastError << __FUNCTION__ << " error - object not initialized";
+        _lastError << " error - object not initialized";
+        DCLOG() << getLastError();
     }
     else
     {
@@ -284,7 +301,8 @@ QString DcPackageIndex::getChangeLog( DcPackageDesc& desc )
 
     if(!isOk())
     {
-        _lastError << __FUNCTION__ << " error - object not initialized";
+        _lastError << " error - object not initialized";
+        DCLOG() << getLastError();
     }
     else
     {

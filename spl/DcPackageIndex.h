@@ -196,7 +196,7 @@ public:
     /*!
     	If a method returns false, use this method to find out why
     */
-    QString getLastError() const { return _lastErrorMsgStr; }
+    inline QString getLastError() const { return _lastErrorMsgStr; }
     
     /*!
     	Clear the last error message
