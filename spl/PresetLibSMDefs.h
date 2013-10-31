@@ -23,7 +23,8 @@
 
 enum DcEventOffset
 {
-    TestEventOffset,
+    VerifyDeviceConnectionOffset,
+    DetectDeviceOffset,
     FetchCompleteSuccessOffset,
     FetchDataExistsEventOffset,
     WriteCompleteSuccessOffset,
@@ -44,7 +45,8 @@ enum DcEventOffset
 
 };
 
-typedef DcSimpleEvent<TestEventOffset> TestEvent;
+typedef DcSimpleEvent<VerifyDeviceConnectionOffset> VerifyDeviceConnection;
+typedef DcSimpleEvent<DetectDeviceOffset> DetectDevice;
 typedef DcSimpleEvent<InPresetEditOffset> InPresetEditEvent;
 typedef DcSimpleEvent<FetchCompleteSuccessOffset> FetchCompleteSuccessEvent;
 typedef DcSimpleEvent<FetchDataExistsEventOffset> FetchDataExistsEvent;

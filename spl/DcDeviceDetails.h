@@ -27,14 +27,23 @@ struct DcDeviceDetails : public QRtMidiDevIdent
     void clear()
     {
         QRtMidiDevIdent::clear();
-        PresetHdr.clear();
-        DataInNACK.clear();
-        DevSOX.clear();
-        PresetDataByteOffset = 0;
+        PresetWriteHdr.clear();
+        FactoryPresetWriteHdr.clear();
+        PresetRdResponce_NACK.setPattern("");
+        PresetWrResponce_NACK.setPattern("");
+        PresetWrResponce_ACK.setPattern("");
+
+        PresetNumberOffset = 0;
         PresetSize = 0;
         PresetCount = 0;
-        BankCount = 0;
         PresetsPerBank = 0;
+        PresetStartOfDataOffset = 0;
+        PresetsPerBank = 0;
+        PresetDataLength = 0;
+        PresetChkSumOffset = 0;
+        PresetNameLen = 0;
+        PresetNameOffset = 0;
+        DeviceIconResPath.clear();
     }
 
     bool isEmpty()
@@ -48,17 +57,27 @@ struct DcDeviceDetails : public QRtMidiDevIdent
         return Name + QRtMidiDevIdent::FwVersion;
     }
 
-    quint8 PresetDataByteOffset;
+    quint8  PresetNumberOffset;
     quint16 PresetSize;
     quint16 PresetCount;
-    quint16 BankCount;
-    int     PresetsPerBank;
+    quint16 PresetStartOfDataOffset;
+    quint16 PresetsPerBank;
+    quint16 PresetDataLength;
+    quint16 PresetChkSumOffset;
+    quint16 PresetNameLen;
+    quint16 PresetNameOffset;
     
-    QRtMidiData DevSOX;
-    QRtMidiData PresetHdr;
-    QRtMidiData DataInNACK;
+    
+    QRtMidiData PresetWriteHdr;
+    QRtMidiData FactoryPresetWriteHdr;
+    QRegExp     PresetRdResponce_NACK;
+    QRegExp     PresetWrResponce_NACK;
+    QRegExp     PresetWrResponce_ACK;
+
     QString     Name;
-    QByteArray ReadPresetTemplate;
+    QByteArray PresetReadTemplate;
+    QString    DeviceIconResPath;
+    
 
 
 };

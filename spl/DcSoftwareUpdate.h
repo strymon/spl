@@ -105,7 +105,7 @@ protected:
     // Append the full local to the given file 'path'
     QString appendWithLocalPath( DcPackageIndex::DcPackageDesc &desc,QString path )
     {
-        return QDir::toNativeSeparators(_rootPath + desc.id + "/" + path);
+        return QDir::toNativeSeparators(_rootPath + desc.id + "/" + path); 
     }
 
     // Download the "package" contents from the remote server.

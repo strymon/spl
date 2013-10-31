@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
-    <height>793</height>
+    <width>771</width>
+    <height>865</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -227,7 +227,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QListWidget" name="workList">
+           <widget class="DcListWidget" name="workList">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -245,6 +245,9 @@
             </property>
             <property name="editTriggers">
              <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
             </property>
            </widget>
           </item>
@@ -342,7 +345,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="devImgLabel">
+           <widget class="DcImgLabel" name="devImgLabel">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -557,8 +560,17 @@
        </item>
        <item>
         <widget class="QSlider" name="vs0">
+         <property name="maximum">
+          <number>127</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="tickPosition">
+          <enum>QSlider::TicksBothSides</enum>
+         </property>
+         <property name="tickInterval">
+          <number>32</number>
          </property>
         </widget>
        </item>
@@ -676,7 +688,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>737</width>
+     <width>771</width>
      <height>21</height>
     </rect>
    </property>
@@ -717,6 +729,7 @@
      <string>View</string>
     </property>
     <addaction name="actionShow_Console"/>
+    <addaction name="actionShow_Update_Pandel"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuEdit"/>
@@ -810,7 +823,12 @@
     <string>Show Console</string>
    </property>
    <property name="shortcut">
-    <string>Alt+S</string>
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionShow_Update_Pandel">
+   <property name="text">
+    <string>Show Update Panel</string>
    </property>
   </action>
  </widget>
@@ -821,6 +839,16 @@
    <extends>QWidget</extends>
    <header>DcConsoleForm.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DcListWidget</class>
+   <extends>QListWidget</extends>
+   <header>DcListWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>DcImgLabel</class>
+   <extends>QLabel</extends>
+   <header>DcImgLabel.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
