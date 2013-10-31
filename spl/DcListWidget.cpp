@@ -59,12 +59,5 @@ void DcListWidget::dragMoveEvent( QDragMoveEvent *e )
          qDebug() << i->text();
      }
      e->accept();
-    
-    //         if (e->source() != this) 
-    //         {
-    //             e->accept();
-    //         } else 
-    //         {
-    //             e->ignore();
-    //         }
+
 }
