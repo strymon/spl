@@ -29,29 +29,35 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QDir>
+
 class DcFileDownloader : public QObject
 {
     Q_OBJECT
 public:
+    
     explicit DcFileDownloader(QUrl url, QObject *parent = 0);
 
     virtual ~DcFileDownloader();
 
     QByteArray downloadedData() const;
     QString getName() { return QFileInfo(_url.path()).fileName();}
+    QString getDest() {return QDir::toNativeSeparators(_dest);}
+
+     bool saveData(QString fname);
 signals:
     void downloaded();
+    void Done();
 
     private slots:
 
         void fileDownloaded(QNetworkReply* pReply);
-
+       
 private:
 
     QNetworkAccessManager m_WebCtrl;
     QUrl _url;
     QByteArray m_DownloadedData;
-
+    QString _dest;
 };
 
 #endif // DCFILEDOWNLOADER_H
