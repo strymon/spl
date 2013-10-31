@@ -22,11 +22,10 @@
 #include "DcDeviceDetails.h"
 #include <QSettings>
 #include <QRegExp>
+#include "DcLog.h"
+#include <QApplication>
 
-// Test URL: "http://sarris/foo.html"; // 
-const char* DcSoftwareUpdate::kIndexFileUrl = "http://s3-us-west-1.amazonaws.com/strymon/pkgs/idx.ini"; // TODO: use a virtual host
-const char* DcSoftwareUpdate::kIndexFileName = "idx.ini";
-
+const char* DcSoftwareUpdate::kRedirectFileUrl = "http://www.strymon.net/upd_spl.bin";
 
 //-------------------------------------------------------------------------
 bool DcSoftwareUpdate::verifyLocalPath(DcPackageIndex::DcPackageDesc desc)
@@ -106,9 +105,20 @@ bool DcSoftwareUpdate::downloadFile( QString srcUrl, QString destPath )
     // TODO: how to check for errors?
     if(dl)
     {
-        dl->saveData(destPath);
+        bool rtval = false;
+
+        if(!dl->hasError())
+        {
+            dl->saveData(destPath);
+            rtval = true;
+        }
+        else
+        {
+            DCLOG() << "Failed downloading " << srcUrl << " Error: " << dl->getErrorStr();
+        }
+
         delete dl;
-        return true;
+        return rtval;
     }
     else
     {
@@ -252,7 +262,43 @@ bool DcSoftwareUpdate::prepForUpdateToLatest( DcDeviceDetails& devDetails,DcUpda
 }
 
 //-------------------------------------------------------------------------
-bool DcSoftwareUpdate::init( QString localPath, QString idxUrl )
+QByteArray DcSoftwareUpdate::makeDigest(QByteArray key, QByteArray url)
+{
+    QByteArray md5 = QCryptographicHash::hash(url,QCryptographicHash::Md5);
+    QByteArray digest = QCryptographicHash::hash(md5.toHex() + key,QCryptographicHash::Md5);
+
+    return digest;
+}
+
+//-------------------------------------------------------------------------
+bool DcSoftwareUpdate::checkUrlFile(QString fname,QString& newUrl)
+{
+    QFile file(fname);
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    QByteArray url;
+    QByteArray digest;
+    in >> url >> digest;
+    QByteArray chk = makeDigest(QApplication::applicationName().toLatin1(),url);
+
+    bool rtval = chk == digest;
+    if(!rtval)
+    {
+        DCLOG() << "The URL File Check Failed:";
+        DCLOG() << "File: " << fname;
+        DCLOG() << "URL: " << url;
+        DCLOG() << "Digest: " << digest.toHex();
+    }
+    else
+    {
+        newUrl = QString(url);
+    }
+       
+    return rtval;
+}
+
+//-------------------------------------------------------------------------
+bool DcSoftwareUpdate::init( QString localPath, QString urlFilePath )
 {
     uninit();
 
@@ -262,13 +308,34 @@ bool DcSoftwareUpdate::init( QString localPath, QString idxUrl )
         return false;
     }
 
+    // First, download the update url file
+    if(!downloadFile(kRedirectFileUrl,urlFilePath))
+    {
+        // Can't get the file from the server, see if we have an old copy.
+        if( !QFile::exists(urlFilePath) )
+        {
+            DCLOG() << "URL file was not local and server is unreachable.";
+            _lastResult << "Unable to contact server";
+            return false;
+        }
+        DCLOG() << "Failed to download the URL file.  Using the local copy.";
+    }
+    
+    // Attempt to extract the update URL from the local url file
+    if(!getIndexUrlFromFile(urlFilePath,_idxUrl))
+    {
+        // Unable to get the index file URL, so bail
+        return false;
+    }
+    
+    // Extract the file name from the url
+    QString idxFileName = QDir(_idxUrl).dirName();
     _rootPath = localPath;
-    _idxUrl = idxUrl;
-    _idxFilePath = QDir::toNativeSeparators(_rootPath + kIndexFileName);
+    _idxFilePath = QDir::toNativeSeparators(_rootPath + idxFileName);
 
     try
     {
-	    if(downloadFile(idxUrl,_idxFilePath))
+	    if(downloadFile(_idxUrl,_idxFilePath))
 	    {
 	        if(_swPackageIndex.init(_idxFilePath))
 	        {
@@ -603,6 +670,29 @@ bool DcSoftwareUpdate::isPresetFile( QString& nextFile )
 QString DcSoftwareUpdate::getLastResult()
 {
     return _lastResultString;
+}
+
+//-------------------------------------------------------------------------
+bool DcSoftwareUpdate::getIndexUrlFromFile( QString urlFilePath, QString& url )
+{
+    QString updatesUrl;
+    bool rtval = false;
+
+    // Verify the url file
+    if(!checkUrlFile(urlFilePath,updatesUrl))
+    {
+        DCERROR() << "The URL file is invalid";
+        _lastResult << "The URL file is invalid";
+    }
+    else
+    {
+        DCLOG() << "URL File was successfully downloaded";
+        DCLOG() << "UPDATES URL: " << updatesUrl;
+        rtval = true;
+        url = updatesUrl;
+    }
+
+    return rtval;
 }
 
 //-------------------------------------------------------------------------

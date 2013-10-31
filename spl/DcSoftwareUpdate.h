@@ -49,8 +49,7 @@ class DcSoftwareUpdate : public QObject
 {
            Q_OBJECT;
 public:
-    static const char* kIndexFileUrl;
-    static const char* kIndexFileName;
+    static const char* kRedirectFileUrl;
 
     DcSoftwareUpdate() {_lastResult.setString(&_lastResultString);};
     DcSoftwareUpdate(QString localPath, QString idxUrl) : _rootPath(localPath), _idxUrl(idxUrl) 
@@ -61,6 +60,9 @@ public:
     ~DcSoftwareUpdate() {};
     
     bool init(QString localPath, QString idxUrl);
+
+    bool getIndexUrlFromFile( QString urlFilePath, QString& url );
+
     void uninit();
 
     bool prepForUpdateToLatest(DcDeviceDetails& dev, DcUpdateWorklist& updateWorkList);
@@ -134,7 +136,13 @@ protected:
 
     // Download the file from the given package that contains the 
     QString downloadFileWithPartialString( DcPackageIndex::DcPackageDesc desc,QString partialString);
+   
+    // Returns true if the URL file is valid, and if valid, the url contained in the file
+    // is placed in newUrl
+    bool checkUrlFile(QString fname,QString& newUrl);
     
+    // Return digest for given key and string
+    QByteArray makeDigest(QByteArray key, QByteArray str);
 
     
 private:

@@ -78,6 +78,7 @@ private:
     DcUpdateWorklist _updateWl;
     IoProgressDialog* _progressDialog; 
     DcUpdate_Result _installUpdateResult;
+    QString _urlFileName;
 };
 
 #endif // DCUPDATEDIALOG_H

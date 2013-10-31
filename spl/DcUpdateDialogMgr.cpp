@@ -33,6 +33,7 @@ DcUpdateDialogMgr::DcUpdateDialogMgr(QString localUpdatePath, DcBootControl* bct
     _bootCtl = bctl;
     _devDetails = details;
     _updatesPath = localUpdatePath;
+    _urlFileName = localUpdatePath + QLatin1String("upd_") + QApplication::applicationName() + QLatin1String(".bin");
 }
 
 DcUpdateDialogMgr::~DcUpdateDialogMgr()
@@ -60,7 +61,7 @@ DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::getLatestAndShowDialog()
 
 
 
-    if(pm.init(_updatesPath,DcSoftwareUpdate::kIndexFileUrl))
+    if(pm.init(_updatesPath,_urlFileName))
     {
             QString newVer;
 
@@ -100,7 +101,7 @@ DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::getLatestAndShowDialog()
                         _installUpdateResult = DcUpdate_Unknown;
                         if(installUpdate(pm,ud->okToInstallPresets()))
                         {
-                            DCLOG() << QLatin1String("update completed successfully");
+                            DCLOG() << QLatin1String("Update completed successfully");
                             rtval = DcUpdate_Success;
                         }
                         else
@@ -137,7 +138,7 @@ DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::getLatestAndShowDialog()
         }
         else
         {
-            _progressDialog->show();
+            _progressDialog->hide();
             _lastErrorMsgStr = "<h2>Error Obtaining Update Information</h2>";
             DCLOG() << pm.getLastResult();
             DCLOG() << "Current Version: " << _devDetails.FwVersion;

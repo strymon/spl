@@ -42,6 +42,8 @@ public:
     QByteArray downloadedData() const;
     QString getName() { return QFileInfo(_url.path()).fileName();}
     QString getDest() {return QDir::toNativeSeparators(_dest);}
+    bool hasError();
+    QString getErrorStr();
 
      bool saveData(QString fname);
 signals:
@@ -51,10 +53,12 @@ signals:
     private slots:
 
         void fileDownloaded(QNetworkReply* pReply);
-       
+
+
 private:
 
     QNetworkAccessManager m_WebCtrl;
+    QString _errorString;
     QUrl _url;
     QByteArray m_DownloadedData;
     QString _dest;
