@@ -24,6 +24,8 @@
 #include <QThread>
 #include "QRtMidi/QRtMidiIdent.h"
 #include <QApplication>
+#include "DcLog.h"
+
 
 const char* DcBootControl::kPrivateResetPartial = "F0 00 01 55 vv vv 1B F7";
 const char* DcBootControl::kFUGood = "F0 00 01 55 42 0C 00 F7";
@@ -93,26 +95,26 @@ bool DcBootControl::enableBootcode( )
         // Verify device is in boot code
         if(!isBootcode())
         {
-            qWarning() << "Failed to verify device is in boot code";
+            DCLOG() << "Failed to verify device is in boot code";
         }
         else
         {
-            qDebug() << "Device is running boot code";
+            DCLOG() << "Device is running boot code";
             rtval = true;
         }
 
     }
     else if(responceData.match(RESPONCE_ENABLE_RECOVERY_REJECTED))
     {
-        qWarning() << "The device has rejected the enable recovery command";
+        DCLOG() << "The device has rejected the enable recovery command";
     }
     else if(responceData.match(RESPONCE_ENABLE_RECOVERY_FAILED))
     {
-        qWarning() << "Device has failed the enabled recovery command";
+        DCLOG() << "Device has failed the enabled recovery command";
     }
     else
     {
-        qWarning() << "Timeout entering boot code";
+        DCLOG() << "Timeout entering boot code";
     }
     return rtval;
 }
@@ -135,7 +137,7 @@ bool DcBootControl::identify(QRtMidiDevIdent* id /*=0 */)
             if(autotc.dequeue(md))
             {
                 id->fromIdentData(md);
-                qDebug() << id->toString() << "\n";
+                DCLOG() << id->toString() << "\n";
                 rtval = true;
             }
         }
@@ -183,24 +185,24 @@ bool DcBootControl::writeFirmwareUpdateMsg(QRtMidiData& msg,int timeOutMs /*= 20
             }
             else if(md == kFUBad)
             {
-                qDebug() << "kFUBad";
+                DCLOG() << "kFUBad";
                 _lastErrorMsg << "Device reject firmware command - BAD packet.";
             }
             else if(md == kFUFailed)
             {
-                qDebug() << "kFUFailed";
+                DCLOG() << "kFUFailed";
                 _lastErrorMsg << "Device failed firmware command.";
             }
             else
             {
-                qDebug() << "Unknown response: " << md.toString(' ') << "\n";
+                DCLOG() << "Unknown response: " << md.toString(' ') << "\n";
                 _lastErrorMsg << "Firmware write generated an unknown response from the device.";
             }
         }
     }
     else
     {
-        qDebug() << "Timeout waiting on " << msg.toString(' ') << "\n";
+        DCLOG() << "Timeout waiting on " << msg.toString(' ') << "\n";
         _lastErrorMsg << "Firmware update failure - timeout after write command.\n" << msg.toString(' ').mid(15,38);
     }
 
@@ -292,14 +294,14 @@ bool DcBootControl::activateBank( int bankNumber )
     // Parameter Checking
     if(bankNumber != 0 && bankNumber != 1)
     {
-        qDebug() << "Invalid bank number specified";
+        DCLOG() << "Invalid bank number specified";
         return false;
     }
 
     // Verify system state
     if(!isBootcode())
     {
-        qDebug() << "not in boot code, can't activate a bank";
+        DCLOG() << "not in boot code, can't activate a bank";
         return false;
     }
     
@@ -379,7 +381,7 @@ QRtMidiData DcBootControl::makePrivateResetCmd()
     // Verify we can ID the connected device
     if(false == identify(&id))
     {
-        qWarning() << "No response from identity request";
+        DCLOG() << "No response from identity request";
     }
     else
     {
