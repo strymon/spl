@@ -38,12 +38,13 @@ public slots:
     void reset();
     void setMax(int max);
     void setError( QString msg );
-
-
+    void setMessage( QString msg );
+    void setFormat(QString fmt);
+    void setNoCancel( bool noCan );
 
 protected:
     void showEvent(QShowEvent *e);
-
+    
 private:
 
     Ui_IoProgressDialog ui;

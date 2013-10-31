@@ -17,8 +17,6 @@
 #include "IoProgressDialog.h"
 #include <QTimer>
 
-
-
 //-------------------------------------------------------------------------
 IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
     :QDialog(parent)
@@ -73,13 +71,15 @@ bool IoProgressDialog::cancled()
 void IoProgressDialog::reset()
 {
     setProgress(0);
-    
+    ui.progressBar->setTextVisible(false);
     _hasCancled = false;
     ui.msgLabel->clear();
+    ui.pushButton->show();
 }
 //-------------------------------------------------------------------------
 void IoProgressDialog::setError( QString msg )
 {
+    ui.msgLabel->setStyleSheet("color: rgb(255, 0, 0)");
     ui.msgLabel->setText(msg);
 }
 
@@ -88,6 +88,7 @@ void IoProgressDialog::setMax( int max )
 {
       ui.progressBar->setMinimum(0);
       ui.progressBar->setMaximum(max);
+      ui.progressBar->setTextVisible(true);
 }
 
 //-------------------------------------------------------------------------
@@ -106,4 +107,23 @@ void IoProgressDialog::showEvent( QShowEvent *e )
     Q_UNUSED(e);
     ui.pushButton->setFocus();
 
+}
+
+//-------------------------------------------------------------------------
+void IoProgressDialog::setMessage( QString msg )
+{
+    ui.msgLabel->setStyleSheet("color: rgb(0,0,0)");
+    ui.msgLabel->setText(msg);
+}
+
+//-------------------------------------------------------------------------
+void IoProgressDialog::setFormat( QString fmt )
+{
+    ui.progressBar->setFormat(fmt);
+}
+
+//-------------------------------------------------------------------------
+void IoProgressDialog::setNoCancel( bool noCan )
+{
+    noCan ? ui.pushButton->hide() : ui.pushButton->show();
 }
