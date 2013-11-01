@@ -44,11 +44,11 @@ DcBootControl::DcBootControl( QRtMidiIn& i, QRtMidiOut& o )
     _lastErrorMsg.setString(&_lastErrorMsgStr);
 
 #if defined(Q_OS_WIN32)
-    _maxDataOut = 128;
-    _delayBetweenDataOut = 42; // ms (~320us/B * 128B)
+    _maxDataOut = 0;
+    _delayBetweenDataOut = 0; 
 #else
     _maxDataOut = 0;
-    _delayBetweenDataOut = 0; // ms (~320us/B * 128B)
+    _delayBetweenDataOut = 0;
 #endif
 }
 
