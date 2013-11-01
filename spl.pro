@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
-SUBDIRS = spl
-CONFIG +=ordered
-
+SUBDIRS = QRtMidi spl
+CONFIG += ordered
+cache()
