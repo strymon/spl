@@ -209,9 +209,6 @@ private slots:
     void conCmd_ioConfig( DcConArgs args );
     void conCmd_pinit( DcConArgs args );
     void conCmd_cpsel( DcConArgs args );
-    void conCmd_fwupdate( DcConArgs args );
-
-    bool updateFirmware( DcDeviceDetails& devDetails, QString filename );
 
     // For the given list of midi data, create a text file.
     bool midiDataToTextFile( QString fileName, QList<QRtMidiData> dataList);
