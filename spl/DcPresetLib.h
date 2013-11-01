@@ -37,8 +37,6 @@
 #include "dcconbool.h"
 
 #include <QMutex>
-#include "DcMidiIoTester.h"
-#include "DcQSio.h"
 #include "DcQUtils.h"
 #include "DcLog.h"
 
