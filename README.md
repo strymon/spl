@@ -19,8 +19,8 @@ It was written in C++ and uses the Qt Application and UI framework. <br>
 Version: 0.9.3.8 <br>
 Date: 11/01/2013 <br>
 
-OSX ( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) <br>
-Windows ( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.exe ) <br>
+OSX: [strymon_lib_setup_0.9.3.8.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) <br>
+Windows: [strymon_lib_setup_0.9.3.8.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.exe ) <br>
 
 #### What's New in 0.9.3.8
 + OSX 10.9 support
