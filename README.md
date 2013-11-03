@@ -27,7 +27,7 @@ Windows: [strymon_lib_setup_0.9.3.8.exe]( https://s3-us-west-1.amazonaws.com/str
 + Verify and reconnect to a device by clicking the device icon.
 + Added a firmware update feature, the Librarian can check for and program new firmware updates.
 + Added support for BigSky.
-+ Shit-Clicking a preset in the Work List will transfer it to the devices “edit buffer.”
++ Shift-Clicking a preset in the Work List will transfer it to the devices “edit buffer.”
 + Control-Clicking a preset in the Work List will switch the device preset by send a corresponding bank select and preset change message.
 
 ### Previous Release
