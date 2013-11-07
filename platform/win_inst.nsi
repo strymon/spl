@@ -77,32 +77,21 @@ Section "Uninstall"
   Delete "$APPDATA_COMMON_FOLDER\Strymon\spl"
 
   ; Delete each file
-  SetOutPath "$INSTDIR"
+  SetOutPath $INSTDIR
 
-  Delete "D3DCompiler_43.dll"
-  Delete "Qt5Core.dll"
-  Delete "Qt5Gui.dll"
-  Delete "Qt5Network.dll"
-  Delete "Qt5Widgets.dll"
-  Delete "icudt49.dll"
-  Delete "icuin49.dll"
-  Delete "icuuc49.dll"
-  Delete "icudt51.dll"
-  Delete "icuin51.dll"
-  Delete "icuuc51.dll"
-  Delete "libEGL.dll"
-  Delete "libGLESv2.dll"
-  Delete "platforms\qwindows.dll"
-  Delete "msvcp100.dll"
-  Delete "msvcr100.dll"
+  !include ..\..\build\redist_remove.ins
+
   Delete "spl.exe"
   Delete "lgpl.txt"
-  Delete "uninstall.exe"
   
   ; Delete the program folders  
-  SetOutPath "$TEMP"
-  RMDir $PROGRAMFILES\Strymon\Librarian\platforms
-  RMDir $PROGRAMFILES\Strymon\Librarian
+  SetOutPath $TEMP
+  RMDir $INSTDIR\platforms
+  
+  Delete $INSTDIR\uninstall.exe
+  RMDir $INSTDIR
+  RMDir $INSTDIR\..
+
 
   ; If this is empty, it shall be deleted
   RMDir $PROGRAMFILES\Strymon

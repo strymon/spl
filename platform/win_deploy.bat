@@ -225,6 +225,9 @@ goto :EOF
   if not exist %REDIST_PATH%\icuuc%QT_ICU_VER%.dll goto redistcopyerror
   if not exist %REDIST_PATH%\libEGL.dll goto redistcopyerror
   if not exist %REDIST_PATH%\libGLESv2.dll goto redistcopyerror
+
+  if not exist %REDIST_PATH%\msvcp%MSVC_REDIST_VER%.dll goto redistcopyerror
+  if not exist %REDIST_PATH%\msvcr%MSVC_REDIST_VER%.dll goto redistcopyerror
    
   echo SetOutPath $INSTDIR\Librarian > %BUILD_DIR%\redist.ins
   echo File %REDIST_PATH%\D3DCompiler_%D3DVER%.dll >> %BUILD_DIR%\redist.ins
@@ -240,12 +243,35 @@ goto :EOF
   echo File %REDIST_PATH%\libEGL.dll >> %BUILD_DIR%\redist.ins
   echo File %REDIST_PATH%\libGLESv2.dll >> %BUILD_DIR%\redist.ins
 
+  echo File %REDIST_PATH%\msvcp%MSVC_REDIST_VER%.dll >> %BUILD_DIR%\redist.ins
+  echo File %REDIST_PATH%\msvcr%MSVC_REDIST_VER%.dll  >> %BUILD_DIR%\redist.ins
+
   echo # Copy the Qt platform file >> %BUILD_DIR%\redist.ins
   echo CreateDirectory $INSTDIR\Librarian\platforms >> %BUILD_DIR%\redist.ins
   echo SetOutPath $INSTDIR\Librarian\platforms >> %BUILD_DIR%\redist.ins
   echo File %REDIST_PATH%\platforms\qwindows.dll >> %BUILD_DIR%\redist.ins 
-  set createRedist=0
 
+  setlocal
+  set incfile=%BUILD_DIR%\redist_remove.ins
+
+  echo # Delete runtime > %incfile%
+  echo Delete platforms\qwindows.dll >> %incfile%
+  echo Delete D3DCompiler_%D3DVER%.dll >> %incfile%
+  echo Delete Qt5Core.dll >> %incfile%
+  echo Delete Qt5Gui.dll >> %incfile%
+  echo Delete Qt5Network.dll >> %incfile%
+  echo Delete Qt5Widgets.dll >> %incfile%
+  echo Delete icudt%QT_ICU_VER%.dll >> %incfile%
+  echo Delete icuin%QT_ICU_VER%.dll >> %incfile%
+  echo Delete icuuc%QT_ICU_VER%.dll >> %incfile%
+  echo Delete libEGL.dll >> %incfile%
+  echo Delete libGLESv2.dll >> %incfile%
+
+  echo Delete msvcp%MSVC_REDIST_VER%.dll >> %incfile%
+  echo Delete msvcr%MSVC_REDIST_VER%.dll  >> %incfile%
+  endlocal
+
+  set createRedist=0
 goto :EOF
 
 :redistcopyerror
