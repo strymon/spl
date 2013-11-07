@@ -16,13 +16,13 @@ It was written in C++ and uses the Qt Application and UI framework. <br>
 <b>Windows</b> XP, Vista, 7, 8<br>
 
 ### Current Release
-Version: 0.9.3.8 <br>
+Version: 0.9.3  <br>
 Date: 11/01/2013 <br>
 
 OSX: [strymon_lib_setup_0.9.3.8.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) <br>
-Windows: [strymon_lib_setup_0.9.3.8.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.exe ) <br>
+Windows: [strymon_lib_setup_0.9.3.9.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.9.exe ) <br>
 
-#### What's New in 0.9.3.8
+#### What's New in 0.9.3
 + OSX 10.9 support
 + Verify and reconnect to a device by clicking the device icon.
 + Added a firmware update feature, the Librarian can check for and program new firmware updates.
