@@ -38,6 +38,7 @@
 #include <QHistoryState>
 #include <QSignalTransition>
 #include "cmn/DcState.h"
+#include "cmn/DcGlobals.h"
 #include "DcBootControl.h"
 
 
@@ -165,7 +166,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
 
     // Do the rest of the application startup in this timer callback
-     QTimer::singleShot(10, this, SLOT(setupStateMachineHandler()));
+     QTimer::singleShot(50, this, SLOT(setupStateMachineHandler()));
 
     _idResponceTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(recvIdDataTrigger(void*)));
     // _portScanTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(portScanTrigger(void*)));
@@ -270,6 +271,7 @@ void DcPresetLib::writeSettings()
     settings.beginGroup("console");
     settings.setValue("show",ui.actionShow_Console->isChecked());
     settings.endGroup();
+    settings.setValue("fastfetch",gUseAltPresetSize);
 }
 
 //-------------------------------------------------------------------------
@@ -292,6 +294,7 @@ void DcPresetLib::readSettings()
     _maxMsgSize = settings.value("MaxMsgSize",-1).toInt();
     _delayPerMsgChunk = settings.value("DelayPerMsgChunk",0).toInt();
     settings.endGroup();
+    gUseAltPresetSize = settings.value("fastfetch",false).toBool();
 
 }
 
@@ -349,8 +352,25 @@ void DcPresetLib::detectDevice_entered()
 //-------------------------------------------------------------------------
 void DcPresetLib::erroRecovery_entered()
 {
+    QList<DcMidiData> mdl = _xferOutMachine.getCmdsWritten();
+    int presetCount = mdl.length();
+    if(presetCount)
+    {
+        for (int idx = 0; idx < presetCount; idx++)
+        {
+            DcMidiData md = mdl.at(idx);
+            int pid = getPresetNumber(md);
+            _deviceListData[pid] = md;
+        }
+
+        QStringList names = presetListToBankPatchName(_deviceListData);
+        // Update device list display
+        ui.deviceList->clear();
+        ui.deviceList->addItems(names);
+    }
+
     clearMidiInConnections();
-    checkSyncState();    
+    checkSyncState();
     _machine.postEvent(new WorkListDirtyEvent());
 }
 
@@ -456,11 +476,24 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
     ui.devImgLabel->setPixmap(pm);
     
     // Adding device specific details to the console
-    _con->addRoSymDef("EOX","F7");
-    _con->addRoSymDef("SOX","F0");
-    _con->addRoSymDef("dev.soxhdr",_devDetails.SOXHdr.toString(' '));
     _con->addRoSymDef("dev.ver",_devDetails.FwVersion);
     _con->addRoSymDef("dev.name",_devDetails.Name);
+
+    _con->addRoSymDef("eox","F7");
+    _con->addRoSymDef("sox","F0");
+
+    _con->addRoSymDef("dev.soxhdr",_devDetails.SOXHdr.toString(' '));
+
+    _con->addRoSymDef("dev.p.data.offset",_devDetails.PresetStartOfDataOffset);
+    _con->addRoSymDef("dev.p.number.offset",_devDetails.PresetNumberOffset);
+    _con->addRoSymDef("dev.p.size",_devDetails.PresetDataLength);
+    _con->addRoSymDef("dev.p.per_bank",_devDetails.PresetsPerBank);
+    _con->addRoSymDef("dev.p.count",_devDetails.PresetCount);
+    _con->addRoSymDef("dev.p.name.offset",_devDetails.PresetNameOffset);
+    _con->addRoSymDef("dev.p.name.len",_devDetails.PresetNameLen);
+    _con->addRoSymDef("dev.p.chksum.offset",_devDetails.PresetChkSumOffset);
+
+
 
 
 
@@ -559,8 +592,8 @@ void DcPresetLib::setupStateMachineHandler()
     cet->setTargetState(notInSyncState);
     errorRecovery->addTransition(cet);
 
-    QObject::connect(cancelXfer, SIGNAL(entered()), this, SLOT(cancelXfer_entered()));
 
+    QObject::connect(cancelXfer, SIGNAL(entered()), this, SLOT(cancelXfer_entered()));
     
     detectDevice->addTransition(this,SIGNAL(deviceReady()),     userCanFetch);
     detectDevice->addTransition(this,SIGNAL(deviceNotFound()),  noDevice);
@@ -767,7 +800,10 @@ void DcPresetLib::setupWritePresetXfer_entered()
         else
         {
             // Update the work list too.
-            _deviceListData[pid] = md;
+            // We can't assume this, there could be an error durring the transfrer.
+
+            // Don't update this yet: _deviceListData[pid] = md;
+
             _xferOutMachine.append(md);
         }
     }
@@ -793,7 +829,7 @@ void DcPresetLib::presetEdit_entered()
 {
     // Now, create a backup of this fresh data
     backupDeviceList();
-    updateWorkListFromDeviceList();
+   // updateWorkListFromDeviceList();
 
     Q_ASSERT(_deviceListData.length());
     
@@ -1019,6 +1055,16 @@ void DcPresetLib::writePresetsComplete_entered()
     qDebug() << "Preset write complete";
     clearMidiInConnections();
 
+    // Update the device list with the data that was transfered.
+    QList<DcMidiData> mdl = _xferOutMachine.getCmdsWritten();
+    int presetCount = mdl.length();
+    for (int idx = 0; idx < presetCount; idx++)
+    {
+        DcMidiData md = mdl.at(idx);
+        int pid = getPresetNumber(md);
+        _deviceListData[pid] = md;
+    }
+
     updateWorkListFromDeviceList();
     _machine.postEvent(new WriteCompleteSuccessEvent());
 }
@@ -1031,6 +1077,7 @@ void DcPresetLib::readPresetsComplete_entered()
      clearMidiInConnections();
 
     _deviceListData = _xferInMachine.getDataList();
+    updateWorkListFromDeviceList();
     
     // Keep track of what device this data was for
     _workListDataDeviceUid = _devDetails.getUid();
@@ -1128,7 +1175,8 @@ QString DcPresetLib::presetToBankPatchName(DcMidiData& p)
 void DcPresetLib::on_actionLoad_One_triggered()
 {
     QSettings settings;
-    QString lastOpened = settings.value("lastSinglePreset","presets.syx").toString();
+    QString defaultPresetFileName = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    QString lastOpened = settings.value("lastSinglePreset",defaultPresetFileName).toString();
 
     // Is anything selected, if not, that's a programming error as this action should be 
     // disabled until a selection
@@ -1201,7 +1249,8 @@ void DcPresetLib::on_actionSave_One_triggered()
     QSettings settings;
     QString lastSaveDir;
 
-    QString lastSave = settings.value("lastSinglePreset","onepreset.syx").toString();
+    QString lastSave = settings.value("lastSinglePreset","").toString();
+
     if(lastSave.isEmpty())
     {
             lastSaveDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
@@ -1267,8 +1316,8 @@ void DcPresetLib::on_actionSave_triggered()
 void DcPresetLib::on_actionOpen_triggered()
 {
     QSettings settings;
-    QString lastOpened = settings.value("lastPresetBundleOpened","presets.syx").toString();
-    
+    QString defaultPresetFileName = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/" + _devDetails.Name + " Presets.syx";
+    QString lastOpened = settings.value("lastPresetBundleOpened",defaultPresetFileName).toString();
     QString fileName = execOpenDialog(lastOpened);
 
     if(!fileName.isEmpty())
@@ -2630,6 +2679,7 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         details.PresetCount             = 200;
 
 
+
     }
     else if(data.contains(DcMidiDevDefs::kBigSkyIdent) ||  data.contains("0001551203"))
     {
@@ -2638,6 +2688,7 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         details.Name                      = "Big Sky";
         details.PresetsPerBank          = 3;
         details.PresetCount             = 300;
+
     }
     else
     {

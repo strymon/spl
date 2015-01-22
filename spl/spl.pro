@@ -21,11 +21,6 @@ win32:QMAKE_RC = rc
 #include the Dc common files
 include("$$LIB_DIR/cmn/cmn.pri")
 
-#debug:win32 {
-#    QMAKE_CXXFLAGS += -Fd$${DESTDIR}/$${TARGET}.pdb
-#}
-
-
 SOURCES += main.cpp\
         DcPresetLib.cpp\
         IoProgressDialog.cpp \

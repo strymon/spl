@@ -414,6 +414,7 @@ struct DcMidiDevIdent
     
     DcMidiData     Manufacture;
     QString        FwVersion;
+    int            FwVerInt;
     unsigned char  SyxCh;
     DcMidiData     Family;
     DcMidiData     Product;

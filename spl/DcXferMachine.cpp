@@ -26,7 +26,6 @@
 #include "DcDeviceDetails.h"
 #include "cmn/DcLog.h"
 extern bool gUseAltPresetSize;
-#define ALT_PRESET
 
 //-------------------------------------------------------------------------
 void DcXferMachine::sendNext_entered()
@@ -177,6 +176,7 @@ void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
             {
                 _progressDialog->setError("");
             }
+            _writeSuccessList.append(_activeCmd);
             _machine->postEvent(new DataXfer_ACKEvent());
         }
         else
@@ -248,11 +248,18 @@ void DcXferMachine::xferTimeout()
 //-------------------------------------------------------------------------
 // The object will activate when the returned stated is entered.
 // The object completes by transitioning to doneState or errorState
+DcMidiDataList_t DcXferMachine::getCmdsWritten()
+{
+    return _writeSuccessList;
+}
+
 DcState* DcXferMachine::setupStateMachine(QStateMachine* m,DcMidiOut* out,DcState* readDataComplete,DcState* errorState,DcState* cancelState)
 {
     _machine = m;
     _midiOut = out;
-    // DataXfer_RetryEvent
+
+
+
 
     DcState *sendNext        = new DcState(QString("sendNext"));
   
@@ -305,6 +312,7 @@ void DcXferMachine::append( DcMidiData& cmd )
 //-------------------------------------------------------------------------
 void DcXferMachine::reset()
 {
+    _writeSuccessList.clear();
     _cmdList.clear();
     _midiDataList.clear();
     _cancel = false;
@@ -318,6 +326,8 @@ void DcXferMachine::go(DcDeviceDetails* devDetails, int maxPacketSize/*=-1*/, in
 
     _maxPacketSize = maxPacketSize;
     _msPerPacket = delayPerPacket;
+
+    _writeSuccessList.clear();
 
     _timeout = 2000;
     _cancel = false;

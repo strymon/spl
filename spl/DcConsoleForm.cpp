@@ -61,6 +61,7 @@ DcConsoleForm::DcConsoleForm(QWidget *parent) :
     ui->setupUi(this);
 
     _dispCount = 0;
+    _con_html = false;
 
     _updateTimer.setInterval(0);
     _clearOutput = false;
@@ -698,7 +699,7 @@ void DcConsoleForm::cmd_depth( DcConArgs args )
     {
         // Display the depth
         *this << "depth is " << _depth << " lines\n";
-        *this << "current console lines: " << ui->textEdit << "\n";
+        *this << "current console lines: " << ui->textEdit->document()->lineCount() << "\n";
     }
     else if(args.oneArg())
     {
@@ -839,11 +840,16 @@ void DcConsoleForm::addSymDef( QString name, QString d )
 }
 
 //-------------------------------------------------------------------------
+void DcConsoleForm::addRoSymDef( QString name, int val )
+{
+    _roSym.insert(name, QString::number(val));
+}
+
+//-------------------------------------------------------------------------
 void DcConsoleForm::addRoSymDef( QString name, QString d )
 {
     _roSym.insert(name, d);
 }
-
 
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_defSave( DcConArgs args )
@@ -930,16 +936,15 @@ void DcConsoleForm::cmd_lsDef( DcConArgs  args )
     QString s;
     QTextStream txtStrm(&s);
 
-    txtStrm.setFieldWidth(20);
+    txtStrm.setFieldWidth(30);
     txtStrm.setFieldAlignment(QTextStream::AlignLeft);
-    txtStrm << "Name";
-    txtStrm << " | Definition";
-    *this << s << "\n";
-    s.clear();
-    *this << "-------------------- | ----------------------------\n";
-    
-    // Print the user defined command/symbols
+    *this << "\n";
+    *this << " SYMBOL NAME __________________ | DEFINITION__________________\n\n";
+//    *this << " ---------------------------- | ----------------------------\n";
 
+    s.clear();
+
+    // Print the user defined command/symbols
     QMapIterator<QString, DcFnSymDef> i(_fnSym);
     while (i.hasNext()) 
     {
@@ -1075,18 +1080,23 @@ void DcConsoleForm::cmd_undef( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcConsoleForm::cmd_conHtml( DcConArgs args )
 {
-    if(checkArgCnt(args,1))
+    if(args.noArgs())
+    {
+        *this << "con.html is " << ( _con_html ? "on" : "off") << "\n";
+    }
+    else
     {
         if(args.firstTruthy())
         {
             _con_html = true;
-            *this << "ok\n";
+            *this << "Console is using HTML\n";
         }
         else
         {
             _con_html = false;
-            *this << "ok\n";
+            *this << "Consolue is using plain text\n";
         }
+        clear();
     }
 }
 

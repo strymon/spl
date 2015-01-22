@@ -89,8 +89,8 @@ public:
     /*!
       clear the read only symbol definitions
     */ 
-    void clearRoSymDefs();
 
+    void clearRoSymDefs();
     /*!
       Sets the base path used for file IO
     */ 
@@ -120,6 +120,7 @@ public:
       Add a read only name/definition to the ro sym hash
     */ 
     void addRoSymDef(QString name, QString d);
+    void addRoSymDef(QString name, int val);
     /*!
       Execute given command string
     */ 
@@ -163,6 +164,7 @@ public:
     inline DcConsoleForm &operator<<(QTextStreamManipulator m)
     { stream->ts << m; requestRefresh(); return *this; }
     
+
 
 
 public slots:

@@ -38,7 +38,7 @@ public:
     DcXferMachine() { }
 
      ~DcXferMachine () {}
-
+   DcMidiDataList_t getCmdsWritten();
 public slots:
 
  /*!
@@ -108,4 +108,5 @@ private:
     DcDeviceDetails* _devDetails;
     int _retryCount;
     int _numRetries;
+    DcMidiDataList_t _writeSuccessList;
 };
