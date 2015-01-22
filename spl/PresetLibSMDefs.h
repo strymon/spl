@@ -18,7 +18,7 @@
 #define PresetLibSMDefs_h__
 
 #pragma once
-#include "DcStateMachineHelpers.h"
+#include "cmn/DcStateMachineHelpers.h"
 
 
 enum DcEventOffset
@@ -41,6 +41,7 @@ enum DcEventOffset
     DataXfer_ACKOffset,
     DataXfer_NACKOffset,
     DataXfer_TimeoutOffset,
+    DataXfer_Retry,
     DataXfer_CancledOffset,
 
 };
@@ -68,21 +69,22 @@ typedef DcSimpleEvent<DataXfer_ListEmptyOffset> DataXfer_ListEmptyEvent;
 typedef DcSimpleEvent<DataXfer_NACKOffset> DataXfer_NACKEvent;
 typedef DcSimpleEvent<DataXfer_ACKOffset> DataXfer_ACKEvent;
 typedef DcSimpleEvent<DataXfer_TimeoutOffset> DataXfer_TimeoutEvent;
+typedef DcSimpleEvent<DataXfer_Retry> DataXfer_RetryEvent;
 typedef DcSimpleEvent<DataXfer_CancledOffset> DataXfer_CancledEvent;
 
 
 struct MidiDataEvent : public BaseMidiDataEvent
 {
-    MidiDataEvent(const QRtMidiData &val)
+    MidiDataEvent(const DcMidiData &val)
         : value(val) {}
 
-    QRtMidiData value;
+    DcMidiData value;
 };
 
 
 
 // Perhaps one way to create a state transition based on the data in a
-// QRtMidiData event.
+// DcMidiData event.
 class ContainsMidiDataTransition : public DcCustomTransition
 {
 public:
@@ -116,7 +118,7 @@ MidiDataTransition *isDc = new MidiDataTransition("F0 00 01 55");
 isDc->setTargetState(s2);
 s1->addTransition(isDc);
 
-QRtMidiData md("F0 00 01 55");
+DcMidiData md("F0 00 01 55");
 sm.postevent(new MidiDataEvent(md));
 
 */

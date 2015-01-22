@@ -60,6 +60,8 @@ DcConsoleForm::DcConsoleForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    _dispCount = 0;
+
     _updateTimer.setInterval(0);
     _clearOutput = false;
     QObject::connect(&_updateTimer,SIGNAL(timeout()),this,SLOT(refreshTextOutput()));
@@ -102,6 +104,32 @@ DcConsoleForm::~DcConsoleForm()
 {
     saveHistory();
     delete ui;
+}
+
+int DcConsoleForm::initGuiElements()
+{
+    int w = 0;
+    QScrollBar* sb = ui->textEdit->verticalScrollBar();
+    if(sb)
+    {
+        w = sb->width();
+    }
+
+    ui->frame->setMinimumWidth(w);
+
+    return w;
+}
+
+void DcConsoleForm::incCounterDisplay(int value)
+{
+    _dispCount += value;
+    ui->label->setText(QString::number(_dispCount) + " Bytes");
+}
+
+void DcConsoleForm::clearCounterDisplay()
+{
+    _dispCount = 0;
+    ui->label->setText("");
 }
 
 //-------------------------------------------------------------------------
@@ -370,16 +398,16 @@ QString DcConsoleForm::getCurrentCommand()
 }
 
 //-------------------------------------------------------------------------
-void DcConsoleForm::on_lineEdit_textEdited(const QString & text)
+void DcConsoleForm::on_lineEdit_textEdited(const QString & /*text*/)
 {
-     if(text.contains("`"))
-     {
-        QString str = text;   
-        str.replace(QString("`"),QString(""));
-         ui->lineEdit->setText(str);
+//     if(text.contains("`"))
+//     {
+//        QString str = text;
+//        str.replace(QString("`"),QString(""));
+//         ui->lineEdit->setText(str);
 
-        toggleVisible();
-     }
+//        toggleVisible();
+//     }
 }
 
 //-------------------------------------------------------------------------
@@ -712,10 +740,10 @@ void DcConsoleForm::cmd_def( DcConArgs args )
         return;
     }
 
-    if(!checkArgCnt(args,2))
-    {
-        return;
-    }
+//    if(!checkArgCnt(args,2))
+//    {
+//        return;
+//    }
     
     DcFnSymDef symDef = parseFn(args.toString());
     if (_roSym.contains(symDef.name))
@@ -749,10 +777,13 @@ DcFnSymDef DcConsoleForm::parseFn(QString sexp)
 
             if(tokens.length() < 2)
                 throw parseError("error in expression");
+
             t = tokens.takeFirst();
             Q_ASSERT(t == "\"");
+
             symDef.doc = symDef.doc.trimmed();
-             t = tokens.takeFirst();
+
+            t = tokens.takeFirst();
         }
         
         if(t == "[")
@@ -762,14 +793,17 @@ DcFnSymDef DcConsoleForm::parseFn(QString sexp)
                 t = tokens.takeFirst();
                 if(t == "[")
                     throw parseError("misplaced '[' found, expected token or ']'");
+
                 symDef.args.append(t);
             }
 
             if(tokens.length() < 2)
                 throw parseError("error in expression");
+
             t = tokens.takeFirst();
             Q_ASSERT(t == "]");
         }
+
         symDef.expr = tokens.join(' ');
     }
     return symDef;

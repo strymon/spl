@@ -19,16 +19,16 @@
 #include <QString>
 #include <QStateMachine>
 #include <QObject>
-#include "QRtMidi/QRtMidiData.h"
-#include "QRtMidi/QRtMidiOut.h"
+#include "DcMidi/DcMidiData.h"
+#include "DcMidi/DcMidiOut.h"
 #include <QTimer>
-#include "DcState.h"
+#include "cmn/DcState.h"
 #include "IoProgressDialog.h"
 
 
 struct DcDeviceDetails;
 
-typedef QList<QRtMidiData> DcMidiDataList;
+typedef QList<DcMidiData> DcMidiDataList;
 
 class DcXferMachine : public QObject
 {
@@ -44,7 +44,7 @@ public slots:
  /*!
  	Called to setup the transfer engine
  */
- DcState* setupStateMachine(QStateMachine* m,QRtMidiOut* out,DcState* doneState,DcState* errorState,DcState* cancelState);
+ DcState* setupStateMachine(QStateMachine* m,DcMidiOut* out,DcState* doneState,DcState* errorState,DcState* cancelState);
 
   // State Handlers
   void sendNext_entered();
@@ -53,14 +53,14 @@ public slots:
       Data input slot for reading data and the expected
 	  input is a block of MIDI data or a NACK message.
   */
-  void replySlotForDataIn( const QRtMidiData &data );
+  void replySlotForDataIn( const DcMidiData &data );
 
   
   /*!
     Verify preset data.  The method expects that a complete
     preset is given.
   */ 
-  bool verifyPresetData( const QRtMidiData &data, IoProgressDialog* progDialog, const DcDeviceDetails* devinfo);
+  bool verifyPresetData( const DcMidiData &data, IoProgressDialog* progDialog, const DcDeviceDetails* devinfo);
 
 
   /*!
@@ -68,7 +68,7 @@ public slots:
 	  input is an acknowledge (ACK) or negatively acknowledge 
 	  (NACK) MIDI message.
   */
-  void replySlotForDataOut( const QRtMidiData &data );
+  void replySlotForDataOut( const DcMidiData &data );
 
   /*!
   	Timer handler - triggered on device timeout
@@ -77,17 +77,17 @@ public slots:
   int getTimeout() const { return _timeout; }
   void setTimeout(int val) { _timeout = val; }
   
-  QList<QRtMidiData>& getDataList() { return _midiDataList; }
+  QList<DcMidiData>& getDataList() { return _midiDataList; }
   
   void setCancel() { _cancel = true; }
   void setProgressDialog( IoProgressDialog* progressDialog );
 
   void go(DcDeviceDetails* _devDetails, int maxPacketSize = -1, int delayPerPacket = 0);
 
-  void append( QRtMidiData& cmdStr );
+  void append( DcMidiData& cmdStr );
 
   void reset();
-
+  void strickedReplySlotForDataOut( const DcMidiData &data );
 private:
 
     int _timeout;
@@ -97,13 +97,15 @@ private:
     IoProgressDialog* _progressDialog;
     
     QStateMachine*  _machine;
-    QRtMidiOut*     _midiOut;
-    QList<QRtMidiData>  _cmdList;
-    QList<QRtMidiData>  _midiDataList;
-    QRtMidiData _activeCmd;
+    DcMidiOut*     _midiOut;
+    QList<DcMidiData>  _cmdList;
+    QList<DcMidiData>  _midiDataList;
+    DcMidiData _activeCmd;
     int _pacPerCmd;
     
     int _msPerPacket;
     int _maxPacketSize;
     DcDeviceDetails* _devDetails;
+    int _retryCount;
+    int _numRetries;
 };

@@ -88,7 +88,6 @@ call %MSVC_SETUP% %PLAT%
 popd
 
 :: Force a clean build - but be careful recursively deleting a directory!!!
-:: For safety - only delete this path if a Makefile is found
 if exist %BUILDPATH%\spl\NUL rmdir /s /q %BUILDPATH%
 sleep .5
 mkdir %BUILDPATH%
@@ -98,11 +97,11 @@ cd /D %BUILDPATH%
 :: Make sure we are not in the same dir
 if exist win_deploy.bat goto :ERROR3
 @echo Invoking QMAKE: -platform %QMAKE_SPEC% -r -tp vc %PROJ_ROOT% 
-qmake -platform %QMAKE_SPEC% -r -tp vc %PROJ_ROOT% 
+qmake -platform %QMAKE_SPEC% -tp vc -r %PROJ_ROOT% 
 
 if %CREATE_ONLY% == Y goto :EOF
 
-msbuild QRtMidi/QRtMidi.vcxproj /t:Rebuild /p:Configuration=Release 
+msbuild DcMidi/DcMidi.vcxproj /t:Rebuild /p:Configuration=Release 
 msbuild spl/spl.vcxproj /t:Rebuild /p:Configuration=Release
 popd
 goto :EOF

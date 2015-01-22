@@ -16,13 +16,13 @@
 *-------------------------------------------------------------------------*/
 #include "DcPresetLib.h"
 #include <QtWidgets/QApplication>
-#include "QRtMidi/QRtMidiData.h"
+#include "DcMidi/DcMidiData.h"
 #include <QDebug>
 #include <QtGlobal>
 #include "DcConArgs.h"
 
 
-static const char* kDcVersionString = "0.9.3.9";
+static const char* kDcVersionString = "0.9.3.13";
 
 
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    qRegisterMetaType<QRtMidiData>();
+    qRegisterMetaType<DcMidiData>();
     qRegisterMetaType<DcConArgs>();
 
 

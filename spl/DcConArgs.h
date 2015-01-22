@@ -134,12 +134,22 @@ public:
     {
         if(argCount() >= 1)
         {
-            QString a = first().toString().toLower();
+            QString a = first().toString().toLower().trimmed();
             return a == "1" || a == "on" || a == "yes" || a == "true";
         }
         return false;
     }
-    
+
+    inline bool secondTruthy()
+    {
+        if(argCount() >= 2)
+        {
+            QString a = second().toString().toLower().trimmed();
+            return a == "1" || a == "on" || a == "yes" || a == "true";
+        }
+        return false;
+    }
+
     /*!
       Returns a QString version of the meta-data value for the given key
       For example, to get a command doc string, use 'doc'

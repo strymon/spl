@@ -60,7 +60,7 @@ public:
 
     bool updateFirmware(QString fileName);
 
-    bool loadSysexFile(const QString &fileName, QList<QRtMidiData> &dataList, QList<QRtMidiData> *pRejectDataList = 0);
+    bool loadSysexFile(const QString &fileName, QList<DcMidiData> &dataList, QList<DcMidiData> *pRejectDataList = 0);
 
     QString getLastErrorMsg();
 

@@ -22,7 +22,7 @@
 #include "DcDeviceDetails.h"
 #include <QSettings>
 #include <QRegExp>
-#include "DcLog.h"
+#include "cmn/DcLog.h"
 #include <QApplication>
 
 const char* DcSoftwareUpdate::kRedirectFileUrl = "http://www.strymon.net/upd_spl.bin";

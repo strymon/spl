@@ -19,7 +19,7 @@
 --------------------------------------------------------------------------*/
 #include "DcPackageIndex.h"
 #include <QSettings>
-#include "DcLog.h"
+#include "cmn/DcLog.h"
 
 const char* DcPackageIndex::kNullId = "0";
 

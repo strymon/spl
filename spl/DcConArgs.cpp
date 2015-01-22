@@ -1,5 +1,5 @@
 #include "DcConArgs.h"
-#include "QRtMidi/QRtMidiData.h"
+#include "DcMidi/DcMidiData.h"
 //-------------------------------------------------------------------------
 DcConArgs::DcConArgs( const DcConArgs &other )
 {
@@ -62,7 +62,7 @@ QString DcConArgs::strJoin( int offset /*= 1*/, int len /*= 0*/ )
     {
         st.append(_args.at(i).toString());
     }
-    QRtMidiData md(st);
+    DcMidiData md(st);
     return st;
     
 }
@@ -106,6 +106,12 @@ QString DcConArgs::toString()
     int len = count();
     for (int i = 0; i < len ; i++)
     {
+        QString t = _args.at(i).toString();
+        if(t.contains(" "))
+        {
+            st.append("\"" + _args.at(i).toString() + "\"");
+        }
+        else
         st.append(_args.at(i).toString() + " ");
     }
     return st.trimmed();    

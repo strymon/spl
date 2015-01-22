@@ -44,7 +44,7 @@ set CONFIG=release
 if %1X==X goto ARGDONE 
 @echo TOKENS: %1 %2
 :: /p to override the default build path
-if /I %1x==/px (
+if /I %1x==/pathx (
  set BUILD_DIR=%2
  shift
  shift
@@ -92,12 +92,12 @@ if /I %1x==/helpx (
 @echo --------------------------------------------------------------------------------------  
 @echo - USEAGE
 @echo - 
-@echo - /p ^<path^>       - optional - Path used to build project
+@echo - /path ^<path^>    - optional - Path used to build project
 @echo - /inst-only        - don't build or inc version, just build installer
 @echo - /ver ^<version^>  - optional - force build to use specified version or current if
 @echo -                                'cur' is specified
 @echo - /vs2012           - optional - force build to use the MSVC 2012 compiler
-@echo - /create           - optional - creatre VS project files only, do not build
+@echo - /create           - optional - creatre VS project files only, do not invoke build
 @echo - 
 @echo --------------------------------------------------------------------------------------  
 goto :EOF
@@ -106,6 +106,7 @@ goto :EOF
 
 if %USE_VS_2012% == NO goto confset
 :: QT 5.1.1 VS 2012 settings:w
+@echo Using vs2012
 set VSVER=2012
 set QTMAKESPEC=win32-msvc2012
 set MSVC_DIR=C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC

@@ -69,6 +69,16 @@ public:
       toggle the console form visibility
     */ 
     void toggleVisible();
+
+
+    /*!
+     * \brief getSbWidth will return the width of the console scroll bar
+     * \return
+     */
+    int initGuiElements();
+
+    void incCounterDisplay(int value);
+    void clearCounterDisplay();
    
     /*!
       set true, and the console input will except key presses, set false
@@ -154,12 +164,13 @@ public:
     { stream->ts << m; requestRefresh(); return *this; }
     
 
+
 public slots:
     virtual void setVisible(bool visible);
      
      
     void on_lineEdit_returnPressed();
-    void on_lineEdit_textEdited(const QString & text);
+    void on_lineEdit_textEdited(const QString &);
 
 
 
@@ -242,7 +253,7 @@ private:
     bool _noClrOnReturnOnce;
     bool _appendOk;
     QString _curLineEditText;
-    
+    int _dispCount;
     bool _con_html;
     quint64 _lastTs;
     bool getNoClrOnReturnOnce() const { return _noClrOnReturnOnce; }

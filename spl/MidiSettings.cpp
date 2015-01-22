@@ -16,13 +16,13 @@
 *-------------------------------------------------------------------------*/
 
 #include "MidiSettings.h"
-#include "QRtMidi/QRtMidiData.h"
+#include "DcMidi/DcMidiData.h"
 #include <QSettings>
 #include <QThread>
 
 #include <QSetIterator>
 
-#include "QRtMidi/QRtMidiIdent.h"
+#include "DcMidi/DcMidiIdent.h"
 #include "DcDeviceDetails.h"
 
 
@@ -39,7 +39,7 @@ MidiSettings::MidiSettings( QWidget *parent /*= 0*/ )
      _timer.stop();
 
      connect(&_timer, SIGNAL(timeout()), this, SLOT(updateTestResult()));
-     QObject::connect(&_midiIn, &QRtMidiIn::dataIn, this,&MidiSettings::recvDataForTest );
+     QObject::connect(&_midiIn, &DcMidiIn::dataIn, this,&MidiSettings::recvDataForTest );
 
      // Setup the midi IO
      _midiIn.init();
@@ -98,14 +98,14 @@ void MidiSettings::on_testButton_clicked()
     _midiIn.init();
     _midiOut.init();
 
-    _testResult = QRtTestResults::NotFoundTimeout;
+    _testResult = DcTestResults::NotFoundTimeout;
     ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 170, 0);}");
 
     if(!_midiOut.open(ui.midiOutCombo->currentText()))
     {
         ui.resultLabel->setText("MIDI Out Busy");
         ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
-        _testResult = QRtTestResults::PortBusy;;
+        _testResult = DcTestResults::PortBusy;;
         qDebug() << "MIDI OUT device " << ui.midiOutCombo->currentText() << " is busy";
     }
 
@@ -113,7 +113,7 @@ void MidiSettings::on_testButton_clicked()
     {
         ui.resultLabel->setText("MIDI In Busy");
         ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
-        _testResult = QRtTestResults::PortBusy;
+        _testResult = DcTestResults::PortBusy;
         qDebug() << "MIDI IN device " << ui.midiInCombo->currentText() << " is busy";
     }
     _timer.start(1000);
@@ -150,7 +150,7 @@ void MidiSettings::on_testButton_clicked()
 */
 
 // This method expects to receive a MIDI "Identity Request Response"
-void MidiSettings::recvDataForTest(const QRtMidiData &data)
+void MidiSettings::recvDataForTest(const DcMidiData &data)
 {
     // If the timer is not active, the timeout has happened.
     if(!_timer.isActive())
@@ -158,7 +158,7 @@ void MidiSettings::recvDataForTest(const QRtMidiData &data)
         return;    
     }
 
-    QRtMidiDevIdent ident(data);
+    DcMidiDevIdent ident(data);
 
     // Make sure the incoming data is an Identity response, if not, no need
     // to bother - the watchdog timer is still running so there's not hang.
@@ -167,13 +167,13 @@ void MidiSettings::recvDataForTest(const QRtMidiData &data)
         if(hasDevSupport(data))
         {
             _timer.stop();
-            _testResult = QRtTestResults::Success;
+            _testResult = DcTestResults::Success;
             _timer.start(0);
             qWarning() << "Success, using device: " << ident.getManufactureName() << " " << ident.toString();
         }
         else
         {
-            _testResult = QRtTestResults::UnknownDevice;
+            _testResult = DcTestResults::UnknownDevice;
             _unkownDevList.append(ident);
             qWarning() << "A device responded: " << ident.getManufactureName() << " " << ident.toString();
             qWarning() << "It's not supported, data= " << data.toString(' ');
@@ -227,15 +227,15 @@ void MidiSettings::updateTestResult()
         return;
 
     _timer.stop();
-    if(_testResult == QRtTestResults::Success)
+    if(_testResult == DcTestResults::Success)
     {
         ui.resultLabel->setText("success");
         ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(85, 170, 0);}");
     }
-    else if(_testResult == QRtTestResults::UnknownDevice)
+    else if(_testResult == DcTestResults::UnknownDevice)
     {
         QString lastUnkownInList = "unknown";
-        foreach(QRtMidiDevIdent id, _unkownDevList)
+        foreach(DcMidiDevIdent id, _unkownDevList)
         {
             qDebug() << id.getManufactureName() << " " << id.toString();
             lastUnkownInList = "Unsupported: " + id.getManufactureName() + " Product: " + id.Product.toString();
@@ -245,7 +245,7 @@ void MidiSettings::updateTestResult()
         ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 255, 102);}");
 
     }
-    else if(_testResult == QRtTestResults::NotFoundTimeout)
+    else if(_testResult == DcTestResults::NotFoundTimeout)
     {
         qDebug() << "No response from the MIDI port";
         ui.resultLabel->setText("no response");
@@ -280,13 +280,13 @@ void MidiSettings::reject()
 //-------------------------------------------------------------------------
 void MidiSettings::cleanup()
 {
-     QObject::disconnect(&_midiIn, &QRtMidiIn::dataIn, 0,0); 
+     QObject::disconnect(&_midiIn, &DcMidiIn::dataIn, 0,0); 
     _midiIn.close();
     _midiOut.close();
 }
 
 //-------------------------------------------------------------------------
-bool MidiSettings::hasDevSupport( const QRtMidiData &data )
+bool MidiSettings::hasDevSupport( const DcMidiData &data )
 {
     QSetIterator<const char*> i(_supportSet);
     while (i.hasNext())

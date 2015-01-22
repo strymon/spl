@@ -24,8 +24,8 @@
 #include "DcSoftwareUpdate.h"
 #include "DcUpdateAvailableDialog.h"
 #include "DcBootControl.h"
-#include "DcQUtils.h"
-#include "DcLog.h"
+#include "cmn/DcQUtils.h"
+#include "cmn/DcLog.h"
 
 DcUpdateDialogMgr::DcUpdateDialogMgr(QString localUpdatePath, DcBootControl* bctl, DcDeviceDetails &details, QWidget *parent /*=0*/)
 {
@@ -177,7 +177,7 @@ bool DcUpdateDialogMgr::installUpdate( DcSoftwareUpdate &pm,bool okToInstallPres
         else
         {
             // Firmware update complete, if the "update work list" has other sysex files, apply these files.
-            QList<QRtMidiData> sysexList;
+            QList<DcMidiData> sysexList;
 
             bool bailError = false;
 
@@ -291,8 +291,8 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
             _lastErrorMsgStr = "Unable to open the file: " + fileName;
             return false;
         }
-        QList<QRtMidiData> sysexList;
-        QList<QRtMidiData> filterList;
+        QList<DcMidiData> sysexList;
+        QList<DcMidiData> filterList;
 
         // MIDI messages that are not used by the fw update code are added to this list.
         filterList << "F0 00 01 55 42 11 F7" << "F0 00 01 55 42 01 F7";
@@ -344,7 +344,7 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
 
                     // The firmware is contained in a list of QRTMidiData objects, each object is a
                     // sysex message that shall be sent to device.
-                    foreach(QRtMidiData md, sysexList)
+                    foreach(DcMidiData md, sysexList)
                     {
                         bool writeStatus = false;
                         
@@ -430,7 +430,7 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
 
     return rtval;
 }
-bool DcUpdateDialogMgr::loadSysexFile( const QString &fileName,QList<QRtMidiData>& dataList, QList<QRtMidiData>* pRejectDataList /* = 0 */)
+bool DcUpdateDialogMgr::loadSysexFile( const QString &fileName,QList<DcMidiData>& dataList, QList<DcMidiData>* pRejectDataList /* = 0 */)
 {
     bool result = true;
     _lastErrorMsgStr.clear();
@@ -447,7 +447,7 @@ bool DcUpdateDialogMgr::loadSysexFile( const QString &fileName,QList<QRtMidiData
 
     // Load one preset in, see if it matches the current Manufacture
     unsigned char byte;
-    QRtMidiData md;
+    DcMidiData md;
     bool lookForStatusByte = true;
 
     while(1 == in.readRawData((char*)&byte,1))
@@ -475,7 +475,7 @@ bool DcUpdateDialogMgr::loadSysexFile( const QString &fileName,QList<QRtMidiData
                 {
                     bool reject = false;
                     // Apply the filter
-                    foreach(QRtMidiData rejectMd,*pRejectDataList)
+                    foreach(DcMidiData rejectMd,*pRejectDataList)
                     {
                         if(md.contains(rejectMd))
                         {

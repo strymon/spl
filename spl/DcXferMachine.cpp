@@ -17,15 +17,16 @@
 #include "DcXferMachine.h"
 
 #include <QSignalTransition>
-#include "DcState.h"
+#include "cmn/DcState.h"
 #include <QDebug>
 #include <QTimer>
 #include "PresetLibSMDefs.h"
 #include <QThread>
 #include "DcMidiDevDefs.h"
 #include "DcDeviceDetails.h"
-#include "DcLog.h"
-
+#include "cmn/DcLog.h"
+extern bool gUseAltPresetSize;
+#define ALT_PRESET
 
 //-------------------------------------------------------------------------
 void DcXferMachine::sendNext_entered()
@@ -44,11 +45,12 @@ void DcXferMachine::sendNext_entered()
     {
         _activeCmd = _cmdList.takeFirst();
         _midiOut->dataOutSplit(_activeCmd,_maxPacketSize,_msPerPacket);
+        _retryCount = _numRetries;
         _watchdog.start(_timeout);
     }
 }
 //-------------------------------------------------------------------------
-void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
+void DcXferMachine::replySlotForDataIn( const DcMidiData &data )
 {
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
@@ -67,17 +69,34 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
         _watchdog.stop();
 
         // Check for a Negative Acknowledgment of the data in request
-        if( data.match(_devDetails->PresetRdResponce_NACK,true) )
+        if( data.match(_devDetails->PresetRd_NAK,true) )
         {
             _progressDialog->setError("Device Rejected Command");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
-        else if( data.contains(_devDetails->PresetWriteHdr) )
+        else if( data.match(_devDetails->PresetRd_ACK) )
         {
-            if( verifyPresetData(data,_progressDialog,_devDetails) == true )
+            DcMidiData recompinded;
+
+            if(gUseAltPresetSize)
             {
+                int chnksz   = data.get14bit(9+2);
+                recompinded = data.mid(0,9);
+                recompinded[6] = 0x62;
+                recompinded.append(DcMidiData(data.mid(9+6,chnksz)));
+                recompinded.append(DcMidiData("18191A1B1C1D1E1F202122232425262728292A2B2C2D2E2F303132337F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F"));
+                recompinded.append(DcMidiData(data.mid(9+6+chnksz)));
+            }
+            else
+            {
+                        recompinded = data;
+            }
+
+
+            if( verifyPresetData(recompinded,_progressDialog,_devDetails) == true )
+            {    
                 _progressDialog->inc();
-                _midiDataList.append(data);
+                _midiDataList.append(recompinded);
                 _machine->postEvent(new DataXfer_ACKEvent());
             }
             else
@@ -96,23 +115,110 @@ void DcXferMachine::replySlotForDataIn( const QRtMidiData &data )
 }
 
 //-------------------------------------------------------------------------
-void DcXferMachine::replySlotForDataOut( const QRtMidiData &data )
+void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
+{
+    DCLOG() << "Midi In";
+    // Expect to see sysex coming from the currently attached device.
+    // This check will prevent other legal messages from blowing up
+    // out preset transfer - like controller messages
+    if(data.contains(_devDetails->SOXHdr))
+    {
+        bool NAK = data.match(_devDetails->PresetWr_NAK);
+        bool ACK = data.match(_devDetails->PresetWr_ACK);
+        
+        // If it's not an ACK or NAK, then just ignore the response data
+        if(!(NAK || ACK))
+        {
+            // Check for a strymon MIDITH
+            if(data == _activeCmd)
+            {
+                return;
+            }
+            
+            // This is an unexpected Sysex message, it has a valid strymon HDR, 
+            // but the payload was unexpected.
+            DCLOG() << "Ignoring unexpected/invalid Strymon Sysex message";
+            DCLOG() << "    Sent: " << _activeCmd.toString();
+            DCLOG() << "Received: " << data.toString();
+            return;
+        }
+
+        // This is the response we were looking for, cancel the transfer timeout watchdog
+        _watchdog.stop();
+        
+        // Check for write preset Negative Acknowledgment
+        if(NAK)
+        {
+            if(--_retryCount <= 0)
+            {
+                DCLOG() << "Retries exhausted, device rejected write command";
+                _progressDialog->setError("Device Rejected Write Command");
+                _machine->postEvent(new DataXfer_NACKEvent());
+            }
+            else
+            {
+                // Retry the Write Command
+                DCLOG() << "Command was NAK'ed, retrying";
+                QThread::msleep(100);
+                _midiOut->dataOutSplit(_activeCmd,_maxPacketSize,_msPerPacket);
+                // Restart watchdog
+                _watchdog.start(_timeout);
+            }
+        }
+        else if(ACK)
+        {
+            _progressDialog->inc();
+            if( _retryCount < _numRetries )
+            {
+                _progressDialog->setError( QString("Success after %1 retries").arg(_retryCount) );
+                QApplication::processEvents();
+            }
+            else
+            {
+                _progressDialog->setError("");
+            }
+            _machine->postEvent(new DataXfer_ACKEvent());
+        }
+        else
+        {
+            // Getting here means an unexpected message was received.
+            DCLOG() << "Unexpected data received after preset write";
+            DCLOG() << "    Sent: " << _activeCmd.toString();
+            DCLOG() << "Received: " << data.toString();
+
+            _progressDialog->setError("Unexpected data after preset write");
+            _machine->postEvent(new DataXfer_NACKEvent());
+        }
+    }
+}
+
+void DcXferMachine::strickedReplySlotForDataOut( const DcMidiData &data )
 {
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
     // out preset transfer - like controller messages
     if(data.contains(_devDetails->SOXHdr))
     {
+
+        // Ignore data 
+        if(data == _activeCmd)
+        {
+            // If the data coming back is the same as what was sent, 
+            // it was echoed back to us, just ignore as it was probably due
+            // to a device with MIDI "soft" THRU (midi-merge)
+            return;
+        } 
+
         // Cancel the watchdog timer
         _watchdog.stop();
-        
+
         // Check for write preset Negative Acknowledgment
-        if( data.match(_devDetails->PresetWrResponce_NACK) )
+        if( data.match(_devDetails->PresetWr_NAK) )
         {
             _progressDialog->setError("Device Rejected Write Command");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
-        else if( data.match(_devDetails->PresetWrResponce_ACK) )
+        else if( data.match(_devDetails->PresetWr_ACK) )
         {
             _progressDialog->inc();
             _machine->postEvent(new DataXfer_ACKEvent());
@@ -121,13 +227,14 @@ void DcXferMachine::replySlotForDataOut( const QRtMidiData &data )
         {
             // Getting here means an unexpected message was received.
             DCLOG() << "Unexpected data received after preset write";
-            DCLOG() << data.toString();
+            DCLOG() << "    Sent: " << _activeCmd.toString();
+            DCLOG() << "Received: " << data.toString();
+
             _progressDialog->setError("Unexpected data after preset write");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
     }
 }
-
 //-------------------------------------------------------------------------
 void DcXferMachine::xferTimeout()
 {
@@ -141,10 +248,11 @@ void DcXferMachine::xferTimeout()
 //-------------------------------------------------------------------------
 // The object will activate when the returned stated is entered.
 // The object completes by transitioning to doneState or errorState
-DcState* DcXferMachine::setupStateMachine(QStateMachine* m,QRtMidiOut* out,DcState* readDataComplete,DcState* errorState,DcState* cancelState)
+DcState* DcXferMachine::setupStateMachine(QStateMachine* m,DcMidiOut* out,DcState* readDataComplete,DcState* errorState,DcState* cancelState)
 {
     _machine = m;
     _midiOut = out;
+    // DataXfer_RetryEvent
 
     DcState *sendNext        = new DcState(QString("sendNext"));
   
@@ -189,7 +297,7 @@ void DcXferMachine::setProgressDialog( IoProgressDialog* progressDialog )
 }
 
 //-------------------------------------------------------------------------
-void DcXferMachine::append( QRtMidiData& cmd )
+void DcXferMachine::append( DcMidiData& cmd )
 {
     _cmdList.append(cmd);
 }
@@ -213,13 +321,14 @@ void DcXferMachine::go(DcDeviceDetails* devDetails, int maxPacketSize/*=-1*/, in
 
     _timeout = 2000;
     _cancel = false;
+    _numRetries = 4;
     _progressDialog->setProgress(0);
     _progressDialog->setMax(_cmdList.length());
     _progressDialog->show();
 }
 
 //-------------------------------------------------------------------------
-bool DcXferMachine::verifyPresetData( const QRtMidiData &data, IoProgressDialog* progDialog, const DcDeviceDetails* devinfo )
+bool DcXferMachine::verifyPresetData( const DcMidiData &data, IoProgressDialog* progDialog, const DcDeviceDetails* devinfo )
 {
     // Verify Data transfer:
     bool rtval = false;

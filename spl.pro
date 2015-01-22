@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = QRtMidi spl
+SUBDIRS = lib/DcMidi spl
+
 CONFIG += ordered
 cache()

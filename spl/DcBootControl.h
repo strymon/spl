@@ -23,12 +23,12 @@
 #include <QObject>
 
 #include <QMutex>
-#include "QRtMidi/QRtMidiTrigger.h"
+#include "DcMidi/DcMidiTrigger.h"
 
-#include <QRtMidi/QRtMidiIn.h>
-#include <QRtMidi/QRtMidiOut.h>
+#include <DcMidi/DcMidiIn.h>
+#include <DcMidi/DcMidiOut.h>
 
-struct QRtMidiDevIdent;
+struct DcMidiDevIdent;
 
 #define CMD_ENABLE_RECOVERY                 "F0 00 01 55 42 11 F7"
 #define CMD_GET_BANK0_INFO                  "F0 00 01 55 42 08 F7"
@@ -68,7 +68,7 @@ class DcCodeBankInfo
 public:
 
     DcCodeBankInfo() {clear();}
-    DcCodeBankInfo(QRtMidiData& md) {init(md);}
+    DcCodeBankInfo(DcMidiData& md) {init(md);}
     
     // true, if this object has been initialized
     bool isOk() { return _size != ~0; }
@@ -76,7 +76,7 @@ public:
     /*!
       Initialize the boot info with the given MIDI
     */ 
-    void init(QRtMidiData& md)
+    void init(DcMidiData& md)
     {
         clear();
 
@@ -113,7 +113,7 @@ public:
     /*!
       For the given valid boot info response data, return the code size
     */ 
-    quint32 bankInfoToCodeSize( QRtMidiData &md )
+    quint32 bankInfoToCodeSize( DcMidiData &md )
     {
         QString rtval;
         QTextStream ts(&rtval);
@@ -136,7 +136,7 @@ public:
     /*!
       For the given valid boot info response MIDI data, return the code version.
     */ 
-    QString bankInfoToCodeVer( QRtMidiData &md )
+    QString bankInfoToCodeVer( DcMidiData &md )
     {
         return md.toAsciiString(6,4);
     }
@@ -146,7 +146,7 @@ public:
       For the given valid boot info response data, return the state of the code
       bank: ACTIVE, or INVACTIVE
     */ 
-    bool bankInfoToState( QRtMidiData &md )
+    bool bankInfoToState( DcMidiData &md )
     {
         int s = md.toInt(18,1);
         return (s == kBankIsActive);
@@ -234,7 +234,7 @@ class DcBootControl
 
 public:    
     
-    DcBootControl(QRtMidiIn& i, QRtMidiOut& o);
+    DcBootControl(DcMidiIn& i, DcMidiOut& o);
     ~DcBootControl()
     {
 
@@ -261,7 +261,7 @@ public:
       After sending an Identify request, the function will block until 
       a response is received or time-out.  
     */ 
-    bool identify(QRtMidiDevIdent* id = 0);
+    bool identify(DcMidiDevIdent* id = 0);
 
     /*!
         Brings the device into boot mode.
@@ -269,10 +269,10 @@ public:
     bool enableBootcode();
 
     /*!
-        If successful, a non-zero QRtMidiData object is returned
+        If successful, a non-zero DcMidiData object is returned
         that holds a private reset command.
    */
-    QRtMidiData makePrivateResetCmd();
+    DcMidiData makePrivateResetCmd();
 
     /*!
       Pretty print the boot info
@@ -285,13 +285,13 @@ public:
     bool getBootCodeInfo(DcBootCodeInfo& bcInfo);
 
     // Write midi data to the device, will not wait for response
-    bool writeMidi(QRtMidiData& msg);
+    bool writeMidi(DcMidiData& msg);
 
     /*!
       Write the given MIDI update message to the connected device and 
       wait for status. 
     */ 
-    bool writeFirmwareUpdateMsg(QRtMidiData& msg,int timeOutMs = 2000);
+    bool writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs = 2000);
     
     /*!
        Causes the device to "launch" the active FLASH 
@@ -307,15 +307,15 @@ public:
    
     The link data rate should be set to 1X before or after a launch.
     */
-    bool exitBoot(QRtMidiDevIdent* id = 0);
+    bool exitBoot(DcMidiDevIdent* id = 0);
 
     // Get last error message
     QString getLastError() const { return _lastErrorMsgStr; }
    
 private:
 
-    QRtMidiIn*   _pMidiIn;
-    QRtMidiOut* _pMidiOut;
+    DcMidiIn*   _pMidiIn;
+    DcMidiOut* _pMidiOut;
     
     QTextStream _lastErrorMsg;
     QString _lastErrorMsgStr;    

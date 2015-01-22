@@ -6,13 +6,10 @@ TARGET = spl
 
 TEMPLATE = app
 
-CONFIG(debug, debug|release): DESTDIR = debug
-CONFIG(release, debug|release): DESTDIR = release
+include("$$top_srcdir/defaults.pri")
+CONFIG += depend_includepath
 
-OBJECTS_DIR = $$DESTDIR/.obj
-MOC_DIR     = $$DESTDIR/.moc
-RCC_DIR     = $$DESTDIR/.qrc
-UI_DIR      = $$DESTDIR/.ui
+INCLUDEPATH += $$top_srcdir/spl
 
 # This includes the Windows specific RC file
 # This is how the application gets an icon
@@ -21,15 +18,16 @@ win32:RC_FILE += win.rc
 win32:QMAKE_RC = rc
 # -D_MSC_VER
 
-debug:win32 {
-    QMAKE_CXXFLAGS += -Fd$${DESTDIR}/$${TARGET}.pdb
-}
+#include the Dc common files
+include("$$LIB_DIR/cmn/cmn.pri")
+
+#debug:win32 {
+#    QMAKE_CXXFLAGS += -Fd$${DESTDIR}/$${TARGET}.pdb
+#}
 
 
 SOURCES += main.cpp\
         DcPresetLib.cpp\
-        DcState.cpp\
-        DcStateMachineHelpers.cpp\
         IoProgressDialog.cpp \
         MoveDialog.cpp \
         DcXferMachine.cpp \
@@ -45,8 +43,6 @@ SOURCES += main.cpp\
         DcSoftwareUpdate.cpp \
         DcUpdateAvailableDialog.cpp \
         DcUpdateDialogMgr.cpp \
-        DcQUtils.cpp\
-        DcLog.cpp \
         DcImgLabel.cpp
 
 
@@ -54,8 +50,6 @@ HEADERS  += DcPresetLib.h \
             RenameDialog.h \
             MoveDialog.h \
             IoProgressDialog.h \
-            DcStateMachineHelpers.h \
-            DcState.h \
             DcDeviceDetails.h \
             DcMidiDevDefs.h \ 
             DcXferMachine.h \
@@ -68,33 +62,35 @@ HEADERS  += DcPresetLib.h \
             DcSoftwareUpdate.h \
             DcUpdateAvailableDialog.h \
             DcUpdateDialogMgr.h \
-            DcQUtils.h\
-            DcLog.h \
-    DcImgLabel.h
+            DcImgLabel.h
 
 FORMS += DcPresetLib.ui IoProgressDialog.ui MoveDialog.ui RenameDialog.ui DcplAbout.ui \
     DcConsoleForm.ui MidiPortSelect.ui \
     DcUpdateAvailableDialog.ui
 
 #include the linkage setup
-include("$$top_srcdir/QRtMidi/QRtMidi.pri")
+include("$$LIB_DIR/DcMidi/DcMidi.pri")
 
+
+RESOURCES += dcpl.qrc
 win32 {
   DEFINES += QT_DLL
+  QMAKE_LFLAGS_WINDOWS += /verbose:lib  /SAFESEH:NO
 }
 
 macx {
         LIBS += -lz -framework Carbon 
 }
 
-RESOURCES += dcpl.qrc
+# Include DcMidi
+win32:LIBS += -L$$LIB_OUT/DcMidi/$$DESTDIR/ -ldcmidi
+else:unix:LIBS += -L$$LIB_OUT/DcMidi/$$DESTDIR/ -ldcmidi
 
-INCLUDEPATH += $$top_srcdir
-LIBS += -L$$top_builddir/QRtMidi/$$DESTDIR -lqrtmidi
+win32:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/dcmidi.lib
+else:macx:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/libdcmidi.a
+else:unix:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/libdcmidi.a
 
-win32:PRE_TARGETDEPS += $$top_builddir/QRtMidi/$$DESTDIR/qrtmidi.lib
-else:macx:PRE_TARGETDEPS += $$top_builddir/QRtMidi/$$DESTDIR/libqrtmidi.a
-else:unix: PRE_TARGETDEPS += $$top_builddir/QRtMidi/$$DESTDIR/libqrtmidi.a
+### INCLUDEPATH += $$top_srcdir
 
 
 

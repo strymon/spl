@@ -22,9 +22,9 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QThread>
-#include "QRtMidi/QRtMidiIdent.h"
+#include "DcMidi/DcMidiIdent.h"
 #include <QApplication>
-#include "DcLog.h"
+#include "cmn/DcLog.h"
 
 
 const char* DcBootControl::kPrivateResetPartial = "F0 00 01 55 vv vv 1B F7";
@@ -35,9 +35,9 @@ const char* DcBootControl::kFUResponcePattern = "F0 00 01 55 42 0C .. F7";
 
 
 //-------------------------------------------------------------------------
-DcBootControl::DcBootControl( QRtMidiIn& i, QRtMidiOut& o )
+DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o )
 {
-    // TODO: sharing the QRtMidiIn and QRtMidiOut objects should be managed properly 
+    // TODO: sharing the DcMidiIn and DcMidiOut objects should be managed properly 
     // and in a brainless easy manner.
     _pMidiIn = &i;
     _pMidiOut = &o;
@@ -56,9 +56,9 @@ DcBootControl::DcBootControl( QRtMidiIn& i, QRtMidiOut& o )
 //-------------------------------------------------------------------------
 bool DcBootControl::enableBootcode( )
 {
-    QRtMidiData md;
+    DcMidiData md;
    
-    QRtMidiData responceData;
+    DcMidiData responceData;
 
     // The device is in boot mode if it responses to the Echo command.
     if(isBootcode())
@@ -66,12 +66,12 @@ bool DcBootControl::enableBootcode( )
         return true;
     }
     
-    QRtMidiData priRst = makePrivateResetCmd();
+    DcMidiData priRst = makePrivateResetCmd();
     if(0 == priRst.length())
         return false;
 
-    QRtMidiTrigger tc(RESPONCE_ENABLE_RECOVERY_ANY);
-    QRtAutoTrigger autoch(&tc,_pMidiIn);
+    DcMidiTrigger tc(RESPONCE_ENABLE_RECOVERY_ANY);
+    DcAutoTrigger autoch(&tc,_pMidiIn);
     
     // Issue a private reset
     _pMidiOut->dataOut(priRst);
@@ -121,10 +121,10 @@ bool DcBootControl::enableBootcode( )
 
 
 //-------------------------------------------------------------------------
-bool DcBootControl::identify(QRtMidiDevIdent* id /*=0 */)
+bool DcBootControl::identify(DcMidiDevIdent* id /*=0 */)
 {
     bool rtval = false;
-    QRtAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
+    DcAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
 
     _pMidiOut->dataOut("F0 7E 7F 06 01 F7");
 
@@ -133,7 +133,7 @@ bool DcBootControl::identify(QRtMidiDevIdent* id /*=0 */)
     {
         if(id)
         {
-            QRtMidiData md;
+            DcMidiData md;
             if(autotc.dequeue(md))
             {
                 id->fromIdentData(md);
@@ -154,16 +154,16 @@ bool DcBootControl::identify(QRtMidiDevIdent* id /*=0 */)
     return rtval;
 }
 
-bool DcBootControl::writeMidi(QRtMidiData& msg)
+bool DcBootControl::writeMidi(DcMidiData& msg)
 {
     _pMidiOut->dataOut(msg);
     return true;
 }
 
-bool DcBootControl::writeFirmwareUpdateMsg(QRtMidiData& msg,int timeOutMs /*= 2000*/)
+bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 2000*/)
 {
     bool rtval = false;
-    QRtAutoTrigger autotc(kFUResponcePattern,_pMidiIn);
+    DcAutoTrigger autotc(kFUResponcePattern,_pMidiIn);
 
     // Magic number 8 is the response control flags, a 3 will
     // deliver status.
@@ -171,7 +171,7 @@ bool DcBootControl::writeFirmwareUpdateMsg(QRtMidiData& msg,int timeOutMs /*= 20
 
     _pMidiOut->dataOutSplit(msg,_maxDataOut,_delayBetweenDataOut);
 
-    QRtMidiData md;
+    DcMidiData md;
     
 
     // Wait for the response data, or timeout after 300ms
@@ -235,13 +235,13 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
     else
     {
      
-        QRtMidiDevIdent id;
+        DcMidiDevIdent id;
         if(identify(&id))
         {
             bcInfo.setVersion(id.FwVersion);
         }
 
-        QRtAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
+        DcAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
         _pMidiOut->dataOut(CMD_GET_BANK0_INFO);
 
         if(!autotc.wait(500))
@@ -250,7 +250,7 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
         }
         else
         {
-           QRtMidiData md;
+           DcMidiData md;
            autotc.dequeue(md);
            codeInfo.init(md);    
         }
@@ -264,7 +264,7 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
         }
         else
         {
-            QRtMidiData md;
+            DcMidiData md;
             autotc.dequeue(md);
             codeInfo.init(md);
         }
@@ -278,7 +278,7 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
 //-------------------------------------------------------------------------
 bool DcBootControl::isBootcode()
 {
-    QRtAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
+    DcAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
     _pMidiOut->dataOut(CMD_GET_BANK0_INFO);
     
     bool rtval = autotc.wait(400);
@@ -308,7 +308,7 @@ bool DcBootControl::activateBank( int bankNumber )
     // Do it
     if(0 == bankNumber)
     {
-        QRtAutoTrigger mtrigger(DCBC_ACTIVATE_BANK0_SUCCESS,_pMidiIn);
+        DcAutoTrigger mtrigger(DCBC_ACTIVATE_BANK0_SUCCESS,_pMidiIn);
         _pMidiOut->dataOut(DCBC_ACTIVATE_BANK0);
         if(mtrigger.wait(1000))
         {
@@ -322,7 +322,7 @@ bool DcBootControl::activateBank( int bankNumber )
     }
     else
     {
-        QRtAutoTrigger mtrigger(DCBC_ACTIVATE_BANK1_SUCCESS,_pMidiIn);
+        DcAutoTrigger mtrigger(DCBC_ACTIVATE_BANK1_SUCCESS,_pMidiIn);
         _pMidiOut->dataOut(DCBC_ACTIVATE_BANK1);
         if(mtrigger.wait(1000))
         {
@@ -340,13 +340,13 @@ bool DcBootControl::activateBank( int bankNumber )
 }
 
 //-------------------------------------------------------------------------
-bool DcBootControl::exitBoot( QRtMidiDevIdent* id /*= 0*/ )
+bool DcBootControl::exitBoot( DcMidiDevIdent* id /*= 0*/ )
 {
     bool rtval = false;
     
 
     // Setup to wait for Strymon identity data
-    QRtAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
+    DcAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
     
     _pMidiOut->dataOut("F0 00 01 55 42 01 F7");
 
@@ -357,7 +357,7 @@ bool DcBootControl::exitBoot( QRtMidiDevIdent* id /*= 0*/ )
         
         if(id)
         {
-            QRtMidiData md;
+            DcMidiData md;
             if(autotc.dequeue(md))
             {
                 id->fromIdentData(md);
@@ -373,10 +373,10 @@ bool DcBootControl::exitBoot( QRtMidiDevIdent* id /*= 0*/ )
 }
 
 //-------------------------------------------------------------------------
-QRtMidiData DcBootControl::makePrivateResetCmd()
+DcMidiData DcBootControl::makePrivateResetCmd()
 {
-    QRtMidiDevIdent id;
-    QRtMidiData priRst;
+    DcMidiDevIdent id;
+    DcMidiData priRst;
 
     // Verify we can ID the connected device
     if(false == identify(&id))
@@ -395,7 +395,7 @@ QRtMidiData DcBootControl::makePrivateResetCmd()
 //-------------------------------------------------------------------------
 bool DcBootControl::privateReset()
 {
-    QRtMidiData priRst = makePrivateResetCmd();
+    DcMidiData priRst = makePrivateResetCmd();
     if(priRst.isEmpty())
     {
         return false;

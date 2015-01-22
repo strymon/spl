@@ -20,15 +20,15 @@
 #include <QTimer>
 #include <QSet>
 
-#include "QRtMidi/QRtMidiIn.h"
-#include "QRtMidi/QRtMidiOut.h"
+#include "DcMidi/DcMidiIn.h"
+#include "DcMidi/DcMidiOut.h"
 
-#include "QRtMidi/QRtMidiIdent.h"
+#include "DcMidi/DcMidiIdent.h"
 
 #include "ui_MidiPortSelect.h"
 
 
-namespace QRtTestResults
+namespace DcTestResults
 {
     enum Result 
     {
@@ -68,9 +68,9 @@ public slots:
     void on_midiInCombo_currentIndexChanged(int);
     void on_midiOutCombo_currentIndexChanged(int);
     void updateTestResult();
-    void recvDataForTest(const QRtMidiData &data);
+    void recvDataForTest(const DcMidiData &data);
 
-    bool hasDevSupport( const QRtMidiData &data );
+    bool hasDevSupport( const DcMidiData &data );
     
     // Return true if a MIDI in and MIDI out device is selected
     bool isPortPairSelected();
@@ -84,13 +84,13 @@ protected:
 
 private:
 
-    QRtMidiIn  _midiIn;
-    QRtMidiOut _midiOut;
+    DcMidiIn  _midiIn;
+    DcMidiOut _midiOut;
     QSet<const char*> _supportSet;
 
-    QRtMidiIdentList_t _unkownDevList;
+    DcMidiIdentList_t _unkownDevList;
 
-    QRtTestResults::Result _testResult;
+    DcTestResults::Result _testResult;
     QTimer _timer;
 
     Ui_MidiSelectDialog ui;

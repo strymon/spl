@@ -15,9 +15,10 @@
 
 *-------------------------------------------------------------------------*/
 #pragma once
-#include "QRtMidi/QRtMidiIdent.h"
+#include "DcMidi/DcMidiIdent.h"
+#include <qglobal.h>
 
-struct DcDeviceDetails : public QRtMidiDevIdent
+struct DcDeviceDetails : public DcMidiDevIdent
 {
     DcDeviceDetails() 
     {
@@ -26,12 +27,12 @@ struct DcDeviceDetails : public QRtMidiDevIdent
     
     void clear()
     {
-        QRtMidiDevIdent::clear();
+        DcMidiDevIdent::clear();
         PresetWriteHdr.clear();
         FactoryPresetWriteHdr.clear();
         PresetRdResponce_NACK.setPattern("");
-        PresetWrResponce_NACK.setPattern("");
-        PresetWrResponce_ACK.setPattern("");
+        PresetWr_NAK.setPattern("");
+        PresetWr_ACK.setPattern("");
 
         PresetNumberOffset = 0;
         PresetSize = 0;
@@ -48,15 +49,17 @@ struct DcDeviceDetails : public QRtMidiDevIdent
 
     bool isEmpty()
     {
-        return QRtMidiDevIdent::isEmpty();
+        return DcMidiDevIdent::isEmpty();
     }
 
-    QString getUid()
+    unsigned int getUid()
     {
-        // TODO: this is not very "uuid"
-        return Name + QRtMidiDevIdent::FwVersion;
+        return qHash(Name + 
+            DcMidiDevIdent::FwVersion  + 
+            DcMidiDevIdent::Family.toString() + 
+            DcMidiDevIdent::Product.toString() + 
+            DcMidiDevIdent::Manufacture.toString());
     }
-
     quint8  PresetNumberOffset;
     quint16 PresetSize;
     quint16 PresetCount;
@@ -68,16 +71,18 @@ struct DcDeviceDetails : public QRtMidiDevIdent
     quint16 PresetNameOffset;
     
     
-    QRtMidiData PresetWriteHdr;
-    QRtMidiData FactoryPresetWriteHdr;
+    DcMidiData PresetWriteHdr;
+    DcMidiData FactoryPresetWriteHdr;
     QRegExp     PresetRdResponce_NACK;
-    QRegExp     PresetWrResponce_NACK;
-    QRegExp     PresetWrResponce_ACK;
+    QRegExp     PresetWr_NAK;
+    QRegExp     PresetWr_ACK;
 
     QString     Name;
     QByteArray PresetReadTemplate;
     QString    DeviceIconResPath;
-    
+
+    QRegExp PresetRd_NAK;
+    QRegExp PresetRd_ACK;
 
 
 };
