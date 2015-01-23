@@ -37,6 +37,11 @@ Date: 6/12/2013 <br>
 OSX ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.dmg ) <br>
 Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.exe ) <br>
 
+### Developer Notes
+Here's how I generate a VS2013 project:
+qmake -platform win32-msvc2013 -tp vc -r <some_path>
+
+
 ## License
 
 Copyright © 2013 Damage Control Engineering, LLC

@@ -51,6 +51,7 @@ public:
      ~DcUpdateDialogMgr();
 
     DcUpdate_Result getLatestAndShowDialog();
+    DcUpdate_Result justDownloadFile( const QString& filePath );
 
     QString updatesPath() const;
 

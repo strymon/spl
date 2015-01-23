@@ -72,9 +72,6 @@ void DcUpdateAvailableDialog::renderCurrentVer()
     {
         str = "<font size= \"3\" color=\"#FDB71B\"> <b>" + _curVer + "</b></font>";
         ui->headerLabel->setText("Firmware Update Available");
-//         ui->infoLabel->setText("We always work hard to improve the experience our customers have with our products.");
-//         ui->infoLable1->setText("Occasionally we will release firmware updates that add new features and resolve");
-//         ui->infoLable2->setText("issues we've found.");
         ui->releaseNotesLable->setOpenExternalLinks(true);
         ui->releaseNotesLable->show();
     }
@@ -93,20 +90,13 @@ void DcUpdateAvailableDialog::on_installButton_clicked()
     accept();
 }
 
-//-------------------------------------------------------------------------
 void DcUpdateAvailableDialog::setChangeLogUrl( QString urlstring )
 {
     QString html  = "<html><head/><body><p><a href=\"" + urlstring + "\"><span style=\" text-decoration: underline; color:#0000ff;\">read release notes</span></a></p></body></html>";
     ui->releaseNotesLable->setText(html);
 }
 
-//-------------------------------------------------------------------------
 bool DcUpdateAvailableDialog::okToInstallPresets()
 {
     return ui->reinitPresetCheckBox->checkState() == Qt::Checked;
 }
-
-// void DcUpdateAvailableDialog::on_releaseNotesLable_linkActivated(const QString &link)
-// {
-// 
-// }

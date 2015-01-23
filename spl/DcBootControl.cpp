@@ -1,23 +1,6 @@
-/*-------------------------------------------------------------------------
-	    Copyright 2013 Damage Control Engineering, LLC
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-
-*-------------------------------------------------------------------------*/
-/*!
- \file DcBootControl.cpp
---------------------------------------------------------------------------*/
 #include "DcBootControl.h"
+
 #include <QMutexLocker>
 #include <QDebug>
 #include <QDateTime>
@@ -33,8 +16,6 @@ const char* DcBootControl::kFUBad = "F0 00 01 55 42 0C 01 F7";
 const char* DcBootControl::kFUFailed = "F0 00 01 55 42 0C 02 F7";
 const char* DcBootControl::kFUResponcePattern = "F0 00 01 55 42 0C .. F7";
 
-
-//-------------------------------------------------------------------------
 DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o )
 {
     // TODO: sharing the DcMidiIn and DcMidiOut objects should be managed properly 
@@ -52,8 +33,6 @@ DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o )
 #endif
 }
 
-
-//-------------------------------------------------------------------------
 bool DcBootControl::enableBootcode( )
 {
     DcMidiData md;
@@ -102,7 +81,6 @@ bool DcBootControl::enableBootcode( )
             DCLOG() << "Device is running boot code";
             rtval = true;
         }
-
     }
     else if(responceData.match(RESPONCE_ENABLE_RECOVERY_REJECTED))
     {
@@ -119,8 +97,6 @@ bool DcBootControl::enableBootcode( )
     return rtval;
 }
 
-
-//-------------------------------------------------------------------------
 bool DcBootControl::identify(DcMidiDevIdent* id /*=0 */)
 {
     bool rtval = false;
@@ -172,7 +148,6 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
     _pMidiOut->dataOutSplit(msg,_maxDataOut,_delayBetweenDataOut);
 
     DcMidiData md;
-    
 
     // Wait for the response data, or timeout after 300ms
     if(autotc.wait(timeOutMs))
@@ -208,7 +183,7 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
 
     return rtval;
 }
-//-------------------------------------------------------------------------
+
 QString DcBootControl::getBankInfoString()
 {
     DcBootCodeInfo info;    
@@ -223,7 +198,6 @@ QString DcBootControl::getBankInfoString()
     return rtstr;
 }
 
-//-------------------------------------------------------------------------
 bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
 {
     DcCodeBankInfo codeInfo;
@@ -275,7 +249,7 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
     return bcInfo.isOk();
 }
 
-//-------------------------------------------------------------------------
+
 bool DcBootControl::isBootcode()
 {
     DcAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
@@ -286,7 +260,7 @@ bool DcBootControl::isBootcode()
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcBootControl::activateBank( int bankNumber )
 {
     bool rtval = false;
@@ -339,7 +313,7 @@ bool DcBootControl::activateBank( int bankNumber )
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcBootControl::exitBoot( DcMidiDevIdent* id /*= 0*/ )
 {
     bool rtval = false;
@@ -372,7 +346,7 @@ bool DcBootControl::exitBoot( DcMidiDevIdent* id /*= 0*/ )
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 DcMidiData DcBootControl::makePrivateResetCmd()
 {
     DcMidiDevIdent id;
@@ -392,7 +366,7 @@ DcMidiData DcBootControl::makePrivateResetCmd()
     return priRst;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcBootControl::privateReset()
 {
     DcMidiData priRst = makePrivateResetCmd();

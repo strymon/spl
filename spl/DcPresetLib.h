@@ -86,6 +86,9 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionShow_Update_Pandel_triggered();
 
+    void UpdateFirmwareHelper(const QString& FirmwareFile = QString());
+
+    void on_fileDropped( const QString& fileName );
 
     /*!
       Display a file open dialog
@@ -175,6 +178,8 @@ private slots:
     void conCmd_GetUrl(DcConArgs args);
     void conDownloadDone();
     void conCmd_Fetch(DcConArgs args);
+    
+    void conCmd_UpdateFirmware( DcConArgs args );
 
     /*!
       For the given preset bundle file path, export each preset
@@ -421,7 +426,8 @@ protected:
     void copySelectedPresets(QString destWLIndex);
     bool midiDataToBinFile( QString fileName, DcMidiData data );
     bool stringListToTextFile( QString fileName, QStringList strList );
-//    bool portScan();
+   
+    //    bool portScan();
     DcMidiTrigger* _idResponceTrigger;
     
     DcMidiTrigger* _portScanTrigger;

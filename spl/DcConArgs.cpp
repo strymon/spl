@@ -1,6 +1,6 @@
 #include "DcConArgs.h"
 #include "DcMidi/DcMidiData.h"
-//-------------------------------------------------------------------------
+
 DcConArgs::DcConArgs( const DcConArgs &other )
 {
 
@@ -10,7 +10,6 @@ DcConArgs::DcConArgs( const DcConArgs &other )
     _query = other._query;
 }
 
-//-------------------------------------------------------------------------
 QString DcConArgs::hexJoin( int offset /*= 1*/, int len /*= 0*/ )
 {
     QString st;
@@ -22,7 +21,6 @@ QString DcConArgs::hexJoin( int offset /*= 1*/, int len /*= 0*/ )
     return st.trimmed();
 }
 
-//-------------------------------------------------------------------------
 QString DcConArgs::decJoin( int offset /*= 1*/, int len /*= 0*/ )
 {
     QString st;
@@ -53,7 +51,6 @@ QString DcConArgs::decJoin( int offset /*= 1*/, int len /*= 0*/ )
     return st.trimmed();
 }
 
-//-------------------------------------------------------------------------
 QString DcConArgs::strJoin( int offset /*= 1*/, int len /*= 0*/ )
 {
     QString st;
@@ -67,7 +64,6 @@ QString DcConArgs::strJoin( int offset /*= 1*/, int len /*= 0*/ )
     
 }
 
-//-------------------------------------------------------------------------
 QString DcConArgs::strScan()
 {
     QString st;
@@ -99,7 +95,6 @@ QString DcConArgs::strScan()
     return st;
 }
 
-//-------------------------------------------------------------------------
 QString DcConArgs::toString()
 {
     QString st;
@@ -117,7 +112,6 @@ QString DcConArgs::toString()
     return st.trimmed();    
 }
 
-//-------------------------------------------------------------------------
 QStringList DcConArgs::argsAsStringList()
 {
     QStringList rtval;
@@ -129,7 +123,6 @@ QStringList DcConArgs::argsAsStringList()
     return rtval;
 }
 
-//-------------------------------------------------------------------------
 QVariant DcConArgs::first(QVariant def)
 {
     if(_args.count() > 1)
@@ -137,7 +130,6 @@ QVariant DcConArgs::first(QVariant def)
     return def;
 }
 
-//-------------------------------------------------------------------------
 QVariant DcConArgs::second(QVariant def)
 {
     if(_args.count() > 2)
@@ -146,7 +138,7 @@ QVariant DcConArgs::second(QVariant def)
     return def;
     
 }
-//-------------------------------------------------------------------------
+
 QVariant DcConArgs::third(QVariant def)
 {
     if(_args.count() > 3)
@@ -155,7 +147,6 @@ QVariant DcConArgs::third(QVariant def)
     return def;
 }
 
-//-------------------------------------------------------------------------
 QString DcConArgs::meta( QString key,const char* def/*=""*/ )
 {
     if(_meta.contains(key))
@@ -165,19 +156,16 @@ QString DcConArgs::meta( QString key,const char* def/*=""*/ )
     return QString(def);
 }
 
-//-------------------------------------------------------------------------
 void DcConArgs::setMeta( QString key,QVariant val )
 {
     _meta[key] = val;
 }
 
-//-------------------------------------------------------------------------
 void DcConArgs::setCmdName( QString name )
 {
     _cmdName = name;
 }
 
-//-------------------------------------------------------------------------
 void DcConArgs::clear()
 {
     _cmdName.clear();
@@ -186,7 +174,6 @@ void DcConArgs::clear()
     _args.clear();
 }
 
-//-------------------------------------------------------------------------
 bool DcConArgs::queryCmd( QString name, QString useage, QString doc )
 {
     if(this->isQuery())
@@ -200,7 +187,6 @@ bool DcConArgs::queryCmd( QString name, QString useage, QString doc )
     return false;
 }
 
-//-------------------------------------------------------------------------
 void DcConArgs::parseCmdLine( const QString &cmd )
 {
     // Credit: http://www.qtcentre.org/threads/37304-Split-strings-using-QStringList-split()-but-ignore-quotes
@@ -210,10 +196,15 @@ void DcConArgs::parseCmdLine( const QString &cmd )
 
     bool inside = (cmd.at(0) == '\"'); //true if the first character is "
     QStringList tmpList = cmd.split(QRegExp("\""), QString::SkipEmptyParts); // Split by " and make sure you don't have an empty string at the beginning
-    foreach (QString s, tmpList) {
-        if (inside) { // If 's' is inside quotes ...
+    foreach (QString s, tmpList)
+    {
+        if (inside)
+        {
+            // If 's' is inside quotes ...
             _args.append(s); // ... get the whole string
-        } else { // If 's' is outside quotes ...
+        } else
+        {
+            // If 's' is outside quotes ...
             QStringList lst = s.split(" ", QString::SkipEmptyParts); // ... get the spitted string
             for (int i = 0; i < lst.count() ; i++)
             {
@@ -222,12 +213,6 @@ void DcConArgs::parseCmdLine( const QString &cmd )
         }
         inside = !inside;
     }   
-//     
-//     QStringList lst =  str.split(" ",QString::SkipEmptyParts);
-//     for (int i = 0; i < lst.count() ; i++)
-//     {
-//         _args.append(lst.at(i));
-//     }
 }
 
 

@@ -304,7 +304,7 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
             {
                 // Wrong product id
                 DCLOG() << "firmware file does not contain firmware for this device";
-                _lastErrorMsgStr = "Internal update error - file does not contain firmware for current device";
+                _lastErrorMsgStr = "File does not contain firmware for current device";
                 rtval = false;
             }
             else
@@ -531,4 +531,29 @@ bool DcUpdateDialogMgr::loadSysexFile( const QString &fileName,QList<DcMidiData>
 QString DcUpdateDialogMgr::getLastErrorMsg()
 {
     return _lastErrorMsgStr;
+}
+
+DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::justDownloadFile( const QString& filePath )
+{
+    _progressDialog = new IoProgressDialog( _parent );
+    _progressDialog->setFormat( "%p%" );
+    _progressDialog->reset();
+    _progressDialog->setModal( true );
+    _progressDialog->show();
+    _progressDialog->setMessage( "Reading firmware file" );
+    QApplication::processEvents();
+
+    if( !updateFirmware( filePath ) )
+    {
+        DCLOG() << "Updated failed: " << _lastErrorMsgStr;
+        _progressDialog->hide();
+        return DcUpdate_Failed;
+    }
+    else
+    {
+        DCLOG() << "Update success";
+
+        _progressDialog->hide();
+        return DcUpdate_Success;
+    }
 }

@@ -33,6 +33,7 @@ public:
 
 signals:
     void clicked();
+    void fileDropped( const QString& path );
 
 public slots:
 
@@ -41,6 +42,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *ev);
     int _orgW, _orgH;
 
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 };
 
 #endif // DCIMGLABEL_H

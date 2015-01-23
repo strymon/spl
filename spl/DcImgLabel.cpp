@@ -18,7 +18,10 @@
  \file DcImgLabel.cpp
  --------------------------------------------------------------------------*/
 #include "DcImgLabel.h"
-
+#include <QDropEvent>
+#include <QMimeData>
+#include <QWidget>
+#include <QDebug>
 DcImgLabel::DcImgLabel(QWidget *parent) :
     QLabel(parent)
 {
@@ -50,4 +53,28 @@ void DcImgLabel::mouseReleaseEvent(QMouseEvent *ev)
     this->setPixmap(this->pixmap()->scaled(_orgW,_orgH));
 
     emit clicked();
+}
+
+
+void DcImgLabel::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasFormat("application/x-qt-windows-mime;value=\"FileName\""))
+       {
+           event->acceptProposedAction();
+       }
+}
+
+void DcImgLabel::dropEvent(QDropEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+      Qt::DropAction action = event->dropAction();
+
+      if ( data->hasFormat("application/x-qt-windows-mime;value=\"FileName\"") &&
+          ( (action == Qt::MoveAction) || (action == Qt::CopyAction) ) )
+      {
+
+           QUrl url = QUrl::fromEncoded(data->text().toLatin1());
+           qDebug() << "FileName: " + url.fileName() << "\n";
+           emit fileDropped(url.toLocalFile());
+      }
 }

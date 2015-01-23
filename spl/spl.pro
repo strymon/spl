@@ -38,7 +38,8 @@ SOURCES += main.cpp\
         DcSoftwareUpdate.cpp \
         DcUpdateAvailableDialog.cpp \
         DcUpdateDialogMgr.cpp \
-        DcImgLabel.cpp
+        DcImgLabel.cpp \
+    DcDropLabel.cpp
 
 
 HEADERS  += DcPresetLib.h \
@@ -57,7 +58,8 @@ HEADERS  += DcPresetLib.h \
             DcSoftwareUpdate.h \
             DcUpdateAvailableDialog.h \
             DcUpdateDialogMgr.h \
-            DcImgLabel.h
+            DcImgLabel.h \
+    DcDropLabel.h
 
 FORMS += DcPresetLib.ui IoProgressDialog.ui MoveDialog.ui RenameDialog.ui DcplAbout.ui \
     DcConsoleForm.ui MidiPortSelect.ui \

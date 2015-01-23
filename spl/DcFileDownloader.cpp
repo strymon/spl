@@ -13,7 +13,6 @@ DcFileDownloader::DcFileDownloader(QUrl url, QObject *parent) :
     QEventLoop loop;
     connect(this, SIGNAL(Done()), &loop, SLOT(quit()));
 
-
     _url = url;
 
     QNetworkRequest request(url);
@@ -43,9 +42,7 @@ void DcFileDownloader::fileDownloaded(QNetworkReply* pReply)
         m_DownloadedData.clear();
     }
     
-    //emit a signal
     pReply->deleteLater();
-
     emit Done();
 }
 
@@ -65,13 +62,13 @@ bool DcFileDownloader::saveData(QString fname)
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcFileDownloader::hasError()
 {
     return !_errorString.isEmpty();
 }
 
-//-------------------------------------------------------------------------
+
 QString DcFileDownloader::getErrorStr()
 {
     return _errorString;

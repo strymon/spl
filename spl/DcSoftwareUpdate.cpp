@@ -27,7 +27,7 @@
 
 const char* DcSoftwareUpdate::kRedirectFileUrl = "http://www.strymon.net/upd_spl.bin";
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::verifyLocalPath(DcPackageIndex::DcPackageDesc desc)
 {
     QString destroot = toLocalPath(desc);
@@ -37,7 +37,7 @@ bool DcSoftwareUpdate::verifyLocalPath(DcPackageIndex::DcPackageDesc desc)
     return QDir().exists(destroot);
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::downloadPackage( DcPackageIndex::DcPackageDesc desc)
 {
     // TODO: Add progress reporting to this method via some optional method.
@@ -95,7 +95,7 @@ QString DcSoftwareUpdate::downloadFileWithPartialString( DcPackageIndex::DcPacka
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::downloadFile( QString srcUrl, QString destPath )
 {
     // TODO: Broadcast progress
@@ -165,7 +165,7 @@ bool DcSoftwareUpdate::getLatestInfo( DcDeviceDetails& dev,QString& verStr, QStr
 }
 
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::prepForUpdateToLatest( DcDeviceDetails& devDetails,DcUpdateWorklist& updateWorkList)
 {
     bool rtval = true;
@@ -261,7 +261,7 @@ bool DcSoftwareUpdate::prepForUpdateToLatest( DcDeviceDetails& devDetails,DcUpda
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 QByteArray DcSoftwareUpdate::makeDigest(QByteArray key, QByteArray url)
 {
     QByteArray md5 = QCryptographicHash::hash(url,QCryptographicHash::Md5);
@@ -270,7 +270,6 @@ QByteArray DcSoftwareUpdate::makeDigest(QByteArray key, QByteArray url)
     return digest;
 }
 
-//-------------------------------------------------------------------------
 bool DcSoftwareUpdate::checkUrlFile(QString fname,QString& newUrl)
 {
     QFile file(fname);
@@ -297,7 +296,7 @@ bool DcSoftwareUpdate::checkUrlFile(QString fname,QString& newUrl)
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::init( QString localPath, QString urlFilePath )
 {
     uninit();
@@ -355,14 +354,14 @@ bool DcSoftwareUpdate::init( QString localPath, QString urlFilePath )
     return false;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::checkLocalPath( DcPackageIndex::DcPackageDesc desc )
 {
     QString destroot = toLocalPath(desc);
     return QDir().exists(destroot);
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::prepProgressFile(DcPackageIndex::DcPackageDesc& desc,QString& progFilePath)
 {
     bool rtval = true;
@@ -456,7 +455,7 @@ bool DcSoftwareUpdate::prepProgressFile(DcPackageIndex::DcPackageDesc& desc,QStr
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::createUpdateProgressTrackingFile(DcPackageIndex::DcPackageDesc desc)
 {
     bool rtval = false;
@@ -504,7 +503,7 @@ bool DcSoftwareUpdate::createUpdateProgressTrackingFile(DcPackageIndex::DcPackag
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::getAndVerifyProgressFilePath(DcPackageIndex::DcPackageDesc& desc,QString& progFilePath)
 {
     bool rtval = false;
@@ -522,7 +521,7 @@ bool DcSoftwareUpdate::getAndVerifyProgressFilePath(DcPackageIndex::DcPackageDes
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::markFileComplete(DcPackageIndex::DcPackageDesc desc,QString& completedFile)
 {
     bool rtval = false;
@@ -572,7 +571,7 @@ bool DcSoftwareUpdate::getChangelog(DcPackageIndex::DcPackageDesc desc,QString& 
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::selectNextFwAssetForUpdate(DcPackageIndex::DcPackageDesc desc,QString& nextFile)
 {
     bool rtval = false;
@@ -646,13 +645,13 @@ bool DcSoftwareUpdate::selectNextFwAssetForUpdate(DcPackageIndex::DcPackageDesc 
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::isFirmwareFile( QString& nextFile )
 {
     return nextFile.contains(QRegExp("fw[0-9]?.syx$"));
 }
 
-//-------------------------------------------------------------------------
+
 void DcSoftwareUpdate::uninit()
 {
     _swPackageIndex.uninit();
@@ -660,19 +659,19 @@ void DcSoftwareUpdate::uninit()
     _idxUrl.clear();
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::isPresetFile( QString& nextFile )
 {
     return nextFile.contains(QRegExp("_[uf]p.syx$"));
 }
 
-//-------------------------------------------------------------------------
+
 QString DcSoftwareUpdate::getLastResult()
 {
     return _lastResultString;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcSoftwareUpdate::getIndexUrlFromFile( QString urlFilePath, QString& url )
 {
     QString updatesUrl;
@@ -695,7 +694,7 @@ bool DcSoftwareUpdate::getIndexUrlFromFile( QString urlFilePath, QString& url )
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcUpdateWorklist::hasPresets()
 {
     return !presetSysexFileList.isEmpty();

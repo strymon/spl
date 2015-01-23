@@ -138,7 +138,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     this->setWindowIcon(QIcon(":/images/res/dcpm_256x256x32.png"));
   
     QObject::connect(ui.devImgLabel,SIGNAL(clicked()),this,SLOT(on_devImgClicked()));
-
+    QObject::connect(ui.devImgLabel,SIGNAL( fileDropped( const QString& ) ),this,SLOT( on_fileDropped( const QString& ) ) );
     setupConsole();
     
     ui.fetchButton->setFocus();
@@ -172,6 +172,8 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     // _portScanTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(portScanTrigger(void*)));
     
     // loadConsolePlugins();
+    
+    
 
 }
 void DcPresetLib::on_devImgClicked()
@@ -1387,7 +1389,7 @@ bool DcPresetLib::loadPresetBinary(const QString &fileName,QList<DcMidiData>& da
         }
 
         // Filter out any NAK commands
-        if(md.match("47F7"))
+        if(md.match("47F7") && md.length() < 100)
         {
             continue;
         }
@@ -1974,6 +1976,19 @@ void DcPresetLib::conCmd_GetUrl( DcConArgs args )
 }
 
 //-------------------------------------------------------------------------
+void DcPresetLib::conCmd_UpdateFirmware( DcConArgs args )
+{
+    if( args.argCount() == 0 )
+    {
+        UpdateFirmwareHelper();
+    }
+    else
+    {
+        UpdateFirmwareHelper( args.first().toString() );
+    }
+}
+
+//-------------------------------------------------------------------------
 void DcPresetLib::setupConsole()
 {
     // _con is just an alias for ui.console
@@ -1989,6 +2004,9 @@ void DcPresetLib::setupConsole()
     _con->addCmd("out",this,SLOT(conCmd_MidiOut(DcConArgs)),"<midi hex bytes> - write midi bytes to connected device");
 
     _con->addCmd("writefile",this,SLOT(conCmd_MidiWriteFile(DcConArgs)),"[<filename>] - open file and write to connected device");
+
+    _con->addCmd( "upfw",this,SLOT( conCmd_UpdateFirmware( DcConArgs ) ),"[<filepath>] - program the given firmware file to the connected device" );
+
     _con->addCmd("geturl",this,SLOT(conCmd_GetUrl(DcConArgs)),"download specified URL" );
 
     _con->addCmd("qss",this,SLOT(conCmd_qss(DcConArgs)),"Load the qss file" );
@@ -2908,110 +2926,7 @@ void DcPresetLib::conCmd_changeActiveBootBank( DcConArgs args )
 
 void DcPresetLib::on_actionShow_Update_Pandel_triggered()
 {
-
-    QMessageBox* msgBox = new QMessageBox(this);
-    msgBox->setModal(true);
-    
-    if(_dirtyItemsIndex.length())
-    {
-        if (QMessageBox::Discard != QMessageBox::question(this, "Unsaved Worklist Warning",
-            "You have unsaved presets in the Worklist.\nAre you sure you want to update the device firmware?",
-            QMessageBox::Discard | QMessageBox::Abort,
-            QMessageBox::Abort))
-        {
-            return;
-        }
-        
-        
-        clearWorklist();
-    }
-
-    DCLOG() << "User clicked Update, VersionString =  " << _devDetails.FwVersion;
-   
-    if( _devDetails.FwVersion.isEmpty()  )
-    {
-        DCLOG() << "A device was not present ";
-        
-        msgBox->setWindowTitle(QLatin1String("Unable to Complete the Software Update"));
-        msgBox->setText("<h2>Software update can not find a device.</h2>Please try using the menu 'Settings->MIDI Setup' and verify the device connection.");
-        msgBox->setIcon(QMessageBox::Information);
-        msgBox->exec();
-        return;
-    }
-    else if( _devDetails.FwVersion[0] == 'B')
-    {
-        DCLOG() << "The device is running boot code, version = " << _devDetails.FwVersion;
-        
-        msgBox->setWindowTitle(QLatin1String("Unable to Complete the Software Update"));
-        msgBox->setText("<h2>Unable to complete the software update.</h2>The connected device seems to \
-                        be in \"update/boot mode.\"<br><br>Try this:<ol><li>Restart the device by unplugging \
-                        the power.</li><li>From the menu 'Settings->MIDI Setup,' verify the device connection.</li></ol>");
-
-        msgBox->setIcon(QMessageBox::Information);
-        msgBox->exec();
-        return;
-
-    }
-
-    msgBox->setWindowTitle(QLatin1String(""));
-
-    clearMidiInConnections();
-
-    bool prevState = enableMidiMonitor(false);
-    _con->setInputReady(false);
-
-    DcBootControl bctrl(_midiIn,_midiOut);
-
-    DcUpdateDialogMgr* udmgr = new DcUpdateDialogMgr(_updatesPath,&bctrl,_devDetails,this);
-    DcUpdateDialogMgr::DcUpdate_Result result = udmgr->getLatestAndShowDialog();
-    
-    if(result == DcUpdateDialogMgr::DcUpdate_Failed)
-    {
-        msgBox->setIcon(QMessageBox::Warning);
-        msgBox->setText(udmgr->getLastErrorMsg());
-        msgBox->exec();
-    }
-    else if(result != DcUpdateDialogMgr::DcUpdate_SuccessNoUpdate)
-    {
-
-        msgBox->setText(_lastErrorMsgStr);
-
-        if(result == DcUpdateDialogMgr::DcUpdate_Cancled)
-        {
-            msgBox->setText("The update was cancled.");
-            msgBox->setIcon(QMessageBox::Warning);
-        }
-        else if(result == DcUpdateDialogMgr::DcUpdate_Failed || result == DcUpdateDialogMgr::DcUpdate_PatchFileUpdateFailure)
-        {
-            msgBox->setWindowTitle("Update Error");
-            msgBox->setText(QLatin1String("The update was unable to complete"));
-            msgBox->setIcon(QMessageBox::Critical);
-        }
-        else if(result == DcUpdateDialogMgr::DcUpdate_Success)
-        {
-            msgBox->setText(QLatin1String("The update has completed successfully."));
-            msgBox->setIcon(QMessageBox::Information);
-        }
-        else if(result == DcUpdateDialogMgr::DcUpdate_PresetUpdateCancled)
-        {
-            msgBox->setText(QLatin1String("The firmware update was successful.\n\nHowever, the optional preset update was cancled."));
-            msgBox->setIcon(QMessageBox::Warning);
-        }
-        else if(result == DcUpdateDialogMgr::DcUpdate_PresetUpdateFailure)
-        {
-            msgBox->setText(QLatin1String("The firmware update was successful.\n\nHowever, the optional preset update failed to complete."));
-            msgBox->setIcon(QMessageBox::Warning);
-        }
-
-        msgBox->setStandardButtons(QMessageBox::Ok);
-        QApplication::processEvents();            
-        msgBox->exec();
-    }
-    
-    enableMidiMonitor(prevState);
-    _con->setInputReady(true);
-    _machine.postEvent(new VerifyDeviceConnection());
-
+    UpdateFirmwareHelper();
 }
 
 //-------------------------------------------------------------------------
@@ -3084,4 +2999,132 @@ void DcPresetLib::clearDeviceUI()
     ui.devImgLabel->setPixmap(pm);
     ui.devInfoLabel->setText("");
     ui.devImgLabel->setToolTip("");
+}
+
+void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
+{
+    QMessageBox* msgBox = new QMessageBox( this );
+    msgBox->setModal( true );
+
+    if( _dirtyItemsIndex.length() )
+    {
+        if( QMessageBox::Discard != QMessageBox::question( this,"Unsaved Worklist Warning",
+            "You have unsaved presets in the Worklist.\nAre you sure you want to update the device firmware?",
+            QMessageBox::Discard | QMessageBox::Abort,
+            QMessageBox::Abort ) )
+        {
+            return;
+        }
+
+
+        clearWorklist();
+    }
+
+    DCLOG() << "User clicked Update, VersionString =  " << _devDetails.FwVersion;
+
+    if( _devDetails.FwVersion.isEmpty() )
+    {
+        DCLOG() << "A device was not present ";
+
+        msgBox->setWindowTitle( QLatin1String( "Unable to Complete the Software Update" ) );
+        msgBox->setText( "<h2>Software update can not find a device.</h2>Please try using the menu 'Settings->MIDI Setup' and verify the device connection." );
+        msgBox->setIcon( QMessageBox::Information );
+        msgBox->exec();
+        return;
+    }
+    else if( _devDetails.FwVersion[0] == 'B' )
+    {
+        DCLOG() << "The device is running boot code, version = " << _devDetails.FwVersion;
+
+        msgBox->setWindowTitle( QLatin1String( "Unable to Complete the Software Update" ) );
+        msgBox->setText( "<h2>Unable to complete the software update.</h2>The connected device seems to \
+                                                                              be in \"update/boot mode.\"<br><br>Try this:<ol><li>Restart the device by unplugging \
+                                                                                                                                                           the power.</li><li>From the menu 'Settings->MIDI Setup,' verify the device connection.</li></ol>" );
+
+        msgBox->setIcon( QMessageBox::Information );
+        msgBox->exec();
+        return;
+
+    }
+
+    msgBox->setWindowTitle( QLatin1String( "" ) );
+
+    clearMidiInConnections();
+
+    bool prevState = enableMidiMonitor( false );
+    _con->setInputReady( false );
+
+    DcBootControl bctrl( _midiIn,_midiOut );
+
+    DcUpdateDialogMgr* udmgr = new DcUpdateDialogMgr( _updatesPath,&bctrl,_devDetails,this );
+    
+    DcUpdateDialogMgr::DcUpdate_Result result = FirmwareFile.isEmpty() ? udmgr->getLatestAndShowDialog() : udmgr->justDownloadFile( FirmwareFile );
+
+    if( result == DcUpdateDialogMgr::DcUpdate_Failed )
+    {
+        msgBox->setIcon( QMessageBox::Warning );
+        msgBox->setText( udmgr->getLastErrorMsg() );
+        msgBox->exec();
+    }
+    else if( result != DcUpdateDialogMgr::DcUpdate_SuccessNoUpdate )
+    {
+
+        msgBox->setText( _lastErrorMsgStr );
+
+        if( result == DcUpdateDialogMgr::DcUpdate_Cancled )
+        {
+            msgBox->setText( "The update was cancled." );
+            msgBox->setIcon( QMessageBox::Warning );
+        }
+        else if( result == DcUpdateDialogMgr::DcUpdate_Failed || result == DcUpdateDialogMgr::DcUpdate_PatchFileUpdateFailure )
+        {
+            msgBox->setWindowTitle( "Update Error" );
+            msgBox->setText( QLatin1String( "The update was unable to complete" ) );
+            msgBox->setIcon( QMessageBox::Critical );
+        }
+        else if( result == DcUpdateDialogMgr::DcUpdate_Success )
+        {
+            msgBox->setText( QLatin1String( "The update has completed successfully." ) );
+            msgBox->setIcon( QMessageBox::Information );
+        }
+        else if( result == DcUpdateDialogMgr::DcUpdate_PresetUpdateCancled )
+        {
+            msgBox->setText( QLatin1String( "The firmware update was successful.\n\nHowever, the optional preset update was cancled." ) );
+            msgBox->setIcon( QMessageBox::Warning );
+        }
+        else if( result == DcUpdateDialogMgr::DcUpdate_PresetUpdateFailure )
+        {
+            msgBox->setText( QLatin1String( "The firmware update was successful.\n\nHowever, the optional preset update failed to complete." ) );
+            msgBox->setIcon( QMessageBox::Warning );
+        }
+
+        msgBox->setStandardButtons( QMessageBox::Ok );
+        QApplication::processEvents();
+        msgBox->exec();
+    }
+
+    enableMidiMonitor( prevState );
+    _con->setInputReady( true );
+    _machine.postEvent( new VerifyDeviceConnection() );
+}
+
+ void DcPresetLib::on_fileDropped( const QString& fileName )
+{
+    *_con << fileName << "\n" ;
+    DcMidiDataList_t mdl;
+    DcMidiData md;
+    if( loadPresetBinary( fileName,mdl ) )
+    {
+        _workListData = mdl;
+        checkSyncState();
+    }
+    if( loadPresetBinary( fileName,md ) )
+    {
+        *_con << md.toString() << "\n";
+    }
+    else
+    {
+        // UpdateFirmwareHelper( fileName );
+        
+    }
 }

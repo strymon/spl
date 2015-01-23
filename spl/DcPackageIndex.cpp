@@ -23,7 +23,7 @@
 
 const char* DcPackageIndex::kNullId = "0";
 
-//-------------------------------------------------------------------------
+
 bool DcPackageIndex::init(QString idxPath)
 {
     clearLastError();
@@ -59,7 +59,7 @@ bool DcPackageIndex::init(QString idxPath)
     return isOk();
 }
 
-//-------------------------------------------------------------------------
+
 void DcPackageIndex::uninit()
 {
     if(_idxFile)
@@ -69,7 +69,7 @@ void DcPackageIndex::uninit()
     }
 }
 
-//-------------------------------------------------------------------------
+
 bool DcPackageIndex::getProductIds(QStringList& lst)
 {
     clearLastError();
@@ -97,7 +97,7 @@ bool DcPackageIndex::getProductIds(QStringList& lst)
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcPackageIndex::getVersions( DcProductIdStr pid,QStringList& lst )
 {
     clearLastError();
@@ -134,7 +134,7 @@ bool DcPackageIndex::getVersions( DcProductIdStr pid,QStringList& lst )
 
 
 
-//-------------------------------------------------------------------------
+
 bool DcPackageIndex::initPackageDesc( DcVersionStr version, DcProductIdStr pid, DcPackageDesc& desc )
 {
     bool rtval = false;
@@ -222,7 +222,7 @@ bool DcPackageIndex::getLatest(DcProductIdStr pid, DcPackageDesc& latest,bool us
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcPackageIndex::findNewer( DcProductIdStr pid, DcVersionStr version, bool useBeta, DcPackageDesc& latest)
 {
     bool rtval = false;
@@ -270,7 +270,7 @@ bool DcPackageIndex::findNewer( DcProductIdStr pid, DcVersionStr version, bool u
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 QStringList DcPackageIndex::getFileList( DcPackageDesc& desc )
 {
     QStringList lst;
@@ -294,7 +294,7 @@ QStringList DcPackageIndex::getFileList( DcPackageDesc& desc )
     return lst;
 }
 
-//-------------------------------------------------------------------------
+
 QString DcPackageIndex::getChangeLog( DcPackageDesc& desc )
 {
     QString rtval;
@@ -323,7 +323,7 @@ QString DcPackageIndex::getChangeLog( DcPackageDesc& desc )
 
     return rtval;
 }
-//-------------------------------------------------------------------------
+
 QString DcPackageIndex::getBaseUrl( DcPackageDesc& desc )
 {
     QString rtval;

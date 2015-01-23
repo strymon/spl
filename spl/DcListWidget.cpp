@@ -16,39 +16,25 @@
 *-------------------------------------------------------------------------*/
 #include "DcListWidget.h"
 
-//-------------------------------------------------------------------------
+
 void DcListWidget::dragEnterEvent( QDragEnterEvent *e )
 {
- /*   if (QListWidget *lb = qobject_cast<QListWidget*>(e->source())) 
-    {
-        
-
-    }*/
-
     qDebug() << e->source()->objectName();
     qDebug() << "Enter: " << e->pos() << this->itemAt(e->pos())->text();
     e->accept();
 }
 
-//-------------------------------------------------------------------------
 void DcListWidget::dragLeaveEvent( QDragLeaveEvent *event )
 {
-    
-        
-        event->accept();
-
+    event->accept();
 }
 
-
-//-------------------------------------------------------------------------
 void DcListWidget::dropEvent( QDropEvent *e )
 {
     qDebug() << this->selectedItems()[0]->text() << "Replaces " << this->itemAt(e->pos())->text();
     e->accept();
 }
 
-
-//-------------------------------------------------------------------------
 void DcListWidget::dragMoveEvent( QDragMoveEvent *e )
 {
     qDebug() << "dragMoveEvent";
@@ -59,5 +45,4 @@ void DcListWidget::dragMoveEvent( QDragMoveEvent *e )
          qDebug() << i->text();
      }
      e->accept();
-
 }

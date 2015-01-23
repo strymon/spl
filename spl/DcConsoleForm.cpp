@@ -32,7 +32,7 @@ struct parseError
     parseError(const QString& str) : msg(str) {}
 };
 
-//-------------------------------------------------------------------------
+
 QDataStream & operator >> ( QDataStream& stream, DcFnSymDef& symDef )
 {
     stream >> symDef.name;
@@ -42,7 +42,7 @@ QDataStream & operator >> ( QDataStream& stream, DcFnSymDef& symDef )
     return stream;
 }
 
-//-------------------------------------------------------------------------
+
 QDataStream & operator<<( QDataStream& stream, const DcFnSymDef& symDef )
 {
     stream << symDef.name;
@@ -52,7 +52,7 @@ QDataStream & operator<<( QDataStream& stream, const DcFnSymDef& symDef )
     return stream;
 }
 
-//-------------------------------------------------------------------------
+
 DcConsoleForm::DcConsoleForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DcConsoleForm),
@@ -100,7 +100,7 @@ DcConsoleForm::DcConsoleForm(QWidget *parent) :
 
 }
 
-//-------------------------------------------------------------------------
+
 DcConsoleForm::~DcConsoleForm()
 {
     saveHistory();
@@ -133,7 +133,7 @@ void DcConsoleForm::clearCounterDisplay()
     ui->label->setText("");
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::refreshTextOutput()
 {
     _updateTimer.stop();
@@ -153,22 +153,20 @@ void DcConsoleForm::refreshTextOutput()
 
         for (int line = 0; line < dcnt; line++)
         {
-//         	QString s;
-//             s.sprintf("\n");
             if(_con_html)
+            {
                 _textOutputLines.append("<br>\n");
+            }
             else
+            {
                 _textOutputLines.append("\n");
+            }
         }
 
-    }
-    else
-    {
     }
     
     if(this->isVisible())
     {
-       
         ui->textEdit->clear();
         
         QString o = _textOutputLines.join("");
@@ -187,7 +185,7 @@ void DcConsoleForm::refreshTextOutput()
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::loadHistory()
 {
     QSettings settings;
@@ -204,7 +202,7 @@ void DcConsoleForm::loadHistory()
     _historyIndex = _history.count();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::saveHistory()
 {
     QSettings settings;
@@ -230,13 +228,15 @@ void DcConsoleForm::saveHistory()
     }
     settings.endArray();
 }
+
 void DcConsoleForm::autoCmd(QString cmd)
 {
     ui->lineEdit->setText(cmd);
     ui->lineEdit->setFocus();
     on_lineEdit_returnPressed();
 }
-//-------------------------------------------------------------------------
+
+
 void DcConsoleForm::on_lineEdit_returnPressed()
 {
     QString str = ui->lineEdit->text();
@@ -258,7 +258,7 @@ void DcConsoleForm::on_lineEdit_returnPressed()
 
 }
 
-//-------------------------------------------------------------------------
+
 bool DcConsoleForm::eventFilter(QObject* obj, QEvent *e)
 {
     if(obj == ui->lineEdit)
@@ -333,7 +333,7 @@ bool DcConsoleForm::eventFilter(QObject* obj, QEvent *e)
 
     return false;
 }
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::setVisible( bool visible )
 {
     QWidget::setVisible(visible);
@@ -343,10 +343,11 @@ void DcConsoleForm::setVisible( bool visible )
         this->requestRefresh();
         ui->lineEdit->setFocus();
         executeCmdStr("");
+        initGuiElements();
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::handleUpKeyPress()
 {
     if (_history.count())
@@ -368,7 +369,7 @@ void DcConsoleForm::handleUpKeyPress()
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::handleDownKeyPress()
 {
     if (_history.count())
@@ -386,19 +387,19 @@ void DcConsoleForm::handleDownKeyPress()
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::replaceCurrentCommand( QString cmd )
 {
     ui->lineEdit->setText(cmd);
 }
 
-//-------------------------------------------------------------------------
+
 QString DcConsoleForm::getCurrentCommand()
 {
     return ui->lineEdit->text();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::on_lineEdit_textEdited(const QString & /*text*/)
 {
 //     if(text.contains("`"))
@@ -411,7 +412,7 @@ void DcConsoleForm::on_lineEdit_textEdited(const QString & /*text*/)
 //     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::toggleVisible()
 {
     
@@ -433,14 +434,12 @@ void DcConsoleForm::toggleVisible()
 
 }
 
-//-------------------------------------------------------------------------
 void DcConsoleForm::flush()
 {
     refreshTextOutput();
     QApplication::processEvents();
 }
 
-//-------------------------------------------------------------------------
 bool DcConsoleForm::addCmd(QString name, const QObject *receiver, const char *member, QString helpString)
 {
     bool rtval = false;
@@ -489,7 +488,7 @@ bool DcConsoleForm::addCmd(QString name, const QObject *receiver, const char *me
     return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcConsoleForm::addCmd( QString name, const QObject *receiver, 
                            const char *member, QString useage,QString helpString )
 {
@@ -498,7 +497,7 @@ bool DcConsoleForm::addCmd( QString name, const QObject *receiver,
     return addCmd(name, receiver,member,helpString);
 }
 
-//-------------------------------------------------------------------------
+
 QStringList DcConsoleForm::tokenize(QString& sexp)
 {
     sexp.replace("["," [ ");
@@ -513,7 +512,7 @@ QStringList DcConsoleForm::tokenize(QString& sexp)
     return tokens;
 }
 
-//-------------------------------------------------------------------------
+
 bool DcConsoleForm::executeCmdStr(const QString cmdLine, bool direct /*=false*/)
 {
     bool rtval = true;
@@ -590,7 +589,7 @@ bool DcConsoleForm::executeCmdStr(const QString cmdLine, bool direct /*=false*/)
 }
 
 
-//-------------------------------------------------------------------------
+
 bool DcConsoleForm::execCmd( DcConArgs &args,bool direct /* = false */ )
 {
     bool rtval = false;
@@ -634,14 +633,14 @@ bool DcConsoleForm::execCmd( DcConArgs &args,bool direct /* = false */ )
     }	return rtval;
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_clear( DcConArgs args )
 {
     Q_UNUSED(args);
     clear();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_help( DcConArgs args )
 {
     Q_UNUSED(args);
@@ -692,7 +691,7 @@ void DcConsoleForm::cmd_help( DcConArgs args )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_depth( DcConArgs args )
 {
     if(args.noArgs())
@@ -716,7 +715,7 @@ void DcConsoleForm::cmd_depth( DcConArgs args )
 
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::setInputReady( bool en )
 {
     if(!en)
@@ -729,9 +728,14 @@ void DcConsoleForm::setInputReady( bool en )
     }
     
     ui->lineEdit->setEnabled(en);
+    en ? ui->label->show() : ui->label->hide();
+        
+        
+//         ->setStyleSheet("background-color: rgb(255, 255, 255);\ncolor: rgb(165, 165, 165);")
+//         : ui->label->setStyleSheet( "background-color: rgb(255, 255, 255);\ncolor: rgb(165, 165, 165);" )
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_def( DcConArgs args )
 {
 
@@ -754,7 +758,7 @@ void DcConsoleForm::cmd_def( DcConArgs args )
     _fnSym.insert(symDef.name,symDef);
 }
 
-//-------------------------------------------------------------------------
+
 DcFnSymDef DcConsoleForm::parseFn(QString sexp)
 {
     QStringList tokens = tokenize(sexp);
@@ -809,7 +813,7 @@ DcFnSymDef DcConsoleForm::parseFn(QString sexp)
     }
     return symDef;
 }
-//-------------------------------------------------------------------------
+
 bool DcConsoleForm::checkArgCnt( DcConArgs &args, int minCnt /*=0*/ )
 {
     // See if this is a request for help  
@@ -829,7 +833,7 @@ bool DcConsoleForm::checkArgCnt( DcConArgs &args, int minCnt /*=0*/ )
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::addSymDef( QString name, QString d )
 {
     DcFnSymDef sym;
@@ -839,19 +843,19 @@ void DcConsoleForm::addSymDef( QString name, QString d )
 //    _cmdSym.insert(name, d);
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::addRoSymDef( QString name, int val )
 {
     _roSym.insert(name, QString::number(val));
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::addRoSymDef( QString name, QString d )
 {
     _roSym.insert(name, d);
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_defSave( DcConArgs args )
 {
     if(!checkArgCnt(args,1))
@@ -872,7 +876,7 @@ void DcConsoleForm::cmd_defSave( DcConArgs args )
     
 }
 
-//-------------------------------------------------------------------------
+
 // Method saves commands defined at runtime using the 'def' command to the 
 // specified file.
 void DcConsoleForm::cmd_defLoad( DcConArgs  args )
@@ -927,7 +931,7 @@ void DcConsoleForm::cmd_defLoad( DcConArgs  args )
 
 }
 
-//-------------------------------------------------------------------------
+
 // Method loads commands defined at runtime using the 'def' command to the 
 // specified file.
 void DcConsoleForm::cmd_lsDef( DcConArgs  args )
@@ -969,20 +973,20 @@ void DcConsoleForm::cmd_lsDef( DcConArgs  args )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::setBaseDir( QString& basePath )
 {
     _basePath  = QDir::toNativeSeparators(basePath + "console/");
     QDir().mkpath(_basePath);
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::execCmd( const QString cmd,bool direct /*=false */ )
 {
     executeCmdStr(cmd,direct);
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::applySymbols( DcConArgs &args, const QMap<QString,QString>& syms)
 {
     if(syms.count() <= 0)
@@ -1018,13 +1022,13 @@ void DcConsoleForm::applySymbols( DcConArgs &args, const QMap<QString,QString>& 
     } while (expanded);
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::clearRoSymDefs()
 {
     _roSym.clear();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::print( DcConArgs &args, int offset /*= 0*/)
 {
     QString etext;
@@ -1035,7 +1039,7 @@ void DcConsoleForm::print( DcConArgs &args, int offset /*= 0*/)
     *this << etext.trimmed() << "\n";
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_append( DcConArgs args )
 {
     if(!_appendOk)
@@ -1052,7 +1056,7 @@ void DcConsoleForm::cmd_append( DcConArgs args )
     
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_history( DcConArgs args )
 {
     Q_UNUSED(args);
@@ -1062,7 +1066,7 @@ void DcConsoleForm::cmd_history( DcConArgs args )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_undef( DcConArgs args )
 {
     QString sym = args.at(1).toString();
@@ -1077,7 +1081,7 @@ void DcConsoleForm::cmd_undef( DcConArgs args )
 }
 
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_conHtml( DcConArgs args )
 {
     if(args.noArgs())
@@ -1101,7 +1105,7 @@ void DcConsoleForm::cmd_conHtml( DcConArgs args )
 }
 
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::requestRefresh()
 {
     QString &buf=stream->buffer;
@@ -1173,41 +1177,41 @@ void DcConsoleForm::requestRefresh()
     _updateTimer.start();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_exit(DcConArgs args)
 {
     Q_UNUSED(args);
     QApplication::quit();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::clear()
 {
     _clearOutput = true;
     refreshTextOutput();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_ver( DcConArgs args )
 {
     Q_UNUSED(args);
     *this << QApplication::applicationVersion() << "\n";
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_echo(DcConArgs args )
 {
     print(args,1);
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_aboutQt( DcConArgs args )
 {
     Q_UNUSED(args);
     QApplication::aboutQt();
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_doc( DcConArgs args )
 {
     if(args.argCount())
@@ -1233,7 +1237,7 @@ void DcConsoleForm::cmd_doc( DcConArgs args )
     }
 }
 
-//-------------------------------------------------------------------------
+
 void DcConsoleForm::cmd_ts( DcConArgs args )
 {
     Q_UNUSED(args);
