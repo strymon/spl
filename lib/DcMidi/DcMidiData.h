@@ -303,7 +303,7 @@ public:
      {
          qint64 cur = _ts;
 
-         if(-1 == ts)
+         if((quint64)-1 == ts)
          {
              _ts = QDateTime::currentMSecsSinceEpoch();
          }

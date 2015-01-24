@@ -377,12 +377,6 @@ void DcPresetLib::erroRecovery_entered()
 }
 
 //-------------------------------------------------------------------------
-void DcPresetLib::cancelXfer_entered()
-{
-    clearMidiInConnections();
-}
-
-//-------------------------------------------------------------------------
 bool DcPresetLib::hasDevSupport( const DcMidiData &data )
 {
     QSetIterator<const char*> i(_supportedDevicesSet);
@@ -476,6 +470,7 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
     ui.devInfoLabel->setText(devNameVer);
     ui.devImgLabel->setToolTip(_devDetails.FwVersion);
     ui.devImgLabel->setPixmap(pm);
+    ui.devImgLabel->setAcceptDrops(true);
     
     // Adding device specific details to the console
     _con->addRoSymDef("dev.ver",_devDetails.FwVersion);
@@ -540,7 +535,7 @@ void DcPresetLib::setupStateMachineHandler()
     DcState *detectDevice       = new DcState(QString("detectDevice"));
     
     DcState *errorRecovery      = new DcState(QString("errorRecovery"));
-    DcState *cancelXfer         = new DcState(QString("cancelXfer"));
+//    DcState *cancelXfer         = new DcState(QString("cancelXfer"));
 
     DcState *userCanFetch       = new DcState(QString("userCanFetch"));
     DcState *setupReadPresetsState     = new DcState(QString("setupReadPresetsState"));
@@ -574,7 +569,6 @@ void DcPresetLib::setupStateMachineHandler()
     _machine.addState(detectDevice);
     
     _machine.addState(errorRecovery);
-    _machine.addState(cancelXfer);
 
     _machine.addState(userCanFetch);
     _machine.addState(setupReadPresetsState);
@@ -593,10 +587,6 @@ void DcPresetLib::setupStateMachineHandler()
     DcCustomTransition *cet = new DcCustomTransition(WorkListDirtyEvent::TYPE,errorRecovery);
     cet->setTargetState(notInSyncState);
     errorRecovery->addTransition(cet);
-
-
-    QObject::connect(cancelXfer, SIGNAL(entered()), this, SLOT(cancelXfer_entered()));
-    
     detectDevice->addTransition(this,SIGNAL(deviceReady()),     userCanFetch);
     detectDevice->addTransition(this,SIGNAL(deviceNotFound()),  noDevice);
     detectDevice->addTransition(ui.actionMIDI_Ports,SIGNAL(triggered()),midiPortSelect);
@@ -665,7 +655,7 @@ void DcPresetLib::setupStateMachineHandler()
     DcState* xferInState = _xferInMachine.setupStateMachine(&_machine,&_midiOut,readPresetsCompleteState,detectDevice,detectDevice);
     
     // Setup the dataOut system
-    DcState* xferOutState = _xferOutMachine.setupStateMachine(&_machine,&_midiOut,writePresetsCompleteState,errorRecovery,cancelXfer);
+    DcState* xferOutState = _xferOutMachine.setupStateMachine(&_machine,&_midiOut,writePresetsCompleteState,errorRecovery,errorRecovery);
     
     // State readPreset will call setupReadPresetXfer and transition to the xferMachine
     QObject::connect(setupReadPresetsState, SIGNAL(entered()), this, SLOT(setupReadPresetXfer_entered())); // IN
@@ -2981,6 +2971,7 @@ void DcPresetLib::conCmd_uuid( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcPresetLib::conCmd_showlog( DcConArgs args )
 {
+    (void)args;
     _con->execCmd("exec logfile");
 }
 

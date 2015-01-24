@@ -71,7 +71,7 @@ public:
     DcCodeBankInfo(DcMidiData& md) {init(md);}
     
     // true, if this object has been initialized
-    bool isOk() { return _size != ~0; }
+    bool isOk() { return _size != (quint32)~0; }
     
     /*!
       Initialize the boot info with the given MIDI

@@ -44,6 +44,8 @@ protected:
 
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
 };
 
 #endif // DCIMGLABEL_H

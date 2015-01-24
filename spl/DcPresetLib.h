@@ -142,7 +142,6 @@ private slots:
 
     void detectDevice_entered();
     void erroRecovery_entered();
-    void cancelXfer_entered();
     void shutdownMidiIo();
 
     void conCmd_qss( DcConArgs args );

@@ -58,23 +58,46 @@ void DcImgLabel::mouseReleaseEvent(QMouseEvent *ev)
 
 void DcImgLabel::dragEnterEvent(QDragEnterEvent *event)
 {
-    if(event->mimeData()->hasFormat("application/x-qt-windows-mime;value=\"FileName\""))
-       {
-           event->acceptProposedAction();
-       }
+    if (event->mimeData()->hasUrls())
+    {
+        _orgW = this->pixmap()->width();
+        _orgH = this->pixmap()->height();
+        this->setPixmap(this->pixmap()->scaled(_orgW-2,_orgH-2));
+        event->acceptProposedAction();
+    }
+    else if(event->mimeData()->hasFormat("application/x-qt-windows-mime;value=\"FileName\""))
+    {
+        event->acceptProposedAction();
+    }
 }
 
 void DcImgLabel::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
-      Qt::DropAction action = event->dropAction();
+    Qt::DropAction action = event->dropAction();
 
-      if ( data->hasFormat("application/x-qt-windows-mime;value=\"FileName\"") &&
+    if (event->mimeData()->hasUrls())
+    {
+        setPixmap(this->pixmap()->scaled(_orgW,_orgH));
+        QUrl url = QUrl::fromEncoded(data->text().toLatin1());
+        emit fileDropped(url.toLocalFile());
+    }
+    else  if ( data->hasFormat("application/x-qt-windows-mime;value=\"FileName\"") &&
           ( (action == Qt::MoveAction) || (action == Qt::CopyAction) ) )
       {
-
-           QUrl url = QUrl::fromEncoded(data->text().toLatin1());
-           qDebug() << "FileName: " + url.fileName() << "\n";
-           emit fileDropped(url.toLocalFile());
+        setPixmap(this->pixmap()->scaled(_orgW,_orgH));
+        QUrl url = QUrl::fromEncoded(data->text().toLatin1());
+        emit fileDropped(url.toLocalFile());
       }
+}
+
+void DcImgLabel::dragLeaveEvent(QDragLeaveEvent *event)
+{
+     setPixmap(this->pixmap()->scaled(_orgW,_orgH));
+     event->accept();
+}
+
+void DcImgLabel::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->acceptProposedAction();
 }

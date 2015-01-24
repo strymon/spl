@@ -64,15 +64,19 @@ DcConsoleForm::DcConsoleForm(QWidget *parent) :
     _con_html = false;
 
     _updateTimer.setInterval(0);
+
     _clearOutput = false;
     QObject::connect(&_updateTimer,SIGNAL(timeout()),this,SLOT(refreshTextOutput()));
 
      _depth = 100;
-     
     
      ui->lineEdit->installEventFilter(this);
      ui->lineEdit->setAttribute(Qt::WA_MacShowFocusRect, false);
      ui->textEdit->installEventFilter(this);
+
+#ifdef Q_OS_MACX
+     ui->frame->setStyleSheet("background-color: rgb(250, 250, 250);");
+#endif
 
      _noClrOnReturnOnce = false;
      _appendOk = false;
@@ -111,12 +115,19 @@ int DcConsoleForm::initGuiElements()
 {
     int w = 0;
     QScrollBar* sb = ui->textEdit->verticalScrollBar();
-    if(sb)
+    if(sb->isVisible())
     {
-        w = sb->width();
+        if(sb)
+        {
+            w = sb->width();
+        }
+        ui->frame->setMinimumWidth(w);
+        ui->frame->setVisible(true);
     }
-
-    ui->frame->setMinimumWidth(w);
+    else
+    {
+        ui->frame->setVisible(false);
+    }
 
     return w;
 }
@@ -1188,6 +1199,7 @@ void DcConsoleForm::cmd_exit(DcConArgs args)
 void DcConsoleForm::clear()
 {
     _clearOutput = true;
+    clearCounterDisplay();
     refreshTextOutput();
 }
 
