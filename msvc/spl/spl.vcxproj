@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Release|Win32">
@@ -16,7 +16,7 @@
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <PlatformToolSet>v110</PlatformToolSet>
     <OutputDirectory>release\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
@@ -25,7 +25,7 @@
     <IntermediateDirectory>release\.obj\</IntermediateDirectory>
     <PrimaryOutput>spl</PrimaryOutput>
   </PropertyGroup>
-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <PlatformToolSet>v110</PlatformToolSet>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
@@ -36,27 +36,27 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\</OutDir>
-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.obj\</IntDir>
-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">spl</TargetName>
-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</IgnoreImportLibrary>
-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">false</LinkIncremental>
-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\</OutDir>
-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.obj\</IntDir>
-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">spl</TargetName>
-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</IgnoreImportLibrary>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.obj\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">spl</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.obj\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">spl</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>&quot;C:\proj\dc\spl&quot;;&quot;C:\proj\dc\spl\lib&quot;;&quot;C:\proj\dc\spl\spl&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtWidgets&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtGui&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtNetwork&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtCore&quot;;&quot;release\.moc&quot;;&quot;release\.ui&quot;;&quot;.&quot;;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\mkspecs\win32-msvc2012;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\proj\dc\spl;C:\proj\dc\spl\lib;C:\proj\dc\spl\spl;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;release\.moc;release\.ui;.;$(QTDIR)\mkspecs\win32-msvc2012;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\.obj\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -66,7 +66,8 @@
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;__WINDOWS_MM__;QT_DLL;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -74,9 +75,9 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glu32.lib;opengl32.lib;gdi32.lib;user32.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\qtmain.lib;shell32.lib;WinMM.Lib;dcmidi.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Widgets.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Gui.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Network.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib;C:\proj\dc\spl\msvc\lib\DcMidi\release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/verbose:lib &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>glu32.lib;opengl32.lib;gdi32.lib;user32.lib;qtmain.lib;shell32.lib;WinMM.Lib;dcmidi.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Network.lib;Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;C:\proj\dc\spl\msvc\lib\DcMidi\release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/verbose:lib "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -96,9 +97,9 @@
       <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;__WINDOWS_MM__;QT_DLL;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>&quot;C:\proj\dc\spl&quot;;&quot;C:\proj\dc\spl\lib&quot;;&quot;C:\proj\dc\spl\spl&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtWidgets&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtGui&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtNetwork&quot;;&quot;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\include\QtCore&quot;;&quot;debug\.moc&quot;;&quot;debug\.ui&quot;;&quot;.&quot;;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\mkspecs\win32-msvc2012;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\proj\dc\spl;C:\proj\dc\spl\lib;C:\proj\dc\spl\spl;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtCore;debug\.moc;debug\.ui;.;$(QTDIR)\mkspecs\win32-msvc2012;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\.obj\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -115,9 +116,9 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glu32.lib;opengl32.lib;gdi32.lib;user32.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\qtmaind.lib;shell32.lib;WinMM.Lib;dcmidi.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Widgetsd.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Guid.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Networkd.lib;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\lib;C:\proj\dc\spl\msvc\lib\DcMidi\debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/verbose:lib &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>glu32.lib;opengl32.lib;gdi32.lib;user32.lib;qtmaind.lib;shell32.lib;WinMM.Lib;dcmidi.lib;Qt5Widgetsd.lib;Qt5Guid.lib;Qt5Networkd.lib;Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;C:\proj\dc\spl\msvc\lib\DcMidi\debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/verbose:lib "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -162,415 +163,1158 @@
     <ClCompile Include="C:\proj\dc\spl\spl\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcCallOnce.h" />
-    <ClInclude Include="C:\proj\dc\spl\spl\DcConArgs.h" />
-    <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcConsoleForm.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcConsoleForm.h -o release\.moc\moc_DcConsoleForm.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcConsoleForm.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcConsoleForm.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcConsoleForm.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcConsoleForm.h -o debug\.moc\moc_DcConsoleForm.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcConsoleForm.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcConsoleForm.cpp;%(Outputs)</Outputs>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcCallOnce.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcDeviceDetails.h" />
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcConArgs.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcConsoleForm.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcConsoleForm.h -o release\.moc\moc_DcConsoleForm.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcConsoleForm.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcConsoleForm.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcConsoleForm.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcConsoleForm.h -o debug\.moc\moc_DcConsoleForm.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcConsoleForm.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcConsoleForm.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcDeviceDetails.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcDropLabel.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcDropLabel.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcDropLabel.h -o release\.moc\moc_DcDropLabel.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcDropLabel.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcDropLabel.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcDropLabel.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcDropLabel.h -o debug\.moc\moc_DcDropLabel.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcDropLabel.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcDropLabel.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcDropLabel.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcDropLabel.h -o release\.moc\moc_DcDropLabel.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcDropLabel.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcDropLabel.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcDropLabel.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcDropLabel.h -o debug\.moc\moc_DcDropLabel.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcDropLabel.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcDropLabel.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcFileDownloader.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcFileDownloader.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcFileDownloader.h -o release\.moc\moc_DcFileDownloader.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcFileDownloader.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcFileDownloader.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcFileDownloader.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcFileDownloader.h -o debug\.moc\moc_DcFileDownloader.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcFileDownloader.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcFileDownloader.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcFileDownloader.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcFileDownloader.h -o release\.moc\moc_DcFileDownloader.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcFileDownloader.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcFileDownloader.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcFileDownloader.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcFileDownloader.h -o debug\.moc\moc_DcFileDownloader.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcFileDownloader.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcFileDownloader.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcGlobals.h" />
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcGlobals.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcImgLabel.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcImgLabel.h -o release\.moc\moc_DcImgLabel.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcImgLabel.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcImgLabel.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcImgLabel.h -o debug\.moc\moc_DcImgLabel.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcImgLabel.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcImgLabel.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcImgLabel.h -o release\.moc\moc_DcImgLabel.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcImgLabel.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcImgLabel.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcImgLabel.h -o debug\.moc\moc_DcImgLabel.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcImgLabel.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcImgLabel.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcLog.h" />
-    <ClInclude Include="C:\proj\dc\spl\spl\DcMidiDevDefs.h" />
-    <ClInclude Include="C:\proj\dc\spl\spl\DcPackageIndex.h" />
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcLog.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcMidiDevDefs.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcPackageIndex.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcPresetLib.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcPresetLib.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcPresetLib.h -o release\.moc\moc_DcPresetLib.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcPresetLib.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcPresetLib.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcPresetLib.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcPresetLib.h -o debug\.moc\moc_DcPresetLib.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcPresetLib.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcPresetLib.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcPresetLib.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcPresetLib.h -o release\.moc\moc_DcPresetLib.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcPresetLib.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcPresetLib.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcPresetLib.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcPresetLib.h -o debug\.moc\moc_DcPresetLib.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcPresetLib.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcPresetLib.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcQUtils.h" />
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcSigleton.h" />
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcQUtils.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcSigleton.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcSoftwareUpdate.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcSoftwareUpdate.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcSoftwareUpdate.h -o release\.moc\moc_DcSoftwareUpdate.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcSoftwareUpdate.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcSoftwareUpdate.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcSoftwareUpdate.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcSoftwareUpdate.h -o debug\.moc\moc_DcSoftwareUpdate.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcSoftwareUpdate.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcSoftwareUpdate.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcSoftwareUpdate.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcSoftwareUpdate.h -o release\.moc\moc_DcSoftwareUpdate.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcSoftwareUpdate.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcSoftwareUpdate.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcSoftwareUpdate.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcSoftwareUpdate.h -o debug\.moc\moc_DcSoftwareUpdate.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcSoftwareUpdate.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcSoftwareUpdate.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcState.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\lib\cmn\DcState.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\lib\cmn\DcState.h -o release\.moc\moc_DcState.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\lib\cmn\DcState.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcState.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\lib\cmn\DcState.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\lib\cmn\DcState.h -o debug\.moc\moc_DcState.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\lib\cmn\DcState.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcState.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\lib\cmn\DcState.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\lib\cmn\DcState.h -o release\.moc\moc_DcState.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\lib\cmn\DcState.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcState.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\lib\cmn\DcState.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\lib\cmn\DcState.h -o debug\.moc\moc_DcState.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\lib\cmn\DcState.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcState.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcStateMachineHelpers.h" />
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcStateMachineHelpers.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h -o release\.moc\moc_DcUpdateAvailableDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcUpdateAvailableDialog.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h -o debug\.moc\moc_DcUpdateAvailableDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcUpdateAvailableDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h -o release\.moc\moc_DcUpdateAvailableDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcUpdateAvailableDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h -o debug\.moc\moc_DcUpdateAvailableDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcUpdateAvailableDialog.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcUpdateDialogMgr.h" />
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateDialogMgr.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcXferMachine.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcXferMachine.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcXferMachine.h -o release\.moc\moc_DcXferMachine.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\DcXferMachine.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_DcXferMachine.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcXferMachine.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcXferMachine.h -o debug\.moc\moc_DcXferMachine.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\DcXferMachine.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_DcXferMachine.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcXferMachine.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcXferMachine.h -o release\.moc\moc_DcXferMachine.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\DcXferMachine.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_DcXferMachine.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcXferMachine.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\DcXferMachine.h -o debug\.moc\moc_DcXferMachine.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\DcXferMachine.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_DcXferMachine.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\IoProgressDialog.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\IoProgressDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\IoProgressDialog.h -o release\.moc\moc_IoProgressDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\IoProgressDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_IoProgressDialog.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\IoProgressDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\IoProgressDialog.h -o debug\.moc\moc_IoProgressDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\IoProgressDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_IoProgressDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\IoProgressDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\IoProgressDialog.h -o release\.moc\moc_IoProgressDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\IoProgressDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_IoProgressDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\IoProgressDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\IoProgressDialog.h -o debug\.moc\moc_IoProgressDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\IoProgressDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_IoProgressDialog.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\MidiSettings.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\MidiSettings.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MidiSettings.h -o release\.moc\moc_MidiSettings.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\MidiSettings.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_MidiSettings.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\MidiSettings.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MidiSettings.h -o debug\.moc\moc_MidiSettings.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\MidiSettings.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_MidiSettings.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\MidiSettings.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MidiSettings.h -o release\.moc\moc_MidiSettings.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\MidiSettings.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_MidiSettings.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\MidiSettings.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MidiSettings.h -o debug\.moc\moc_MidiSettings.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\MidiSettings.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_MidiSettings.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\MoveDialog.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\MoveDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MoveDialog.h -o release\.moc\moc_MoveDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\MoveDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_MoveDialog.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\MoveDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MoveDialog.h -o debug\.moc\moc_MoveDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\MoveDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_MoveDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\MoveDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MoveDialog.h -o release\.moc\moc_MoveDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\MoveDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_MoveDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\MoveDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\MoveDialog.h -o debug\.moc\moc_MoveDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\MoveDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_MoveDialog.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\RenameDialog.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\RenameDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\RenameDialog.h -o release\.moc\moc_RenameDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\RenameDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_RenameDialog.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\RenameDialog.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\RenameDialog.h -o debug\.moc\moc_RenameDialog.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\RenameDialog.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_RenameDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\RenameDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\RenameDialog.h -o release\.moc\moc_RenameDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\RenameDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_RenameDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\RenameDialog.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\RenameDialog.h -o debug\.moc\moc_RenameDialog.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\RenameDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_RenameDialog.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\dcconbool.h">
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\dcconbool.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\dcconbool.h -o release\.moc\moc_dcconbool.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">MOC C:\proj\dc\spl\spl\dcconbool.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.moc\moc_dcconbool.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\dcconbool.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\dcconbool.h -o debug\.moc\moc_dcconbool.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">MOC C:\proj\dc\spl\spl\dcconbool.h</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.moc\moc_dcconbool.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\dcconbool.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\dcconbool.h -o release\.moc\moc_dcconbool.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOC C:\proj\dc\spl\spl\dcconbool.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.moc\moc_dcconbool.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\dcconbool.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\moc.exe  -DUNICODE -DWIN32 -D__WINDOWS_MM__ -DQT_DLL -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_MSC_VER=1700 -D_WIN32 -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/mkspecs/win32-msvc2012 -IC:/proj/dc/spl/spl -IC:/proj/dc/spl -IC:/proj/dc/spl/lib -IC:/proj/dc/spl/spl -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2012_opengl/include/QtCore -I. C:\proj\dc\spl\spl\dcconbool.h -o debug\.moc\moc_dcconbool.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC C:\proj\dc\spl\spl\dcconbool.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.moc\moc_dcconbool.cpp;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug\.moc\moc_DcConsoleForm.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcConsoleForm.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcDropLabel.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcDropLabel.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcFileDownloader.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcFileDownloader.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcImgLabel.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcImgLabel.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcPresetLib.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcPresetLib.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcSoftwareUpdate.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcSoftwareUpdate.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcState.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcState.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcUpdateAvailableDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcUpdateAvailableDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_DcXferMachine.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_DcXferMachine.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_IoProgressDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_IoProgressDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_MidiSettings.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_MidiSettings.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_MoveDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_MoveDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_RenameDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_RenameDialog.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.moc\moc_dcconbool.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.moc\moc_dcconbool.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="debug\.qrc\qrc_dcpl.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="release\.qrc\qrc_dcpl.cpp">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClInclude Include="debug\.ui\ui_DcConsoleForm.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcConsoleForm.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_DcPresetLib.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcPresetLib.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_DcUpdateAvailableDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcUpdateAvailableDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_DcplAbout.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcplAbout.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_IoProgressDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_IoProgressDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_MidiPortSelect.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_MidiPortSelect.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_MoveDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_MoveDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_RenameDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_RenameDialog.h">
-      <ExcludedFromBuild Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</ExcludedFromBuild>
-    </ClInclude>
+    <CustomBuild Include="debug\.ui\ui_DcConsoleForm.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcConsoleForm.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcPresetLib.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcPresetLib.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcUpdateAvailableDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcUpdateAvailableDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcplAbout.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcplAbout.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_IoProgressDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_IoProgressDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_MidiPortSelect.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_MidiPortSelect.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_MoveDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_MoveDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_RenameDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_RenameDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcConsoleForm.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcConsoleForm.ui -o release\.ui\ui_DcConsoleForm.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\DcConsoleForm.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_DcConsoleForm.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcConsoleForm.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcConsoleForm.ui -o debug\.ui\ui_DcConsoleForm.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\DcConsoleForm.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_DcConsoleForm.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcConsoleForm.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcConsoleForm.ui -o release\.ui\ui_DcConsoleForm.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\DcConsoleForm.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_DcConsoleForm.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcConsoleForm.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcConsoleForm.ui -o debug\.ui\ui_DcConsoleForm.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\DcConsoleForm.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_DcConsoleForm.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcPresetLib.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcPresetLib.ui;DcConsoleForm.h;DcListWidget.h;DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcPresetLib.ui -o release\.ui\ui_DcPresetLib.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\DcPresetLib.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_DcPresetLib.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcPresetLib.ui;DcConsoleForm.h;DcListWidget.h;DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcPresetLib.ui -o debug\.ui\ui_DcPresetLib.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\DcPresetLib.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_DcPresetLib.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcPresetLib.ui;DcConsoleForm.h;DcListWidget.h;DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcPresetLib.ui -o release\.ui\ui_DcPresetLib.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\DcPresetLib.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_DcPresetLib.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcPresetLib.ui;DcConsoleForm.h;DcListWidget.h;DcImgLabel.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcPresetLib.ui -o debug\.ui\ui_DcPresetLib.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\DcPresetLib.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_DcPresetLib.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui -o release\.ui\ui_DcUpdateAvailableDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_DcUpdateAvailableDialog.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui -o debug\.ui\ui_DcUpdateAvailableDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_DcUpdateAvailableDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui -o release\.ui\ui_DcUpdateAvailableDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_DcUpdateAvailableDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui -o debug\.ui\ui_DcUpdateAvailableDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_DcUpdateAvailableDialog.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcplAbout.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\DcplAbout.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcplAbout.ui -o release\.ui\ui_DcplAbout.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\DcplAbout.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_DcplAbout.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\DcplAbout.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\DcplAbout.ui -o debug\.ui\ui_DcplAbout.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\DcplAbout.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_DcplAbout.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\DcplAbout.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcplAbout.ui -o release\.ui\ui_DcplAbout.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\DcplAbout.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_DcplAbout.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\DcplAbout.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\DcplAbout.ui -o debug\.ui\ui_DcplAbout.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\DcplAbout.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_DcplAbout.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\IoProgressDialog.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\IoProgressDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\IoProgressDialog.ui -o release\.ui\ui_IoProgressDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\IoProgressDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_IoProgressDialog.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\IoProgressDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\IoProgressDialog.ui -o debug\.ui\ui_IoProgressDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\IoProgressDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_IoProgressDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\IoProgressDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\IoProgressDialog.ui -o release\.ui\ui_IoProgressDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\IoProgressDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_IoProgressDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\IoProgressDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\IoProgressDialog.ui -o debug\.ui\ui_IoProgressDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\IoProgressDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_IoProgressDialog.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\MidiPortSelect.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\MidiPortSelect.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\MidiPortSelect.ui -o release\.ui\ui_MidiPortSelect.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\MidiPortSelect.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_MidiPortSelect.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\MidiPortSelect.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\MidiPortSelect.ui -o debug\.ui\ui_MidiPortSelect.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\MidiPortSelect.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_MidiPortSelect.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\MidiPortSelect.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\MidiPortSelect.ui -o release\.ui\ui_MidiPortSelect.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\MidiPortSelect.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_MidiPortSelect.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\MidiPortSelect.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\MidiPortSelect.ui -o debug\.ui\ui_MidiPortSelect.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\MidiPortSelect.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_MidiPortSelect.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\MoveDialog.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\MoveDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\MoveDialog.ui -o release\.ui\ui_MoveDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\MoveDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_MoveDialog.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\MoveDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\MoveDialog.ui -o debug\.ui\ui_MoveDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\MoveDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_MoveDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\MoveDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\MoveDialog.ui -o release\.ui\ui_MoveDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\MoveDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_MoveDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\MoveDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\MoveDialog.ui -o debug\.ui\ui_MoveDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\MoveDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_MoveDialog.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\RenameDialog.ui">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\RenameDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\RenameDialog.ui -o release\.ui\ui_RenameDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">UIC C:\proj\dc\spl\spl\RenameDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.ui\ui_RenameDialog.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\RenameDialog.ui;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\uic.exe C:\proj\dc\spl\spl\RenameDialog.ui -o debug\.ui\ui_RenameDialog.h&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">UIC C:\proj\dc\spl\spl\RenameDialog.ui</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.ui\ui_RenameDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\RenameDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\RenameDialog.ui -o release\.ui\ui_RenameDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UIC C:\proj\dc\spl\spl\RenameDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.ui\ui_RenameDialog.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\RenameDialog.ui;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\uic.exe C:\proj\dc\spl\spl\RenameDialog.ui -o debug\.ui\ui_RenameDialog.h
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UIC C:\proj\dc\spl\spl\RenameDialog.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.ui\ui_RenameDialog.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\proj\dc\spl\spl\res\bigsky_100.png" />
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\bigsky_100.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\dcpl.qrc">
       <FileType>Document</FileType>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">C:\proj\dc\spl\spl\dcpl.qrc;C:\proj\dc\spl\spl\res\round_check.png;C:\proj\dc\spl\spl\res\round_check_green.png;C:\proj\dc\spl\spl\res\test_device_100.png;C:\proj\dc\spl\spl\res\sync_arrow.png;C:\proj\dc\spl\spl\res\timeline_100.png;C:\proj\dc\spl\spl\res\tri_bang.png;C:\proj\dc\spl\spl\res\strymon_logo.png;C:\proj\dc\spl\spl\res\dcpm_256x256x32.png;C:\proj\dc\spl\spl\res\mobius_100.png;C:\proj\dc\spl\spl\res\bigsky_100.png;C:\proj\dc\spl\spl\res\devunknown_100.png;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\rcc.exe -name dcpl C:\proj\dc\spl\spl\dcpl.qrc -o release\.qrc\qrc_dcpl.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">RCC C:\proj\dc\spl\spl\dcpl.qrc</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">release\.qrc\qrc_dcpl.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">C:\proj\dc\spl\spl\dcpl.qrc;C:\proj\dc\spl\spl\res\round_check.png;C:\proj\dc\spl\spl\res\round_check_green.png;C:\proj\dc\spl\spl\res\test_device_100.png;C:\proj\dc\spl\spl\res\sync_arrow.png;C:\proj\dc\spl\spl\res\timeline_100.png;C:\proj\dc\spl\spl\res\tri_bang.png;C:\proj\dc\spl\spl\res\strymon_logo.png;C:\proj\dc\spl\spl\res\dcpm_256x256x32.png;C:\proj\dc\spl\spl\res\mobius_100.png;C:\proj\dc\spl\spl\res\bigsky_100.png;C:\proj\dc\spl\spl\res\devunknown_100.png;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">setlocal&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;C:\Qt\Qt5.4.0\5.4\msvc2012_opengl\bin\rcc.exe -name dcpl C:\proj\dc\spl\spl\dcpl.qrc -o debug\.qrc\qrc_dcpl.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;endlocal</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">RCC C:\proj\dc\spl\spl\dcpl.qrc</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">debug\.qrc\qrc_dcpl.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\proj\dc\spl\spl\dcpl.qrc;C:\proj\dc\spl\spl\res\round_check.png;C:\proj\dc\spl\spl\res\round_check_green.png;C:\proj\dc\spl\spl\res\test_device_100.png;C:\proj\dc\spl\spl\res\sync_arrow.png;C:\proj\dc\spl\spl\res\timeline_100.png;C:\proj\dc\spl\spl\res\tri_bang.png;C:\proj\dc\spl\spl\res\strymon_logo.png;C:\proj\dc\spl\spl\res\dcpm_256x256x32.png;C:\proj\dc\spl\spl\res\mobius_100.png;C:\proj\dc\spl\spl\res\bigsky_100.png;C:\proj\dc\spl\spl\res\devunknown_100.png;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\rcc.exe -name dcpl C:\proj\dc\spl\spl\dcpl.qrc -o release\.qrc\qrc_dcpl.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">RCC C:\proj\dc\spl\spl\dcpl.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\.qrc\qrc_dcpl.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\proj\dc\spl\spl\dcpl.qrc;C:\proj\dc\spl\spl\res\round_check.png;C:\proj\dc\spl\spl\res\round_check_green.png;C:\proj\dc\spl\spl\res\test_device_100.png;C:\proj\dc\spl\spl\res\sync_arrow.png;C:\proj\dc\spl\spl\res\timeline_100.png;C:\proj\dc\spl\spl\res\tri_bang.png;C:\proj\dc\spl\spl\res\strymon_logo.png;C:\proj\dc\spl\spl\res\dcpm_256x256x32.png;C:\proj\dc\spl\spl\res\mobius_100.png;C:\proj\dc\spl\spl\res\bigsky_100.png;C:\proj\dc\spl\spl\res\devunknown_100.png;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+if errorlevel 1 goto VCEnd
+$(QTDIR)\bin\rcc.exe -name dcpl C:\proj\dc\spl\spl\dcpl.qrc -o debug\.qrc\qrc_dcpl.cpp
+if errorlevel 1 goto VCEnd
+endlocal</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">RCC C:\proj\dc\spl\spl\dcpl.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\.qrc\qrc_dcpl.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="C:\proj\dc\spl\spl\res\dcpm_256x256x32.png" />
-    <None Include="C:\proj\dc\spl\spl\res\devunknown_100.png" />
-    <None Include="C:\proj\dc\spl\spl\res\mobius_100.png" />
-    <None Include="C:\proj\dc\spl\spl\res\round_check.png" />
-    <None Include="C:\proj\dc\spl\spl\res\round_check_green.png" />
-    <None Include="C:\proj\dc\spl\spl\res\strymon_logo.png" />
-    <None Include="C:\proj\dc\spl\spl\res\sync_arrow.png" />
-    <None Include="C:\proj\dc\spl\spl\res\test_device_100.png" />
-    <None Include="C:\proj\dc\spl\spl\res\timeline_100.png" />
-    <None Include="C:\proj\dc\spl\spl\res\tri_bang.png" />
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\dcpm_256x256x32.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\devunknown_100.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\mobius_100.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\round_check.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\round_check_green.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\strymon_logo.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\sync_arrow.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\test_device_100.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\timeline_100.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\tri_bang.png">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Tools</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="C:\proj\dc\spl\spl\win.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Qt5Version_x0020_Win32="Qt5.4.0" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

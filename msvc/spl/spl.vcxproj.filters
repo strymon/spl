@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Form Files">
@@ -118,63 +118,30 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcCallOnce.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcConArgs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcDeviceDetails.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcDropLabel.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcFileDownloader.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcGlobals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcImgLabel.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcMidiDevDefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcPackageIndex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcPresetLib.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcQUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcSigleton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcSoftwareUpdate.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcState.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcStateMachineHelpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <ClInclude Include="C:\proj\dc\spl\spl\DcUpdateDialogMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcXferMachine.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -192,6 +159,69 @@
     </CustomBuild>
     <CustomBuild Include="C:\proj\dc\spl\spl\dcconbool.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcConArgs.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcDeviceDetails.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcGlobals.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcLog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcMidiDevDefs.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcPackageIndex.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcQUtils.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcSigleton.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcStateMachineHelpers.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateDialogMgr.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\bigsky_100.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\dcpm_256x256x32.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\devunknown_100.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\mobius_100.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\round_check.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\round_check_green.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\strymon_logo.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\sync_arrow.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\test_device_100.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\timeline_100.png">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\res\tri_bang.png">
+      <Filter>Resource Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -285,54 +315,6 @@
     <ClCompile Include="release\.qrc\qrc_dcpl.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClInclude Include="debug\.ui\ui_DcConsoleForm.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcConsoleForm.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_DcPresetLib.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcPresetLib.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_DcUpdateAvailableDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcUpdateAvailableDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_DcplAbout.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_DcplAbout.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_IoProgressDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_IoProgressDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_MidiPortSelect.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_MidiPortSelect.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_MoveDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_MoveDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\.ui\ui_RenameDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="release\.ui\ui_RenameDialog.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.ui">
@@ -359,44 +341,62 @@
     <CustomBuild Include="C:\proj\dc\spl\spl\RenameDialog.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcConsoleForm.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcConsoleForm.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcPresetLib.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcPresetLib.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcUpdateAvailableDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcUpdateAvailableDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_DcplAbout.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_DcplAbout.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_IoProgressDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_IoProgressDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_MidiPortSelect.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_MidiPortSelect.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_MoveDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_MoveDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debug\.ui\ui_RenameDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\.ui\ui_RenameDialog.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcCallOnce.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\proj\dc\spl\spl\res\bigsky_100.png">
-      <Filter>Resource Files</Filter>
-    </None>
     <CustomBuild Include="C:\proj\dc\spl\spl\dcpl.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <None Include="C:\proj\dc\spl\spl\res\dcpm_256x256x32.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\devunknown_100.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\mobius_100.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\round_check.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\round_check_green.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\strymon_logo.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\sync_arrow.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\test_device_100.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\timeline_100.png">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="C:\proj\dc\spl\spl\res\tri_bang.png">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="C:\proj\dc\spl\spl\win.rc" />
