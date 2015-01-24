@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcBootControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcConArgs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcConsoleForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcDropLabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcFileDownloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcImgLabel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcListWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\lib\cmn\DcLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcPackageIndex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcPresetLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\lib\cmn\DcQUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcSoftwareUpdate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\lib\cmn\DcState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\lib\cmn\DcStateMachineHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcUpdateAvailableDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcUpdateDialogMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\DcXferMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\IoProgressDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\MidiSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\MoveDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\RenameDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\dcconbool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\proj\dc\spl\spl\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcCallOnce.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\proj\dc\spl\spl\DcConArgs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="C:\proj\dc\spl\spl\DcDeviceDetails.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcDropLabel.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcFileDownloader.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcGlobals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcImgLabel.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\proj\dc\spl\spl\DcMidiDevDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\proj\dc\spl\spl\DcPackageIndex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcPresetLib.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcQUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcSigleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcSoftwareUpdate.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\lib\cmn\DcState.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="C:\proj\dc\spl\lib\cmn\DcStateMachineHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateAvailableDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="C:\proj\dc\spl\spl\DcUpdateDialogMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcXferMachine.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\IoProgressDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\MidiSettings.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\MoveDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\RenameDialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\dcconbool.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="debug\.moc\moc_DcConsoleForm.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcConsoleForm.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcDropLabel.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcDropLabel.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcFileDownloader.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcFileDownloader.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcImgLabel.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcImgLabel.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcPresetLib.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcPresetLib.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcSoftwareUpdate.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcSoftwareUpdate.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcState.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcState.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcUpdateAvailableDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcUpdateAvailableDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_DcXferMachine.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_DcXferMachine.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_IoProgressDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_IoProgressDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_MidiSettings.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_MidiSettings.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_MoveDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_MoveDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_RenameDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_RenameDialog.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.moc\moc_dcconbool.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.moc\moc_dcconbool.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\.qrc\qrc_dcpl.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="release\.qrc\qrc_dcpl.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClInclude Include="debug\.ui\ui_DcConsoleForm.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_DcConsoleForm.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_DcPresetLib.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_DcPresetLib.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_DcUpdateAvailableDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_DcUpdateAvailableDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_DcplAbout.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_DcplAbout.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_IoProgressDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_IoProgressDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_MidiPortSelect.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_MidiPortSelect.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_MoveDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_MoveDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\.ui\ui_RenameDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="release\.ui\ui_RenameDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcConsoleForm.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcPresetLib.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcUpdateAvailableDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\DcplAbout.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\IoProgressDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\MidiPortSelect.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\MoveDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\proj\dc\spl\spl\RenameDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\proj\dc\spl\spl\res\bigsky_100.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <CustomBuild Include="C:\proj\dc\spl\spl\dcpl.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <None Include="C:\proj\dc\spl\spl\res\dcpm_256x256x32.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\devunknown_100.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\mobius_100.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\round_check.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\round_check_green.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\strymon_logo.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\sync_arrow.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\test_device_100.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\timeline_100.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="C:\proj\dc\spl\spl\res\tri_bang.png">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\proj\dc\spl\spl\win.rc" />
+  </ItemGroup>
+</Project>
