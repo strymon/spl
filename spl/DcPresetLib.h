@@ -179,6 +179,7 @@ private slots:
     void conCmd_Fetch(DcConArgs args);
     
     void conCmd_UpdateFirmware( DcConArgs args );
+    void conCmd_RenameItemInWorklist( DcConArgs args );
 
     /*!
       For the given preset bundle file path, export each preset
@@ -425,6 +426,7 @@ protected:
     void copySelectedPresets(QString destWLIndex);
     bool midiDataToBinFile( QString fileName, DcMidiData data );
     bool stringListToTextFile( QString fileName, QStringList strList );
+    void renameItemInWorklist(int row,const QString& newName);
    
     //    bool portScan();
     DcMidiTrigger* _idResponceTrigger;
