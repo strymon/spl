@@ -80,6 +80,7 @@ void DcImgLabel::dropEvent(QDropEvent *event)
     {
         setPixmap(this->pixmap()->scaled(_orgW,_orgH));
         QUrl url = QUrl::fromEncoded(data->text().toLatin1());
+        event->acceptProposedAction();
         emit fileDropped(url.toLocalFile());
     }
     else  if ( data->hasFormat("application/x-qt-windows-mime;value=\"FileName\"") &&
@@ -87,6 +88,8 @@ void DcImgLabel::dropEvent(QDropEvent *event)
       {
         setPixmap(this->pixmap()->scaled(_orgW,_orgH));
         QUrl url = QUrl::fromEncoded(data->text().toLatin1());
+        
+        event->acceptProposedAction();
         emit fileDropped(url.toLocalFile());
       }
 }
