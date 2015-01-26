@@ -319,6 +319,4 @@ private:
     
     QTextStream _lastErrorMsg;
     QString _lastErrorMsgStr;    
-    int _maxDataOut;
-    int _delayBetweenDataOut;
 };
