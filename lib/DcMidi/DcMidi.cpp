@@ -116,7 +116,8 @@ void DcMidi::buildPortNameList(RtMidi* pRtMidi)
 #ifdef QRT_FILTER_PORT_NAMES
             portName = filterPortName(portName);
 #endif
-
+        
+            portName = portName.remove(QString::number(idx)).trimmed();
             _portNameIndexHash.insert(portName,idx);
     }
 }

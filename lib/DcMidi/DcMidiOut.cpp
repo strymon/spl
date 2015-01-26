@@ -22,7 +22,7 @@
 //#define VERBOSE_MIDI_DEBUG 1
 //-------------------------------------------------------------------------
 DcMidiOut::DcMidiOut(QObject* parent)
-    : DcMidi(parent),_rtMidiOut(0)
+    : DcMidi(parent),_rtMidiOut(0),_maxDataOut(0),_delayBetweenPackets(0)
 {
 }
 
@@ -71,6 +71,11 @@ void DcMidiOut::setupAfterOpen(quint32 flags /*=0*/)
     Q_UNUSED(flags);
 }
 
+void DcMidiOut::dataOutThrottled(const DcMidiData& data)
+{
+    dataOutSplit(data,_maxDataOut,_delayBetweenPackets);
+}
+
 //-------------------------------------------------------------------------
 void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayMs )
 {
@@ -80,9 +85,7 @@ void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayMs )
     }
     else
     {
-
         QList<DcMidiData> list = data.split(maxMsg);
-
         QList<DcMidiData>::iterator i;
         for (i = list.begin(); i != list.end(); ++i)
         {
@@ -133,5 +136,21 @@ void DcMidiOut::dataOut( const QString& hexStr )
 void DcMidiOut::dataOut( const char* hexStr )
 {
     dataOut(DcMidiData(hexStr));
+}
+
+void DcMidiOut::setMaxPacketSize( int szInBytes )
+{
+    _maxDataOut = szInBytes;
+}
+
+void DcMidiOut::setDelayBetweenBackets( int ms )
+{
+    _delayBetweenPackets = ms;
+}
+
+void DcMidiOut::resetSpeed()
+{
+    _delayBetweenPackets = -1;
+    _maxDataOut = -1;
 }
 
