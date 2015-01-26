@@ -2269,6 +2269,7 @@ std::string MidiOutWinMM :: getPortName( unsigned int portNumber )
 
 void MidiOutWinMM :: openPort( unsigned int portNumber, const std::string /*portName*/ )
 {
+  _activeSysex = false;
   if ( connected_ ) {
     errorString_ = "MidiOutWinMM::openPort: a valid connection already exists!";
     error( RtMidiError::WARNING, errorString_ );
@@ -2335,7 +2336,7 @@ void MidiOutWinMM :: sendMessage( std::vector<unsigned char> *message )
 
   MMRESULT result;
   WinMidiData *data = static_cast<WinMidiData *> (apiData_);
-  if ( message->at(0) == 0xF0 ) { // Sysex message
+  if ( _activeSysex || (message->at(0)>>4) == 0xF  ) { // sysex (0xF?)
 
     // Allocate buffer for sysex data.
     char *buffer = (char *) malloc( nBytes );
@@ -2345,8 +2346,17 @@ void MidiOutWinMM :: sendMessage( std::vector<unsigned char> *message )
       return;
     }
 
-    // Copy data to buffer.
-    for ( unsigned int i=0; i<nBytes; ++i ) buffer[i] = message->at(i);
+    // Copy data to buffer. 
+    for ( unsigned int i=0; i<nBytes; ++i ) { 
+        unsigned char b = message->at(i);
+        buffer[i] = b;
+        if(0xF7 == b) {
+            _activeSysex = false;
+        }
+        else if(0xF0 == b) {
+            _activeSysex = true;
+        }
+    }
 
     // Create and prepare MIDIHDR structure.
     MIDIHDR sysex;
@@ -2375,7 +2385,7 @@ void MidiOutWinMM :: sendMessage( std::vector<unsigned char> *message )
     free( buffer );
   }
   else { // Channel or system message.
-
+      _activeSysex = false;
     // Make sure the message size isn't too big.
     if ( nBytes > 3 ) {
       errorString_ = "MidiOutWinMM::sendMessage: message size is greater than 3 bytes (and not sysex)!";

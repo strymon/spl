@@ -721,6 +721,7 @@ class MidiOutWinMM: public MidiOutApi
 
  protected:
   void initialize( const std::string& clientName );
+  bool _activeSysex;
 };
 
 #endif
