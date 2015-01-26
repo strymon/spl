@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dcmidi", "C:/proj/dc/spl/msvc/lib/DcMidi\dcmidi.vcxproj", "{BDC87433-1D96-3B4F-BA03-B82033DF903A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dcmidi", "lib\DcMidi\dcmidi.vcxproj", "{BDC87433-1D96-3B4F-BA03-B82033DF903A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spl", "C:/proj/dc/spl/msvc/spl\spl.vcxproj", "{6F9418C1-E74E-3F0D-94AE-B9682A25183E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spl", "spl\spl.vcxproj", "{6F9418C1-E74E-3F0D-94AE-B9682A25183E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{BDC87433-1D96-3B4F-BA03-B82033DF903A} = {BDC87433-1D96-3B4F-BA03-B82033DF903A}
 	EndProjectSection
@@ -22,8 +22,7 @@ Global
 		{6F9418C1-E74E-3F0D-94AE-B9682A25183E}.Release|Win32.ActiveCfg = Release|Win32
 		{6F9418C1-E74E-3F0D-94AE-B9682A25183E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
