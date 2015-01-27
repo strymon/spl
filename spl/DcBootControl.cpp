@@ -1,4 +1,3 @@
-
 #include "DcBootControl.h"
 
 #include <QMutexLocker>
@@ -8,7 +7,6 @@
 #include "DcMidi/DcMidiIdent.h"
 #include <QApplication>
 #include "cmn/DcLog.h"
-
 
 const char* DcBootControl::kPrivateResetPartial = "F0 00 01 55 vv vv 1B F7";
 const char* DcBootControl::kFUGood = "F0 00 01 55 42 0C 00 F7";
@@ -45,7 +43,7 @@ bool DcBootControl::enableBootcode( )
     DcAutoTrigger autoch(&tc,_pMidiIn);
     
     // Issue a private reset
-    _pMidiOut->dataOut(priRst);
+    _pMidiOut->dataOutThrottled(priRst);
 
     QThread::msleep(100);
     
@@ -124,7 +122,7 @@ bool DcBootControl::identify(DcMidiDevIdent* id /*=0 */)
 
 bool DcBootControl::writeMidi(DcMidiData& msg)
 {
-    _pMidiOut->dataOut(msg);
+    _pMidiOut->dataOutThrottled(msg);
     return true;
 }
 
