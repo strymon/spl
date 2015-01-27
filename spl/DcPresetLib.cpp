@@ -1012,40 +1012,68 @@ void DcPresetLib::on_workList_itemDoubleClicked()
 {
      if(QApplication::keyboardModifiers() & Qt::ShiftModifier)
      {
+         // Write the preset data to the edit buffer
+
          int cur_idx = ui.workList->currentRow();
          if(cur_idx > -1)
          {
-             // Grab the preset data and update the bank/preset to PresetCount (that will place it in the edit buffer)  
+             // Grab the preset data and update the bank/preset to PresetCount (that will place it in the edit buffer)
              DcMidiData md = _workListData.at(cur_idx);
-               md.set14bit(_devDetails.PresetNumberOffset,_devDetails.PresetCount);
-               _midiOut.dataOutThrottled(md);
-               
-               // Send the update display message
-               md = _devDetails.SOXHdr;
-               md.append("26 F7");
-               _midiOut.dataOutThrottled(md);
+
+             // Setting the preset number to the preset count will cause the device to load
+             // this preset into the "edit buffer" and not into a bank/preset memory slot.
+             md.set14bit(_devDetails.PresetNumberOffset,_devDetails.PresetCount);
+
+             // Setup an auto trigger to look for an preset write ack.
+             DcAutoTrigger autotc(_devDetails.PresetWr_ACK.pattern(),&_midiIn);
+             _midiOut.dataOutThrottled(md);
+
+             bool updateDisplay = false;
+             if(!autotc.wait(400))
+             {
+                 // Never saw an ack; perhaps the MIDI I/O is faulty - throttel back the MIDI data rate
+                 // and try again.
+                 _midiOut.setSafeMode();
+                 _midiOut.dataOutThrottled(md);
+
+                 // Wait for the responce, if this failes then there's nothing to do.
+                 if(autotc.wait(400))
+                     updateDisplay = true;
+             }
+             else
+             {
+                 updateDisplay = true;
+             }
+
+
+              if(updateDisplay)
+              {
+                  md = _devDetails.SOXHdr;
+                  md.append("26 F7");
+                  _midiOut.dataOutThrottled(md);
+              }
 
          }
      }
      else if(QApplication::keyboardModifiers() & Qt::ControlModifier)
      {
+         // Send a patch change request
          int cur_idx = ui.workList->currentRow();
          if(cur_idx > -1)
          {
              int num = getPresetNumber(_workListData.at(cur_idx));
              int bnk = num/127;
              int pnum  = (bnk) ? (num % (bnk*127)) : num;
+
              DcMidiData md;
              md.setData("B0 00 vv",bnk);
              _con->execCmd("out " + md.toString(' '));
+
              md.setData("C0 vv",pnum);
              _con->execCmd("out " + md.toString(' '));
-             
-
          }
      }
      else
-
      {
          QMetaObject::invokeMethod(ui.renameButton, "click",Qt::DirectConnection);
      }
@@ -1208,7 +1236,7 @@ void DcPresetLib::on_actionLoad_One_triggered()
     int cur_idx = ui.workList->currentRow();
     if(cur_idx < 0)
     {
-        qWarning() << "Load on has no selection\n";
+        qWarning() << "Load one has no selection\n";
         return;
     }
 
@@ -1645,7 +1673,7 @@ QString  DcPresetLib::execOpenDialog( QString lastOpened )
     QStringList filenames;
     QString fileName;
     QString path = lastOpened;
-    QFileDialog dialog(0,"Load One Preset");
+    QFileDialog dialog(0,"Load");
 
     dialog.setDefaultSuffix("syx");
     dialog.setDirectory(path);
