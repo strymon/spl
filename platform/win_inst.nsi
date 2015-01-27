@@ -1,11 +1,3 @@
-# This is an NSIS install script.  
-# To learn more about NSIS and the tools you need to use this file
-# please see: http://nsis.sourceforge.net
-#
-# NOTE: There are other dependencies other than a proper NSIS installation
-# 1) Script assumes that spl.exe is located ..\build\bin\Win32\XP_Release
-
-# INPUT ARG: Invoke this script by passing the var VER_STR in the format Maj.Min.Inc.Bld
 OutFile $%INST_EXE%
 
 installDir $PROGRAMFILES\Strymon
@@ -20,9 +12,10 @@ Section
 
   # Delete everything and start over.
   # This will have issues if the application is still running
+  Delete "Qt5Core.dll"
   Delete "D3DCompiler_43.dll"
   Delete "D3DCompiler_46.dll"
-  Delete "Qt5Core.dll"
+  Delete "D3DCompiler_47.dll"
   Delete "Qt5Gui.dll"
   Delete "Qt5Network.dll"
   Delete "Qt5Widgets.dll"
@@ -32,6 +25,9 @@ Section
   Delete "icudt51.dll"
   Delete "icuin51.dll"
   Delete "icuuc51.dll"
+  Delete "icudt53.dll"
+  Delete "icuin53.dll"
+  Delete "icuuc53.dll"
   Delete "libEGL.dll"
   Delete "libGLESv2.dll"
   Delete "platforms\qwindows.dll"
@@ -39,15 +35,23 @@ Section
   Delete "msvcr100.dll"
   Delete "msvcp110.dll"
   Delete "msvcr110.dll"
+  Delete "msvcp120.dll"
+  Delete "msvcr120.dll"
   Delete "spl.exe"
   Delete "lgpl.txt"
   Delete "uninstall.exe"
 
+
+# Copy the Qt platform file 
+CreateDirectory $INSTDIR\Librarian\platforms 
+SetOutPath $INSTDIR\Librarian\platforms 
+File ..\..\build\redist\platforms\qwindows.dll  
    
 # Bring in the runtime files
 !include ..\..\build\redist.ins
 
   SetOutPath $INSTDIR\Librarian
+
   # Main Executable
   File $%APP_EXE%
 
@@ -81,7 +85,7 @@ Section "Uninstall"
 
   !include ..\..\build\redist_remove.ins
 
-  Delete "spl.exe"
+  Delete "spl.exe" 
   Delete "lgpl.txt"
   
   ; Delete the program folders  
@@ -91,8 +95,6 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   RMDir $INSTDIR
   RMDir $INSTDIR\..
-
-
   ; If this is empty, it shall be deleted
   RMDir $PROGRAMFILES\Strymon
 uninst_alldone:

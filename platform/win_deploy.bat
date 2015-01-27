@@ -1,41 +1,35 @@
 :: A script for building the Win32 version of the Strymon Librarian
 ::
-:: Copyright 2013 Damage Control Engineering, LLC
+:: Copyright 2013-2015 Damage Control Engineering, LLC
 ::
 :: CHECKLIST TO SETUP BUILD
 :: 1) Make sure the QT paths are setup correctly
 :: 2) Review the runtime redistributable subroutine
 :: 3) Verify that the MSVC_DIR is setup correctly
-::
-:: Usage:
-:: win_deploy <no args>  - increment version build number in main.cpp, rebuild, create installer
-:: win_deploy <ver_str> - set version in main.cpp, rebuild, create installer
+
 @echo off 
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+set LOAD_ENVI_ONLY=NO 
 set BLD_SWITCHES=
 set OK_TO_INST=YES
 set OK_TO_BUILD=YES
 set PLAT_DIR=%CD%
 set PROJ_ROOT=%CD%\..
+set PLAT=x86
 
 :: The 'out-of-source' build directory
 set BUILD_DIR=..\..\build
 set MANUAL_VER=AUTO
-set REDIST_PATH=%BUILD_DIR%\redist.inc
+set REDIST_PATH=%BUILD_DIR%\redist
+set REDIST_INC_FILE=%BUILD_DIR%\redist.ins
 
-:: VS2010 and QT 5.1.1 is the current default
-set USE_VS_2012=NO
-set VSVER=2010
-set PLAT=x86
-set QTMAKESPEC=win32-msvc2010
-set MSVC_DIR=C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC
-:: Spect the version of the qt icu files e.g. icuuc51.dll
-set QT_ICU_VER=51
-set D3DVER=43
-set QT_ROOT=C:\Qt\Qt5.1.1_VS2010\5.1.1\msvc2010
-set QT_SETUP=%QT_ROOT%\bin\qtenv2.bat
-set MSVC_REDIST_VER=100
-set MSVC_REDIST="%MSVC_DIR%\redist\x86\Microsoft.VC%MSVC_REDIST_VER%.CRT"
+set QMAKE_SPEC=win32-msvc2013
+set MSVC_DIR=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC
+set QT_ICU_VER=53
+set D3DVER=47
+set QT_ROOT=C:\Qt\Qt5.4.0_32\5.4\msvc2013
+set MSVC_REDIST_VER=120
+set MSVC_REDIST="%MSVC_DIR%\redist\%PLAT%\Microsoft.VC%MSVC_REDIST_VER%.CRT"
 
 set CONFIG=release
 
@@ -67,15 +61,11 @@ if /I %1x==/inst-onlyx (
  goto ARGDONE 
 ) 
 
-if /I %1x==/vs2012x (
- set USE_VS_2012=YES
- shift
- goto ARGPARSE 
-) 
-
 if /I %1x==/createx (
  set BLD_SWITCHES=%BLD_SWITCHES% /create
+ set OK_TO_BUILD=NO
  set OK_TO_INST=NO
+ set MANUAL_VER=cur
  shift
  goto ARGPARSE 
 ) 
@@ -96,28 +86,12 @@ if /I %1x==/helpx (
 @echo - /inst-only        - don't build or inc version, just build installer
 @echo - /ver ^<version^>  - optional - force build to use specified version or current if
 @echo -                                'cur' is specified
-@echo - /vs2012           - optional - force build to use the MSVC 2012 compiler
 @echo - /create           - optional - creatre VS project files only, do not invoke build
 @echo - 
 @echo --------------------------------------------------------------------------------------  
 goto :EOF
 
 :ARGDONE
-
-if %USE_VS_2012% == NO goto confset
-:: QT 5.1.1 VS 2012 settings:w
-@echo Using vs2012
-set VSVER=2012
-set QTMAKESPEC=win32-msvc2012
-set MSVC_DIR=C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC
-set QT_ICU_VER=51
-set D3DVER=46
-set QT_ROOT=C:\Qt\Qt5.1.1_V2012\5.1.1\msvc2012
-set QT_SETUP=%QT_ROOT%\bin\qtenv2.bat
-set MSVC_REDIST_VER=110
-set MSVC_REDIST="%MSVC_DIR%\redist\%PLAT%\Microsoft.VC%MSVC_REDIST_VER%.CRT"
-
-:confset
 
 if not %MANUAL_VER% == AUTO goto set_ver
 python inc_version.py -f ..\spl\main.cpp -v kDcVersionString --inc_build
@@ -140,22 +114,46 @@ set INST_ZIP=%BUILD_DIR%\strymon_lib_setup_%VER_STR%.zip
 :: Setup requires the installation of nsis: ( http://nsis.sourceforge.net/Main_Page )
 set nsi="C:\Program Files (x86)\NSIS\makensis.exe"
 
-if  %OK_TO_BUILD% == NO goto prep_inst
 
 :start_build
+@echo Start Build
+
+:: Force a clean build - but be careful recursively deleting a directory!!!
+if exist %BUILD_DIR%\spl\NUL rmdir /s /q %BUILD_DIR%
+sleep .5
+mkdir %BUILD_DIR%
+
+pushd .
+cd /D %BUILD_DIR%
+
+@echo Reloacted to %CD%
 
 :: Cleanup a previous build with same version
 if exist %APP_EXE% del %APP_EXE%
+set PATH=%QT_ROOT%\bin;%PATH%
 
-:: Create vs projects and execute build
-call bld_msvc.bat /vsver %VSVER% /plat %PLAT% /outpath %BUILD_DIR% /projroot %PROJ_ROOT% /vcargs "%MSVC_DIR%\vcvarsall.bat" /qtenv "%QT_SETUP%" /makespec %QTMAKESPEC% %BLD_SWITCHES%
+call "%MSVC_DIR%\vcvarsall.bat" %PLAT%
+
+@echo call complete
+if %LOAD_ENVI_ONLY%==YES goto :EOF
+
+:: Make sure we are not in the same dir
+if exist win_deploy.bat goto :ERROR3
+@echo Invoking QMAKE: -platform %QMAKE_SPEC% -r -tp vc %PROJ_ROOT% 
+qmake -platform %QMAKE_SPEC% -tp vc -r %PROJ_ROOT% 
+
+if %OK_TO_BUILD% == NO goto chk_inst
+msbuild /m lib/DcMidi/DcMidi.vcxproj /p:PlatformToolset=v120_xp /t:Rebuild /p:Configuration=%CONFIG% 
+msbuild /m spl/spl.vcxproj /p:PlatformToolset=v120_xp /t:Rebuild /p:Configuration=%CONFIG% /p:BuildInParallel=true
+popd
+
+:chk_inst
 if %OK_TO_INST%==NO goto alldone
 
 if not exist %APP_EXE% goto error_no_exe:
 
 :prep_inst
 echo %CD%
-
 
 if exist %INST_EXE% del %INST_EXE%
 if exist %INST_ZIP% del %INST_ZIP%
@@ -200,6 +198,7 @@ goto :EOF
 
   if not exist %REDIST_PATH% mkdir %REDIST_PATH%
   if not exist %REDIST_PATH%\platforms mkdir %REDIST_PATH%\platforms
+
   copy /v "%QT_ROOT%\plugins\platforms\qwindows.dll" %REDIST_PATH%\platforms
   copy /v "%QT_ROOT%\bin\D3DCompiler_%D3DVER%.dll" %REDIST_PATH%
   copy /v "%QT_ROOT%\bin\Qt5Core.dll" %REDIST_PATH%
@@ -230,27 +229,28 @@ goto :EOF
   if not exist %REDIST_PATH%\msvcp%MSVC_REDIST_VER%.dll goto redistcopyerror
   if not exist %REDIST_PATH%\msvcr%MSVC_REDIST_VER%.dll goto redistcopyerror
    
-  echo SetOutPath $INSTDIR\Librarian > %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\D3DCompiler_%D3DVER%.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\Qt5Core.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\Qt5Gui.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\Qt5Network.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\Qt5Widgets.dll >> %BUILD_DIR%\redist.ins
+  :: Create NSIS include files for the redist files
+  echo SetOutPath $INSTDIR\Librarian > %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\D3DCompiler_%D3DVER%.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\Qt5Core.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\Qt5Gui.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\Qt5Network.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\Qt5Widgets.dll >> %REDIST_INC_FILE%
 
-  echo File %REDIST_PATH%\icudt%QT_ICU_VER%.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\icuin%QT_ICU_VER%.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\icuuc%QT_ICU_VER%.dll >> %BUILD_DIR%\redist.ins
+  echo File %REDIST_PATH%\icudt%QT_ICU_VER%.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\icuin%QT_ICU_VER%.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\icuuc%QT_ICU_VER%.dll >> %REDIST_INC_FILE%
 
-  echo File %REDIST_PATH%\libEGL.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\libGLESv2.dll >> %BUILD_DIR%\redist.ins
+  echo File %REDIST_PATH%\libEGL.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\libGLESv2.dll >> %REDIST_INC_FILE%
 
-  echo File %REDIST_PATH%\msvcp%MSVC_REDIST_VER%.dll >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\msvcr%MSVC_REDIST_VER%.dll  >> %BUILD_DIR%\redist.ins
+  echo File %REDIST_PATH%\msvcp%MSVC_REDIST_VER%.dll >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\msvcr%MSVC_REDIST_VER%.dll  >> %REDIST_INC_FILE%
 
-  echo # Copy the Qt platform file >> %BUILD_DIR%\redist.ins
-  echo CreateDirectory $INSTDIR\Librarian\platforms >> %BUILD_DIR%\redist.ins
-  echo SetOutPath $INSTDIR\Librarian\platforms >> %BUILD_DIR%\redist.ins
-  echo File %REDIST_PATH%\platforms\qwindows.dll >> %BUILD_DIR%\redist.ins 
+  echo # Copy the Qt platform file >> %REDIST_INC_FILE%
+  echo CreateDirectory $INSTDIR\Librarian\platforms >> %REDIST_INC_FILE%
+  echo SetOutPath $INSTDIR\Librarian\platforms >> %REDIST_INC_FILE%
+  echo File %REDIST_PATH%\platforms\qwindows.dll >> %REDIST_INC_FILE% 
 
   setlocal
   set incfile=%BUILD_DIR%\redist_remove.ins
