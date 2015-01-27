@@ -1026,7 +1026,7 @@ void DcConsoleForm::applySymbols( DcConArgs &args, const QMap<QString,QString>& 
 
         if(expanded)
         {
-            DcConArgs args2(args.toString());
+            DcConArgs args2(args.toStringNoDelim());
             args2.setCmdName(args.getCmdName());
             args = args2;
         }

@@ -114,13 +114,24 @@ QString DcConArgs::toString()
     return st.trimmed();    
 }
 
+QString DcConArgs::toStringNoDelim()
+{
+    QString st;
+    int len = count();
+    for( int i = 0; i < len; i++ )
+    {
+        st.append( _args.at( i ).toString() + " " );
+    }
+    return st.trimmed();
+}
+
 QStringList DcConArgs::argsAsStringList()
 {
     QStringList rtval;
 
     for (int idx = 1; idx < _args.count() ; idx++)
     {
-    	rtval << _args.at(idx).toString();
+        rtval << _args.at(idx).toString();
     }
     return rtval;
 }
