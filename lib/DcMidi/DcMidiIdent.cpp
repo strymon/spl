@@ -120,7 +120,16 @@ void DcMidiDevIdent::fromIdentData( const DcMidiData & data )
             SOXHdr    = DcMidiData("F0") + Manufacture + Family.mid(0,1) + Product.mid(0,1);
             
             FwVersion.sprintf("%c.%c.%c.%c",data.at(10+adj),data.at(11+adj),data.at(12+adj),data.at(13+adj));
-            FwVerInt = (data.at(10+adj)<<24) + (data.at(11+adj)<<16)+(data.at(12+adj)<<8)+(data.at(13+adj));
+
+            if( FwVersion.length() >= 6 )
+            {
+                int iver 
+                      = FwVersion.mid( 0,1 ).toInt() * 1000;
+                iver += FwVersion.mid( 2,1 ).toInt() * 100;
+                iver += FwVersion.mid( 4,1 ).toInt() * 10;
+                iver += FwVersion.mid( 6,1 ).toInt();
+                FwVerInt = iver;
+            }
         }
         ResponceData = data;
     }

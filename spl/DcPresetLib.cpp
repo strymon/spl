@@ -425,9 +425,9 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
         // timeouts (devIdWatchDog is called)
 
         // Note, as soon as a supported device is found the method continues and
-        // will ignore any other device responding to the identity request.  This prevents
-        // multi-device support on the same MIDI port.
+        // will ignore any other device responding to the identity request.  
         
+        // This prevents (breaks) multi-device support on the same MIDI port.
         return;
     }
     
@@ -497,6 +497,9 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
     _con->addRoSymDef("dev.p.name.offset",_devDetails.PresetNameOffset);
     _con->addRoSymDef("dev.p.name.len",_devDetails.PresetNameLen);
     _con->addRoSymDef("dev.p.chksum.offset",_devDetails.PresetChkSumOffset);
+    
+    _con->addRoSymDef( "dev.pid",_devDetails.getProductByte());
+    _con->addRoSymDef( "dev.fid",_devDetails.getFamilyByte());
 
 
 
@@ -800,7 +803,7 @@ void DcPresetLib::setupWritePresetXfer_entered()
         else
         {
             // Update the work list too.
-            // We can't assume this, there could be an error durring the transfrer.
+            // We can't assume this, there could be an error during the transfer.
 
             // Don't update this yet: _deviceListData[pid] = md;
 
@@ -2722,16 +2725,16 @@ void DcPresetLib::setFamilyDetails( DcDeviceDetails &details )
 bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& details )
 {
     bool rtval = true;
+    int fastfetch_feature_thresh = 9999;
 
     if(data.contains(DcMidiDevDefs::kTimeLineIdent) || data.contains("0001551201"))
     {
         setFamilyDetails(details);
-
         details.Name                    = "TimeLine";
         details.PresetsPerBank          = 2;
         details.PresetCount             = 200;
-
-
+        fastfetch_feature_thresh        = 156;
+        
     }
     else if(data.contains(DcMidiDevDefs::kMobiusIdent) ||  data.contains("0001551202") )
     {
@@ -2740,9 +2743,7 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         details.Name                      = "Mobius";
         details.PresetsPerBank          = 2;
         details.PresetCount             = 200;
-
-
-
+        fastfetch_feature_thresh        = 115;
     }
     else if(data.contains(DcMidiDevDefs::kBigSkyIdent) ||  data.contains("0001551203"))
     {
@@ -2751,11 +2752,21 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         details.Name                      = "Big Sky";
         details.PresetsPerBank          = 3;
         details.PresetCount             = 300;
-
+        fastfetch_feature_thresh        = 123;
     }
     else
     {
         rtval = false;
+    }
+    
+    // Enable/disable fast fetch feature
+    if( fastfetch_feature_thresh != 9999 && details.FwVerInt >= fastfetch_feature_thresh )
+    {
+        gUseAltPresetSize = true;
+    }
+    else
+    {
+        gUseAltPresetSize = false;
     }
 
     return rtval;
