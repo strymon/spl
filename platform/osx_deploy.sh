@@ -1,6 +1,6 @@
 # MACHINE DEPENDENT SETTINGS
-qtver=5.1.1
-qtdir=/Users/$USER/Qt/$qtver/$qtver/clang_64
+qtver=5.4.0
+qtdir=/Volumes/tmpvol/Qt/5.4.0/5.4/clang_64
 qtbin=$qtdir/bin
 build_dir=/Users/$USER/src/build
 
