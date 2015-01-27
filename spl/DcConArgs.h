@@ -100,6 +100,18 @@ public:
 
     QString toString();
 
+    
+    QString DcConArgs::toStringNoDelim()
+    {
+        QString st;
+        int len = count();
+        for( int i = 0; i < len; i++ )
+        {
+                st.append( _args.at( i ).toString() + " " );
+        }
+        return st.trimmed();
+    }
+
     /*!
       Returns true if no arguments are available
     */ 

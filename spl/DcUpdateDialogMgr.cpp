@@ -276,21 +276,21 @@ bool DcUpdateDialogMgr::installUpdate( DcSoftwareUpdate &pm,bool okToInstallPres
 
 bool DcUpdateDialogMgr::updateFirmware(QString fileName )
 {
-    // TODO: ADD PROGRESS UI IN THIS METHOD
-
     bool rtval = false;
+    
     _lastErrorMsgStr.clear();
     _installUpdateResult = DcUpdate_Failed;
 
     if(QFile().exists(fileName))
     {
         QFile file(fileName);
-
+        
         if (!file.open(QIODevice::ReadOnly))
         {
             _lastErrorMsgStr = "Unable to open the file: " + fileName;
             return false;
         }
+
         QList<DcMidiData> sysexList;
         QList<DcMidiData> filterList;
 
@@ -299,11 +299,28 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
 
         if(loadSysexFile(fileName,sysexList,&filterList))
         {
-            // Verify that the file contains firmware for the current device
-            if(!sysexList.at(0).contains(_devDetails.SOXHdr))
+            // A typical firmware file shall contains the following at offset 0:
+            // 0:  F0
+            // 1: <hdr> 00 01 55
+            // 4: <fid> 12
+            // 5: <pid> (01 | 02 | 03)
+            // 6: <cmd> 1b
+            // 7: F7
+
+            // Count the number of devices daisy via "soft-thru" chained on the MIDI port.
+            int cnt = _bootCtl->countResponcePattern( "F0 7E 7F 06 01 F7","F0 7E .. 06 02 00 01 55" );
+
+            if( cnt > 1 )
+            {
+                DCLOG() << "Only support direct connection to device.";
+                _lastErrorMsgStr = "Devices connected via MIDI through can not be updated.\nPlease connect the device directly to the MIDI interface.";
+                rtval = false;
+            }
+            else if(!sysexList.at(0).contains(_devDetails.SOXHdr))
             {
                 // Wrong product id
                 DCLOG() << "firmware file does not contain firmware for this device";
+                
                 _lastErrorMsgStr = "File does not contain firmware for current device";
                 rtval = false;
             }
@@ -315,7 +332,6 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
                 _progressDialog->reset();
                 _progressDialog->setNoCancel(true);
                 _progressDialog->setMessage("Enabling Update Mode");
-
                 QApplication::processEvents();
 
                 if(false == _bootCtl->enableBootcode())
@@ -325,96 +341,90 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
                 }
                 else
                 {
-                    rtval = true;
-                    quint64 start_time = QDateTime::currentMSecsSinceEpoch();
-
-                    int rptInterval = 20; // 20%
-                    int rptEveryVal = sysexList.count()/rptInterval;
-
-                    int chunkcnt = 0;
-                    int cnt = 0;
-                    _progressDialog->reset();
-                    _progressDialog->setMax(sysexList.count());
-                    _progressDialog->setMessage("Loading New Firmware");
-                    QApplication::processEvents();
-                    
-                    DCLOG() << "Starting the update process";
-                    int retryCnt = 3;
-                    int totalWriteErrorCount = 0;
-
-                    // The firmware is contained in a list of QRTMidiData objects, each object is a
-                    // sysex message that shall be sent to device.
-                    foreach(DcMidiData md, sysexList)
                     {
-                        bool writeStatus = false;
-                        
-                        while(retryCnt-- > 0 && !writeStatus )
+                        rtval = true;
+                        quint64 start_time = QDateTime::currentMSecsSinceEpoch();
+
+                        int rptInterval = 20; // 20%
+                        int rptEveryVal = sysexList.count() / rptInterval;
+
+                        int chunkcnt = 0;
+                        int cnt = 0;
+                        _progressDialog->reset();
+                        _progressDialog->setMax( sysexList.count() );
+                        _progressDialog->setMessage( "Loading New Firmware" );
+                        QApplication::processEvents();
+
+                        DCLOG() << "Starting the update process";
+                        int retryCnt = 3;
+                        int totalWriteErrorCount = 0;
+
+                        // The firmware is contained in a list of QRTMidiData objects, each object is a
+                        // sysex message that shall be sent to device.
+                        foreach( DcMidiData md,sysexList )
                         {
-                            writeStatus = _bootCtl->writeFirmwareUpdateMsg(md);
-                            
-                            if(writeStatus)
+                            bool writeStatus = false;
+
+                            while( retryCnt-- > 0 && !writeStatus )
                             {
+                                writeStatus = _bootCtl->writeFirmwareUpdateMsg( md );
+
+                                if( writeStatus )
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    totalWriteErrorCount++;
+                                    DCLOG() << "Firmware Write Failure" << ((retryCnt > 0) ? " Trying again" : "Giving Up");
+                                }
+                            }
+
+                            if( !writeStatus )
+                            {
+                                DCLOG() << "Aborting Firmware Update - failures due to writeFirmwareUpdateMsg()";
+                                DCLOG() << "BootCtrl Last Error = " << _bootCtl->getLastError();
+                                _lastErrorMsgStr = "<h2>Firmware Updated Failed</h2>The system had trouble transferring data.";
+                                rtval = false;
                                 break;
                             }
                             else
                             {
-                                totalWriteErrorCount++;
-                                DCLOG() << "Firmware Write Failure" << ((retryCnt > 0) ? " Trying again" : "Giving Up");
+                                _progressDialog->inc();
+                                QApplication::processEvents();
+
+                                if( _progressDialog->cancled() )
+                                {
+                                    // Canceling update
+                                    rtval = false;
+                                    _lastErrorMsgStr = "Firmware update was cancled";
+                                    DCLOG() << _lastErrorMsgStr;
+                                    _installUpdateResult = DcUpdate_Cancled;
+                                    break;
+                                }
+
+                                // Progress Report
+                                if( ++cnt % rptEveryVal == 0 )
+                                {
+                                    chunkcnt++;
+                                    DCLOG() << (chunkcnt * (100 / rptInterval)) << "% complete";
+                                }
+                                retryCnt = 3;
                             }
                         }
 
-                        if(!writeStatus)
-                        {
-                            DCLOG() << "Aborting Firmware Update - failures due to writeFirmwareUpdateMsg()";
-                            DCLOG() << "BootCtrl Last Error = " << _bootCtl->getLastError(); 
-                            _lastErrorMsgStr = "<h2>Firmware Updated Failed</h2>The system had trouble transferring data.";
-                            rtval = false;
-                            break;
-                        }
-                        else
-                        {
-                            _progressDialog->inc();
-                            QApplication::processEvents();
+                        quint64 updateDurationMs = QDateTime::currentMSecsSinceEpoch() - start_time;
+                        DCLOG() << "Update completed with " << totalWriteErrorCount << " write errors";
+                        DCLOG() << "Reseting Device after " << (double)updateDurationMs / 1000.0 << " seconds";
+
+                        bool exitBootResult = ExitBootcode();
                         
-                            if(_progressDialog->cancled())
-                            {
-                                // Canceling update
-                                rtval = false;
-                                _lastErrorMsgStr = "Firmware update was cancled";
-                                DCLOG() << _lastErrorMsgStr;
-                                _installUpdateResult = DcUpdate_Cancled;
-                                break;
-                            }
-
-                            // Progress Report
-                            if(++cnt % rptEveryVal == 0)
-                            {
-                                chunkcnt++;
-                                DCLOG() << ( chunkcnt * (100/rptInterval)) << "% complete";
-                            }
-                            retryCnt = 3;
+                        // Command device to exit boot code and then wait
+                        if( rtval && !exitBootResult )
+                        {
+                            rtval = false;
+                            _lastErrorMsgStr = "Failed to exit boot code after firmware update\n";
                         }
-                    }
-                    
-                    quint64 updateDurationMs = QDateTime::currentMSecsSinceEpoch() - start_time;
-                    DCLOG() << "Update completed with " << totalWriteErrorCount << " write errors";
-                    DCLOG() << "Reseting Device after " << (double)updateDurationMs/1000.0 << " seconds";
-
-                    _progressDialog->reset();
-                    _progressDialog->setNoCancel(true);
-                    _progressDialog->setMessage("Device Reset In Progress...");
-                    _progressDialog->show();
-                    QApplication::processEvents();
-
-                    bool exitBootResult = _bootCtl->exitBoot();
-                    _progressDialog->hide();
-                    QApplication::processEvents();
-                    
-                    // Command device to exit boot code and then wait
-                    if(rtval && !exitBootResult)
-                    {
-                        rtval = false;
-                        _lastErrorMsgStr = "Failed to exit boot code after firmware update\n";
                     }
                 }
 
@@ -556,4 +566,20 @@ DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::justDownloadFile( const QS
         _progressDialog->hide();
         return DcUpdate_Success;
     }
+}
+
+bool DcUpdateDialogMgr::ExitBootcode()
+{
+    _progressDialog->reset();
+    _progressDialog->setNoCancel( true );
+    _progressDialog->setMessage( "Device Reset In Progress..." );
+    _progressDialog->show();
+    QApplication::processEvents();
+
+    bool exitBootResult = _bootCtl->exitBoot();
+    
+    _progressDialog->hide();
+    QApplication::processEvents();
+
+    return exitBootResult;
 }

@@ -1,3 +1,0 @@
-[submodule "lib/DcMidi/RtMidi"]
-	path = lib/DcMidi/RtMidi
-	url = https://github.com/thestk/rtmidi.git

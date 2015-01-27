@@ -103,8 +103,6 @@ private:
     DcMidiData _activeCmd;
     int _pacPerCmd;
     
-    int _msPerPacket;
-    int _maxPacketSize;
     DcDeviceDetails* _devDetails;
     int _retryCount;
     int _numRetries;

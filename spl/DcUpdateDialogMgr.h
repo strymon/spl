@@ -61,6 +61,8 @@ public:
 
     bool updateFirmware(QString fileName);
 
+    bool ExitBootcode();
+
     bool loadSysexFile(const QString &fileName, QList<DcMidiData> &dataList, QList<DcMidiData> *pRejectDataList = 0);
 
     QString getLastErrorMsg();

@@ -107,7 +107,9 @@ QString DcConArgs::toString()
             st.append("\"" + _args.at(i).toString() + "\"");
         }
         else
-        st.append(_args.at(i).toString() + " ");
+        {
+            st.append( _args.at( i ).toString() + " " );
+        }
     }
     return st.trimmed();    
 }

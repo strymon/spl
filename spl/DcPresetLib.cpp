@@ -138,7 +138,8 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     this->setWindowIcon(QIcon(":/images/res/dcpm_256x256x32.png"));
   
     QObject::connect(ui.devImgLabel,SIGNAL(clicked()),this,SLOT(on_devImgClicked()));
-    QObject::connect(ui.devImgLabel,SIGNAL( fileDropped( const QString& ) ),this,SLOT( on_fileDropped( const QString& ) ) );
+
+    QObject::connect(ui.devImgLabel,SIGNAL( fileDropped( const QString& ) ),this,SLOT( on_fileDropped( const QString& ) ),Qt::QueuedConnection);
     setupConsole();
     
     ui.fetchButton->setFocus();
@@ -273,7 +274,9 @@ void DcPresetLib::writeSettings()
     settings.beginGroup("console");
     settings.setValue("show",ui.actionShow_Console->isChecked());
     settings.endGroup();
+    
     settings.setValue("fastfetch",gUseAltPresetSize);
+
 }
 
 //-------------------------------------------------------------------------
@@ -314,6 +317,8 @@ void DcPresetLib::detectDevice_entered()
     bool success = false;
     
     _devDetails.clear();
+
+
     conResetReadOnlySymbolDefines();
 
 
@@ -326,6 +331,9 @@ void DcPresetLib::detectDevice_entered()
         {
             QThread::msleep(25);
             QObject::connect(&_midiIn, &DcMidiIn::dataIn, this, &DcPresetLib::recvIdData);    
+
+            _midiOut.setDelayBetweenBackets(_delayPerMsgChunk);
+            _midiOut.setMaxPacketSize(_maxMsgSize);
 
             // Send global Identify Request
             _midiOut.dataOut("F0 7E 7F 06 01 F7");
@@ -417,9 +425,9 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
         // timeouts (devIdWatchDog is called)
 
         // Note, as soon as a supported device is found the method continues and
-        // will ignore any other device responding to the identity request.  This prevents
-        // multi-device support on the same MIDI port.
+        // will ignore any other device responding to the identity request.  
         
+        // This prevents (breaks) multi-device support on the same MIDI port.
         return;
     }
     
@@ -489,6 +497,9 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
     _con->addRoSymDef("dev.p.name.offset",_devDetails.PresetNameOffset);
     _con->addRoSymDef("dev.p.name.len",_devDetails.PresetNameLen);
     _con->addRoSymDef("dev.p.chksum.offset",_devDetails.PresetChkSumOffset);
+    
+    _con->addRoSymDef( "dev.pid",_devDetails.getProductByte());
+    _con->addRoSymDef( "dev.fid",_devDetails.getFamilyByte());
 
 
 
@@ -792,7 +803,7 @@ void DcPresetLib::setupWritePresetXfer_entered()
         else
         {
             // Update the work list too.
-            // We can't assume this, there could be an error durring the transfrer.
+            // We can't assume this, there could be an error during the transfer.
 
             // Don't update this yet: _deviceListData[pid] = md;
 
@@ -956,6 +967,28 @@ void DcPresetLib::on_actionRename_triggered()
     }
 }
 
+void DcPresetLib::renameItemInWorklist(int row,const QString& newName)
+{
+    if(row != -1)
+    {
+        DcMidiData md = _workListData.at(row);
+        QString origName = md.mid(_devDetails.PresetNameOffset,_devDetails.PresetNameLen);
+        
+        QByteArray ba = newName.toUpper().toUtf8();
+
+        ba = ba.leftJustified(_devDetails.PresetNameLen,' ');
+        if(!origName.contains(ba.data()))
+        {
+            md.replace(_devDetails.PresetNameOffset,_devDetails.PresetNameLen,ba);
+            updatePresetChecksum(md);
+            _workListData.replace(row,md);
+            checkSyncState();
+            // Move the state machine to the unsynchronized/dirty state
+            _machine.postEvent(new WorkListDirtyEvent());
+        }
+    }
+}
+
 void DcPresetLib::setPresetName(DcMidiData &md, QString name)
 {
     if(!md.isEmpty() && !name.isEmpty())
@@ -985,12 +1018,12 @@ void DcPresetLib::on_workList_itemDoubleClicked()
              // Grab the preset data and update the bank/preset to PresetCount (that will place it in the edit buffer)  
              DcMidiData md = _workListData.at(cur_idx);
                md.set14bit(_devDetails.PresetNumberOffset,_devDetails.PresetCount);
-               _midiOut.dataOutSplit(md,_maxMsgSize,_delayPerMsgChunk);
+               _midiOut.dataOutThrottled(md);
                
                // Send the update display message
                md = _devDetails.SOXHdr;
                md.append("26 F7");
-               _midiOut.dataOut(md);
+               _midiOut.dataOutThrottled(md);
 
          }
      }
@@ -1859,10 +1892,30 @@ void DcPresetLib::conCmd_MidiOut( DcConArgs args )
             md = args.hexJoin();
         }
         _con->clearCounterDisplay();
-        _midiOut.dataOutSplit(md,_maxMsgSize,_delayPerMsgChunk);
+        _midiOut.dataOutThrottled(md);
     }
 }
 
+//-------------------------------------------------------------------------
+void DcPresetLib::conCmd_RenameItemInWorklist( DcConArgs args )
+{
+    if(args.argCount() >= 2 )
+    {
+        int row = args.first().toInt();
+        QString name = args.second().toString();
+        renameItemInWorklist(row,name);
+    }
+    else
+    {
+        int cnt = ui.workList->count();
+        for (int idx = 0; idx < cnt ; idx++)
+        {
+        	QString rdmName = QString("T_%1_%2").arg(idx).arg(qrand() % 100 );
+            renameItemInWorklist(idx,rdmName);
+        }
+
+    }
+}
 //-------------------------------------------------------------------------
 void DcPresetLib::midiDataInToConHandler( const DcMidiData &data )
 {
@@ -2029,6 +2082,8 @@ void DcPresetLib::setupConsole()
     _con->addCmd("exportfile",this,SLOT(conCmd_SplitPresetBundle(DcConArgs)),"<source preset file> [<destination path>] - export each preset found in the provided file." );
 
     _con->addCmd("fastfetch",this,SLOT(conCmd_enableFastFetch(DcConArgs)),"<on|off> - controls the preset fetch size.");
+    
+    _con->addCmd("ren",this,SLOT(conCmd_RenameItemInWorklist(DcConArgs)),"<row> <name> - rename item at 'row' with given 'name'");
 
     _con->setBaseDir(_dataPath);
 
@@ -2205,12 +2260,12 @@ void DcPresetLib::conCmd_outn( DcConArgs args )
         	outCmd += args.at(idx).toString();
         }
         _midiOut.dataOut("F0 00 01 55 12 03 1B F7");
-        _midiOut.dataOut(outCmd);
+        _midiOut.dataOutThrottled(outCmd);
         QThread::msleep(timems);
         qApp->processEvents();
         for (int CmdCnt = 0; CmdCnt < cnt ; CmdCnt++)
         {
-            _midiOut.dataOut(outCmd);
+            _midiOut.dataOutThrottled(outCmd);
             qApp->processEvents();
         }
     }
@@ -2334,6 +2389,9 @@ void DcPresetLib::conCmd_ioConfig( DcConArgs args )
         _maxMsgSize = maxMsgSize;
         _delayPerMsgChunk = delayPerMsgChunk;
 
+        _midiOut.setDelayBetweenBackets(_delayPerMsgChunk);
+        _midiOut.setMaxPacketSize(_maxMsgSize);
+
         QSettings settings;
         settings.beginGroup("midiio");
         settings.setValue("MaxMsgSize", maxMsgSize);
@@ -2442,7 +2500,7 @@ bool DcPresetLib::programSysexFile(QString fileName)
     int donecnt = 0;
     for (int i = 0; i < sysexList.count() ; i++)
     {
-        _midiOut.dataOutSplit(sysexList.at(i),_maxMsgSize,_delayPerMsgChunk);
+        _midiOut.dataOutThrottled(sysexList.at(i));
         if(i % outputStat == 0)
         {
             *_con << (donecnt*5) << "% complete " << "\n";
@@ -2667,16 +2725,16 @@ void DcPresetLib::setFamilyDetails( DcDeviceDetails &details )
 bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& details )
 {
     bool rtval = true;
+    int fastfetch_feature_thresh = 9999;
 
     if(data.contains(DcMidiDevDefs::kTimeLineIdent) || data.contains("0001551201"))
     {
         setFamilyDetails(details);
-
         details.Name                    = "TimeLine";
         details.PresetsPerBank          = 2;
         details.PresetCount             = 200;
-
-
+        fastfetch_feature_thresh        = 156;
+        
     }
     else if(data.contains(DcMidiDevDefs::kMobiusIdent) ||  data.contains("0001551202") )
     {
@@ -2685,9 +2743,7 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         details.Name                      = "Mobius";
         details.PresetsPerBank          = 2;
         details.PresetCount             = 200;
-
-
-
+        fastfetch_feature_thresh        = 115;
     }
     else if(data.contains(DcMidiDevDefs::kBigSkyIdent) ||  data.contains("0001551203"))
     {
@@ -2696,11 +2752,21 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         details.Name                      = "Big Sky";
         details.PresetsPerBank          = 3;
         details.PresetCount             = 300;
-
+        fastfetch_feature_thresh        = 123;
     }
     else
     {
         rtval = false;
+    }
+    
+    // Enable/disable fast fetch feature
+    if( fastfetch_feature_thresh != 9999 && details.FwVerInt >= fastfetch_feature_thresh )
+    {
+        gUseAltPresetSize = true;
+    }
+    else
+    {
+        gUseAltPresetSize = false;
     }
 
     return rtval;
@@ -2882,7 +2948,7 @@ void DcPresetLib::ioMidiListToDevice( QList<DcMidiData> &sysexList )
     int donecnt = 0;
     for (int i = 0; i < sysexList.count() ; i++)
     {
-        _midiOut.dataOutSplit(sysexList.at(i),_maxMsgSize,_delayPerMsgChunk);
+        _midiOut.dataOutThrottled(sysexList.at(i));
         if(i % outputStat == 0)
         {
             *_con << (donecnt*5) << "% complete " << "\n";
@@ -3104,6 +3170,9 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
     *_con << fileName << "\n" ;
     DcMidiDataList_t mdl;
     DcMidiData md;
+    ui.devImgLabel->setDisabled(true);
+    QApplication::processEvents();
+
     if( loadPresetBinary( fileName,mdl ) )
     {
         _workListData = mdl;
@@ -3115,7 +3184,7 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
     }
     else
     {
-        // UpdateFirmwareHelper( fileName );
-        
+         UpdateFirmwareHelper( fileName );
     }
+    ui.devImgLabel->setDisabled(false);
 }

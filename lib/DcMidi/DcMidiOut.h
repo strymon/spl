@@ -36,7 +36,24 @@ public:
 
     DcMidiOut(QObject* parent = 0);
     virtual ~DcMidiOut();
-     
+    
+    /** Set the maximum packet size sent to MIDI driver
+     *  int szInBytes - size in bytes
+     *  @return void
+     */
+    void setMaxPacketSize(int szInBytes);
+    /** Set the minimum time between MIDI packets
+     *  int ms - time in milliseconds
+     *  @return void
+     */
+    void setDelayBetweenBackets(int ms);
+    /** Reset the transfer speed settings.
+     *  
+     *  @return void
+     */
+    void resetSpeed();
+
+
 signals:
     void dataOutMonitor(const DcMidiData& data);
 
@@ -44,8 +61,9 @@ public slots:
     void dataOut( const DcMidiData& data );
     void dataOut( const QString& hexStr);
     void dataOut( const char* hexStr);
-    
     void dataOutSplit( const DcMidiData& data, int maxMsg, int delayPerMsg );
+    
+    void dataOutThrottled(const DcMidiData& data);
 
 
 private:
@@ -58,5 +76,9 @@ private:
    
 
     RtMidiOut*  _rtMidiOut;
+
+    // working around poor MIDI devices
+    int _maxDataOut;
+    int _delayBetweenPackets;
 };
 #endif // DcMidiOut_h__

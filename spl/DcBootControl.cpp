@@ -23,14 +23,6 @@ DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o )
     _pMidiIn = &i;
     _pMidiOut = &o;
     _lastErrorMsg.setString(&_lastErrorMsgStr);
-
-#if defined(Q_OS_WIN32)
-    _maxDataOut = 0;
-    _delayBetweenDataOut = 0; 
-#else
-    _maxDataOut = 0;
-    _delayBetweenDataOut = 0;
-#endif
 }
 
 bool DcBootControl::enableBootcode( )
@@ -145,7 +137,7 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
     // deliver status.
     msg[8] = 0x03;
 
-    _pMidiOut->dataOutSplit(msg,_maxDataOut,_delayBetweenDataOut);
+    _pMidiOut->dataOutThrottled(msg);
 
     DcMidiData md;
 
@@ -216,7 +208,7 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
         }
 
         DcAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
-        _pMidiOut->dataOut(CMD_GET_BANK0_INFO);
+        _pMidiOut->dataOutThrottled(CMD_GET_BANK0_INFO);
 
         if(!autotc.wait(500))
         {
@@ -230,7 +222,7 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
         }
         
         bcInfo.setBank(0,codeInfo);
-        _pMidiOut->dataOut(CMD_GET_BANK1_INFO);
+        _pMidiOut->dataOutThrottled(CMD_GET_BANK1_INFO);
 
         if(!autotc.wait(500))
         {
@@ -253,13 +245,32 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
 bool DcBootControl::isBootcode()
 {
     DcAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
-    _pMidiOut->dataOut(CMD_GET_BANK0_INFO);
+    _pMidiOut->dataOutThrottled(CMD_GET_BANK0_INFO);
     
     bool rtval = autotc.wait(400);
 
     return rtval;
 }
 
+bool DcBootControl::checkPid(int pid)
+{
+    QString responce = QString( RESPONCE_READ_PID_FID ).arg( (pid & 0xFF00) >> 8).arg(pid & 0xFF);
+    DcAutoTrigger autotc( responce,_pMidiIn );
+    _pMidiOut->dataOutThrottled( DCBC_READ_PID_FID);
+
+    bool rtval = autotc.wait( 400 );
+
+    return rtval;
+}
+
+int DcBootControl::countResponcePattern( const QString& cmd, const QString& pattern, int timeOutMs /*= 800*/)
+{
+    DcAutoTrigger autotc( pattern,_pMidiIn );
+    _pMidiOut->dataOutThrottled( cmd);
+    QThread::msleep( timeOutMs );
+    int cnt = autotc.getCount();
+    return cnt;
+}
 
 bool DcBootControl::activateBank( int bankNumber )
 {
@@ -283,11 +294,11 @@ bool DcBootControl::activateBank( int bankNumber )
     if(0 == bankNumber)
     {
         DcAutoTrigger mtrigger(DCBC_ACTIVATE_BANK0_SUCCESS,_pMidiIn);
-        _pMidiOut->dataOut(DCBC_ACTIVATE_BANK0);
+        _pMidiOut->dataOutThrottled(DCBC_ACTIVATE_BANK0);
         if(mtrigger.wait(1000))
         {
             mtrigger.setPattern(DCBC_DEACTIVATE_BANK1_SUCCESS);
-            _pMidiOut->dataOut(DCBC_DEACTIVATE_BANK1);
+            _pMidiOut->dataOutThrottled(DCBC_DEACTIVATE_BANK1);
             if(mtrigger.wait(1000))
             {
                 rtval = true;
@@ -297,11 +308,11 @@ bool DcBootControl::activateBank( int bankNumber )
     else
     {
         DcAutoTrigger mtrigger(DCBC_ACTIVATE_BANK1_SUCCESS,_pMidiIn);
-        _pMidiOut->dataOut(DCBC_ACTIVATE_BANK1);
+        _pMidiOut->dataOutThrottled(DCBC_ACTIVATE_BANK1);
         if(mtrigger.wait(1000))
         {
             mtrigger.setPattern(DCBC_DEACTIVATE_BANK0_SUCCESS);
-            _pMidiOut->dataOut(DCBC_DEACTIVATE_BANK0);
+            _pMidiOut->dataOutThrottled(DCBC_DEACTIVATE_BANK0);
             if(mtrigger.wait(1000))
             {
                 rtval = true;
@@ -322,7 +333,7 @@ bool DcBootControl::exitBoot( DcMidiDevIdent* id /*= 0*/ )
     // Setup to wait for Strymon identity data
     DcAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
     
-    _pMidiOut->dataOut("F0 00 01 55 42 01 F7");
+    _pMidiOut->dataOutThrottled("F0 00 01 55 42 01 F7");
 
     // Wait 4 seconds for the response data
     if(autotc.wait(4000))
@@ -375,7 +386,7 @@ bool DcBootControl::privateReset()
         return false;
     }
     
-    _pMidiOut->dataOut(priRst);
+    _pMidiOut->dataOutThrottled(priRst);
     
     return true;
 }
