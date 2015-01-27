@@ -43,7 +43,7 @@ void DcXferMachine::sendNext_entered()
     else
     {
         _activeCmd = _cmdList.takeFirst();
-        _midiOut->dataOutSplit(_activeCmd,_maxPacketSize,_msPerPacket);
+        _midiOut->dataOutThrottled(_activeCmd);
         _retryCount = _numRetries;
         _watchdog.start(_timeout);
     }
@@ -159,7 +159,7 @@ void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
                 // Retry the Write Command
                 DCLOG() << "Command was NAK'ed, retrying";
                 QThread::msleep(100);
-                _midiOut->dataOutSplit(_activeCmd,_maxPacketSize,_msPerPacket);
+                _midiOut->dataOutThrottled(_activeCmd);
                 // Restart watchdog
                 _watchdog.start(_timeout);
             }
@@ -239,10 +239,26 @@ void DcXferMachine::strickedReplySlotForDataOut( const DcMidiData &data )
 void DcXferMachine::xferTimeout()
 {
     _watchdog.stop();
-    
-    _progressDialog->setError("Unable to communicate with the device.");
-    DCLOG() << "Transfer Timeout";
-    _machine->postEvent(new DataXfer_TimeoutEvent());
+
+    if( --_retryCount <= 0 )
+    {
+        _progressDialog->setError( "Unable to communicate with the device." );
+        DCLOG() << "Transfer Timeout";
+        _machine->postEvent( new DataXfer_TimeoutEvent() );
+    }
+    else
+    {
+        // Retry the Write Command
+        DCLOG() << "Timeout but retrying";
+        QThread::msleep( 100 );
+        DCLOG() << "Throttling back MIDI output rate";
+        _midiOut->setDelayBetweenBackets( 20 );
+        _midiOut->setMaxPacketSize( 32 );
+        _midiOut->dataOutThrottled( _activeCmd);
+        // Restart watchdog
+
+        _watchdog.start( _timeout );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -324,8 +340,8 @@ void DcXferMachine::go(DcDeviceDetails* devDetails, int maxPacketSize/*=-1*/, in
 {
     _devDetails = devDetails;
 
-    _maxPacketSize = maxPacketSize;
-    _msPerPacket = delayPerPacket;
+    (void)maxPacketSize;
+    (void)delayPerPacket;
 
     _writeSuccessList.clear();
 
