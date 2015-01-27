@@ -14,7 +14,7 @@ ver_str=$(python inc_version.py -a -f ../spl/main.cpp -v kDcVersionString)
 
 if [ $BUILD_APP == 'YES' ]; then
   # Update the Info.plist version so it matches main.cpp
-  python inc_version.py -f ./osx/Info.plist -v string -s $ver_str
+  #python inc_version.py -f ./osx/Info.plist -v string -s $ver_str
 
   src=$(pwd)/..
 

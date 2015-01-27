@@ -94,12 +94,12 @@ goto :EOF
 :ARGDONE
 
 if not %MANUAL_VER% == AUTO goto set_ver
-python inc_version.py -f ..\spl\main.cpp -v kDcVersionString --inc_build
+::python inc_version.py -f ..\spl\main.cpp -v kDcVersionString --inc_build
 goto setup
 
 :set_ver
 if /I "%MANUAL_VER%" == "cur" goto setup 
-python inc_version.py -s %MANUAL_VER% -f ..\spl\main.cpp -v kDcVersionString
+::python inc_version.py -s %MANUAL_VER% -f ..\spl\main.cpp -v kDcVersionString
 
 :setup
 :: Extract version from main.cpp (and use this lame 'cmd.exe for loop' to set VER_STR with output from python script) <sigh>
