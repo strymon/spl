@@ -272,6 +272,14 @@ int DcBootControl::countResponcePattern( const QString& cmd, const QString& patt
     return cnt;
 }
 
+void DcBootControl::setMidiOutSafeMode()
+{
+    if(_pMidiOut)
+    {
+        _pMidiOut->setSafeMode();
+    }
+}
+
 bool DcBootControl::activateBank( int bankNumber )
 {
     bool rtval = false;

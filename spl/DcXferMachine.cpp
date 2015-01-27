@@ -249,11 +249,12 @@ void DcXferMachine::xferTimeout()
     else
     {
         // Retry the Write Command
+
         DCLOG() << "Timeout but retrying";
         QThread::msleep( 100 );
+
         DCLOG() << "Throttling back MIDI output rate";
-        _midiOut->setDelayBetweenBackets( 20 );
-        _midiOut->setMaxPacketSize( 32 );
+        _midiOut->setSafeMode();
         _midiOut->dataOutThrottled( _activeCmd);
         // Restart watchdog
 

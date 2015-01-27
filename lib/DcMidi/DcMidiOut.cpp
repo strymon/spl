@@ -154,3 +154,9 @@ void DcMidiOut::resetSpeed()
     _maxDataOut = -1;
 }
 
+void DcMidiOut::setSafeMode()
+{
+    setMaxPacketSize(kSafeMaxPacketSize);
+    setDelayBetweenBackets(kSafeDelayBetweenPackets);
+}
+

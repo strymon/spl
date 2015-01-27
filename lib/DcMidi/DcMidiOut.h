@@ -32,6 +32,9 @@ class DcMidiOut : public DcMidi
 {
     Q_OBJECT
 
+    static const int kSafeMaxPacketSize = 32;
+    static const int kSafeDelayBetweenPackets = 20;
+
 public:
 
     DcMidiOut(QObject* parent = 0);
@@ -52,7 +55,11 @@ public:
      *  @return void
      */
     void resetSpeed();
-
+    /** Relax the MIDI output data rate
+     *
+     * @return void
+     */
+    void setSafeMode();
 
 signals:
     void dataOutMonitor(const DcMidiData& data);

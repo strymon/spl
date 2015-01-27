@@ -328,6 +328,8 @@ public:
      *  @return int The number of responses detected
      */
     int countResponcePattern( const QString& cmd, const QString& pattern, int timeOutMs = 800 );
+
+    void setMidiOutSafeMode();
 private:
 
     DcMidiIn*   _pMidiIn;
