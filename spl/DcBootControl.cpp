@@ -252,6 +252,25 @@ bool DcBootControl::isBootcode()
     return rtval;
 }
 
+bool DcBootControl::checkPid(int pid)
+{
+    QString responce = QString( RESPONCE_READ_PID_FID ).arg( (pid & 0xFF00) >> 8).arg(pid & 0xFF);
+    DcAutoTrigger autotc( responce,_pMidiIn );
+    _pMidiOut->dataOutThrottled( DCBC_READ_PID_FID);
+
+    bool rtval = autotc.wait( 400 );
+
+    return rtval;
+}
+
+int DcBootControl::countResponcePattern( const QString& cmd, const QString& pattern, int timeOutMs /*= 800*/)
+{
+    DcAutoTrigger autotc( pattern,_pMidiIn );
+    _pMidiOut->dataOutThrottled( cmd);
+    QThread::msleep( timeOutMs );
+    int cnt = autotc.getCount();
+    return cnt;
+}
 
 bool DcBootControl::activateBank( int bankNumber )
 {

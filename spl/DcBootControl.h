@@ -58,6 +58,8 @@ struct DcMidiDevIdent;
 #define DCBC_DEACTIVATE_BANK1  "F0 00 01 55 42 05 F7"
 #define DCBC_DEACTIVATE_BANK1_SUCCESS "F0 00 01 55 42 05 00 F7"
 
+#define DCBC_READ_PID_FID "F0 00 01 55 42 0D 02 00 0F 0F 0F 0F 08 F7"
+#define RESPONCE_READ_PID_FID "F0 00 01 55 42 0D 02 00 0F 0F 0F 0F 08 0%1 0%2 .. .. F7"
 
 
 /*! A class for parsing and accessing a DC a code "bank" */
@@ -241,7 +243,7 @@ public:
     }
 
     /*!
-      Returns true if the attached device is in Bootcode. 
+      Returns true if the attached device is in Boot code. 
     */
     bool isBootcode();
 
@@ -311,7 +313,21 @@ public:
 
     // Get last error message
     QString getLastError() const { return _lastErrorMsgStr; }
-   
+    
+    /** Verify that the current device (that is in boot mode) matches the given product id.
+     *  @param pid
+     *  @return bool
+     */
+    bool checkPid( int pid );
+    
+    /** Count the number of MIDI messages that match the given pattern received within the
+        given time.  Device must not be in boot mode for this command to work.
+     *  @param cmd MIDI message to invoke the response
+     *  @param pattern The MIDI message response pattern
+     *  @param timeOutMs Time interval in milliseconds
+     *  @return int The number of responses detected
+     */
+    int countResponcePattern( const QString& cmd, const QString& pattern, int timeOutMs = 800 );
 private:
 
     DcMidiIn*   _pMidiIn;
