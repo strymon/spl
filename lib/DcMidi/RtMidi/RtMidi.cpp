@@ -1003,11 +1003,11 @@ void MidiOutCore :: sendMessage( std::vector<unsigned char> *message )
   CoreMidiData *data = static_cast<CoreMidiData *> (apiData_);
   OSStatus result;
 
-  if ( message->at(0) != 0xF0 && nBytes > 3 ) {
-    errorString_ = "MidiOutCore::sendMessage: message format problem ... not sysex but > 3 bytes?";
-    error( RtMidiError::WARNING, errorString_ );
-    return;
-  }
+//  if ( message->at(0) != 0xF0 && nBytes > 3 ) {
+//    errorString_ = "MidiOutCore::sendMessage: message format problem ... not sysex but > 3 bytes?";
+//    error( RtMidiError::WARNING, errorString_ );
+//    return;
+//  }
 
   Byte buffer[nBytes+(sizeof(MIDIPacketList))];
   ByteCount listSize = sizeof(buffer);
