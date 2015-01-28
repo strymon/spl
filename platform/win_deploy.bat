@@ -53,6 +53,13 @@ if /I %1x==/verx (
  goto ARGPARSE 
 ) 
 
+:: /plat to manually specify the msvc tools platform (x86 or amd64)
+if /I %1x==/platx (
+ set PLAT=%2
+ shift
+ shift
+ goto ARGPARSE 
+) 
 :: /inst-only (don't build, just create an installer)
 if /I %1x==/inst-onlyx (
  set OK_TO_BUILD=NO
@@ -82,12 +89,13 @@ if /I %1x==/helpx (
 @echo --------------------------------------------------------------------------------------  
 @echo - USEAGE
 @echo - 
-@echo - /path ^<path^>    - optional - Path used to build project
-@echo - /inst-only        - don't build or inc version, just build installer
-@echo - /ver ^<version^>  - optional - force build to use specified version or current if
-@echo -                                'cur' is specified
-@echo - /create           - optional - creatre VS project files only, do not invoke build
-@echo - 
+@echo - /path ^<path^>     - optional - Path used to build project
+@echo - /inst-only         - don't build or inc version, just build installer
+@echo - /ver ^<version^>   - optional - force build to use specified version or current if
+@echo -                                 'cur' is specified
+@echo - /create            - optional - creatre VS project files only, do not invoke build
+@echo - /plat ^<platform^> - optional - select the build platform (x86 or amd64) 
+@echo -                                 defaults to x86 (32 bit)
 @echo --------------------------------------------------------------------------------------  
 goto :EOF
 
@@ -132,6 +140,8 @@ cd /D %BUILD_DIR%
 if exist %APP_EXE% del %APP_EXE%
 set PATH=%QT_ROOT%\bin;%PATH%
 
+
+@echo Setting up MSVC: "%MSVC_DIR%\vcvarsall.bat" %PLAT%
 call "%MSVC_DIR%\vcvarsall.bat" %PLAT%
 
 @echo call complete
