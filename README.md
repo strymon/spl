@@ -8,11 +8,10 @@ It was written in C++ and uses the Qt Application and UI framework. <br>
 
 <img src="http://www.strymon.net/downloads/spl/ss1.png" alt="Screenshot"/>
 
-
 ## Binaries
 
 ### Supported Platforms
-<b>OSX</b>10.7.x, 10.8.x 10.9 10.10<br>
+<b>OSX</b>10.7.x, 10.8.x 10.9 10.10.x<br>
 <b>Windows</b> XP, Vista, 7, 8<br>
 
 ### Current Release
@@ -21,12 +20,6 @@ Date: 11/01/2013 <br>
 
 OSX: [strymon_lib_setup_0.9.3.8.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) <br>
 Windows: [strymon_lib_setup_0.9.3.9.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.9.exe ) <br>
-
-#### What's New Upcoming Release 0.9.4.x
-+ - Improved preset fetch performance
-+ - Verified OSX 10.10 support
-+ - Improved error recovery and support for problematic MIDI interfaces 
-+ * Proper behavior after canceling operations 
 
 #### What's New in 0.9.3
 + - OSX 10.9 support
@@ -42,6 +35,19 @@ Date: 6/12/2013 <br>
 
 OSX ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.dmg ) <br>
 Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.exe ) <br>
+
+### Pre Release
+Version: 0.9.4.1 <br>
+Date: 01/27/2015 <br>
+
+OSX: [strymon_lib_setup_0.9.4.1.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.1.dmg ) <br>
+Windows: [strymon_lib_setup_0.9.4.1.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.1.exe ) <br>
+
+#### What's New in 0.9.4.1
++ - Improved preset fetch performance
++ - Verified OSX 10.10 support
++ - Improved error recovery and support for problematic MIDI interfaces 
++ * Proper behavior after canceling operations 
 
 ## License
 
