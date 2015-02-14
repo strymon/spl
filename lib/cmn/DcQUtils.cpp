@@ -37,11 +37,14 @@ QString DcQUtils::getOsVersion()
         case QSysInfo::WV_VISTA: return "Windows Vista";
         case QSysInfo::WV_WINDOWS7: return "Windows 7";
         case QSysInfo::WV_WINDOWS8: return "Windows 8";
+        case QSysInfo::WV_WINDOWS8_1: return "Windows 8.1";
 
         default: 
             return "Unknown Windows";
     }
 #elif defined Q_OS_MAC
+    int foo = (int)QSysInfo::MacintoshVersion;
+
     switch (QSysInfo::MacintoshVersion)
     {
         case QSysInfo::MV_Unknown: return "Unknown Mac";
@@ -55,6 +58,7 @@ QString DcQUtils::getOsVersion()
         case QSysInfo::MV_10_7: return "OS X 10.7";
         case QSysInfo::MV_10_8: return "OS X 10.8";
         case QSysInfo::MV_10_9: return "OS X 10.9";
+        case QSysInfo::MV_10_10: return "OS X 10.10";
 
         default: 
             return "Unknown Mac";
