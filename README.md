@@ -10,7 +10,7 @@
 ## Description
 
 The Strymon Librarian is a tool for managing MIDI presets. <br>
-It was written in C++ and uses the Qt Application and UI framework. <br>
+The program is written in [C++] (https://en.wikipedia.org/wiki/C%2B%2B) and uses the [QT Application and UI Framework] (http://www.qt.io/download-open-source/) <br>
 
 <img src="http://www.strymon.net/downloads/spl/ss1.png" alt="Screenshot"/>
 
