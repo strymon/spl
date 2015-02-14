@@ -501,10 +501,6 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
     _con->addRoSymDef( "dev.pid",_devDetails.getProductByte());
     _con->addRoSymDef( "dev.fid",_devDetails.getFamilyByte());
 
-
-
-
-
      emit deviceReady();
 }
 
@@ -739,7 +735,7 @@ void DcPresetLib::noDevice_entered()
     }
     
     // Have the system watch for identity data:
-    
+
     // Setup a trigger on midi in, if identity is detected, signal the slot.
     // See the instantiation of _idResponceTrigger for the slot details. 
     _midiIn.addTrigger(*_idResponceTrigger);
@@ -753,7 +749,7 @@ void DcPresetLib::setupReadPresetXfer_entered()
     ui.workList->clear();
     _workListDataDeviceUid = 0;
 
-    _xferInMachine.reset();
+    _xferInMachine.reset(false);
     
     // Get the number of presets that will be transfered from the device
     int presetCount     = _maxPresetCount;
@@ -775,7 +771,8 @@ void DcPresetLib::setupReadPresetXfer_entered()
 
     _xferInMachine.go(&_devDetails);
 
-    qDebug() << "Reading presets: (ioconf " << _maxMsgSize << " " << _delayPerMsgChunk << ")";
+    DCLOG() << "Reading presets";
+
     // Signal the state machine to begin
     emit readPresets_setupDone_signal();
 }
@@ -786,7 +783,7 @@ void DcPresetLib::setupWritePresetXfer_entered()
     // backup the work list
     backupWorklist();
 
-    _xferOutMachine.reset();
+    _xferOutMachine.reset(true);
 
     // Get the number of dirty presets
     int presetCount = _dirtyItemsIndex.length();
@@ -818,10 +815,10 @@ void DcPresetLib::setupWritePresetXfer_entered()
     QObject::connect(&_midiIn, &DcMidiIn::dataIn, &_xferOutMachine, &DcXferMachine::replySlotForDataOut);
     
     _xferOutMachine.setProgressDialog(_progressDialog);
-
-    _xferOutMachine.go(&_devDetails,_maxMsgSize,_delayPerMsgChunk);
+    _xferOutMachine.go(&_devDetails);
     
-    qDebug() << "Writing presets: (ioconf " << _maxMsgSize << " " << _delayPerMsgChunk << ")";
+    DCLOG() << "Writing presets: safemode = " + QString(_midiOut.isSafeMode() ? "ENABLED" : "DISABLED");
+
     // Signal the state machine to begin
     emit writePresets_setupDone_signal();
 
@@ -1521,7 +1518,7 @@ bool DcPresetLib::savePresetBinary(const QString &fileName,const QList<DcMidiDat
     }
 
     file.close();
-    qDebug() << "Presets saved to: " << fileName;
+    DCLOG() << "Presets saved to: " << fileName;
     return true; 
 }
 
@@ -1539,7 +1536,7 @@ bool DcPresetLib::savePresetBinary( const QString &fileName,const DcMidiData& md
     QDataStream out(&file);   // we will serialize the data into the file
     out.writeRawData(md.data(),md.length());
     file.close();
-    qDebug() << "Preset saved to: " << fileName;
+    DCLOG() << "Preset saved to: " << fileName;
 
     return true; 
 
@@ -1609,7 +1606,7 @@ bool DcPresetLib::checkSyncState()
 //-------------------------------------------------------------------------
 void DcPresetLib::dispErrorMsgBox(const char* msg /*=0*/)
 {
-    qDebug() << "Display error box: " << msg;
+    DCLOG() << "Display error box: " << msg;
     QMessageBox* msgBox = new QMessageBox(this);
 
     if(msg)
@@ -1839,6 +1836,7 @@ bool DcPresetLib::enableMidiMonitor( bool enable )
     }
     
     settings.setValue("console/midimonitor",enable);
+    DCLOG() << "MIDI Monitor is " << (enable ? "ON" : "OFF");
     
     return prevState;
 }
@@ -1849,6 +1847,7 @@ void DcPresetLib::conCmd_MidiMonCtrl(DcConArgs args)
     {
         *_con << "must specify on of off\n";
     }
+
     else if(args.at(1).toString().toLower().contains("off"))
     {
         enableMidiMonitor(false);
@@ -1873,9 +1872,12 @@ void DcPresetLib::conCmd_Fetch( DcConArgs args )
     {
         
         int pc = args.at(1,_devDetails.PresetCount).toInt();
-        if(pc)  {
+        if(pc)
+        {
             _maxPresetCount = pc;
-        } else {
+        }
+        else
+        {
             *_con << "preset count is invalid\n";
             return;
         }
@@ -2147,7 +2149,6 @@ void DcPresetLib::conCmd_exec( DcConArgs args )
 
     if(args.argCount() >= 1)
     {
-        //QDesktopServices::openUrl(QUrl(url,QUrl::TolerantMode));
         QProcess::startDetached(shellCmd, args.argsAsStringList());
     }
 }
@@ -3196,16 +3197,22 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
  void DcPresetLib::on_fileDropped( const QString& fileName )
 {
     *_con << fileName << "\n" ;
+     DCLOG() << "File Drop: " << fileName;
+
     DcMidiDataList_t mdl;
     DcMidiData md;
     ui.devImgLabel->setDisabled(true);
     QApplication::processEvents();
+
+    if(_devDetails.isEmpty())
+        return;
 
     if( loadPresetBinary( fileName,mdl ) )
     {
         _workListData = mdl;
         checkSyncState();
     }
+
     if( loadPresetBinary( fileName,md ) )
     {
         *_con << md.toString() << "\n";

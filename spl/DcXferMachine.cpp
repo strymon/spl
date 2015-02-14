@@ -70,6 +70,7 @@ void DcXferMachine::replySlotForDataIn( const DcMidiData &data )
         // Check for a Negative Acknowledgment of the data in request
         if( data.match(_devDetails->PresetRd_NAK,true) )
         {
+            DCLOG() << "Preset read NAK detected, notify user and bail";
             _progressDialog->setError("Device Rejected Command");
             _machine->postEvent(new DataXfer_NACKEvent());
         }
@@ -116,7 +117,6 @@ void DcXferMachine::replySlotForDataIn( const DcMidiData &data )
 //-------------------------------------------------------------------------
 void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
 {
-    DCLOG() << "Midi In";
     // Expect to see sysex coming from the currently attached device.
     // This check will prevent other legal messages from blowing up
     // out preset transfer - like controller messages
@@ -148,18 +148,28 @@ void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
         // Check for write preset Negative Acknowledgment
         if(NAK)
         {
-            if(--_retryCount <= 0)
+            if(--_retryCount < 0)
             {
-                DCLOG() << "Retries exhausted, device rejected write command";
+                DCLOG() << "NAK - retries exhausted - notify user and bail";
                 _progressDialog->setError("Device Rejected Write Command");
                 _machine->postEvent(new DataXfer_NACKEvent());
             }
             else
             {
                 // Retry the Write Command
-                DCLOG() << "Command was NAK'ed, retrying";
                 QThread::msleep(100);
+
+                // Will this be the last try?  Also, if midiOut is not in 'safe mode'
+                // throttle back the output rate to work around troubled MIDI host adapters.
+                if(!_midiOut->isSafeMode())
+                {
+                    DCLOG() << "Throttling back MIDI output rate";
+                    _midiOut->setSafeMode();
+                }
+
+                DCLOG() << "NAK - retry count at " << _retryCount;
                 _midiOut->dataOutThrottled(_activeCmd);
+
                 // Restart watchdog
                 _watchdog.start(_timeout);
             }
@@ -167,15 +177,14 @@ void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
         else if(ACK)
         {
             _progressDialog->inc();
+            _progressDialog->setError("");
+            QApplication::processEvents();
+
             if( _retryCount < _numRetries )
             {
-                _progressDialog->setError( QString("Success after %1 retries").arg(_retryCount) );
-                QApplication::processEvents();
+               DCLOG() << QString("Success after %1 retries").arg(_numRetries - _retryCount);
             }
-            else
-            {
-                _progressDialog->setError("");
-            }
+
             _writeSuccessList.append(_activeCmd);
             _machine->postEvent(new DataXfer_ACKEvent());
         }
@@ -192,72 +201,74 @@ void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
     }
 }
 
-void DcXferMachine::strickedReplySlotForDataOut( const DcMidiData &data )
-{
-    // Expect to see sysex coming from the currently attached device.
-    // This check will prevent other legal messages from blowing up
-    // out preset transfer - like controller messages
-    if(data.contains(_devDetails->SOXHdr))
-    {
+//void DcXferMachine::strickedReplySlotForDataOut( const DcMidiData &data )
+//{
+//    // Expect to see sysex coming from the currently attached device.
+//    // This check will prevent other legal messages from blowing up
+//    // out preset transfer - like controller messages
+//    if(data.contains(_devDetails->SOXHdr))
+//    {
 
-        // Ignore data 
-        if(data == _activeCmd)
-        {
-            // If the data coming back is the same as what was sent, 
-            // it was echoed back to us, just ignore as it was probably due
-            // to a device with MIDI "soft" THRU (midi-merge)
-            return;
-        } 
+//        // Ignore data
+//        if(data == _activeCmd)
+//        {
+//            // If the data coming back is the same as what was sent,
+//            // it was echoed back to us, just ignore as it was probably due
+//            // to a device with MIDI "soft" THRU (midi-merge)
+//            return;
+//        }
 
-        // Cancel the watchdog timer
-        _watchdog.stop();
+//        // Cancel the watchdog timer
+//        _watchdog.stop();
 
-        // Check for write preset Negative Acknowledgment
-        if( data.match(_devDetails->PresetWr_NAK) )
-        {
-            _progressDialog->setError("Device Rejected Write Command");
-            _machine->postEvent(new DataXfer_NACKEvent());
-        }
-        else if( data.match(_devDetails->PresetWr_ACK) )
-        {
-            _progressDialog->inc();
-            _machine->postEvent(new DataXfer_ACKEvent());
-        }
-        else
-        {
-            // Getting here means an unexpected message was received.
-            DCLOG() << "Unexpected data received after preset write";
-            DCLOG() << "    Sent: " << _activeCmd.toString();
-            DCLOG() << "Received: " << data.toString();
+//        // Check for write preset Negative Acknowledgment
+//        if( data.match(_devDetails->PresetWr_NAK) )
+//        {
+//            _progressDialog->setError("Device Rejected Write Command");
+//            _machine->postEvent(new DataXfer_NACKEvent());
+//        }
+//        else if( data.match(_devDetails->PresetWr_ACK) )
+//        {
+//            _progressDialog->inc();
+//            _machine->postEvent(new DataXfer_ACKEvent());
+//        }
+//        else
+//        {
+//            // Getting here means an unexpected message was received.
+//            DCLOG() << "Unexpected data received after preset write";
+//            DCLOG() << "    Sent: " << _activeCmd.toString();
+//            DCLOG() << "Received: " << data.toString();
 
-            _progressDialog->setError("Unexpected data after preset write");
-            _machine->postEvent(new DataXfer_NACKEvent());
-        }
-    }
-}
+//            _progressDialog->setError("Unexpected data after preset write");
+//            _machine->postEvent(new DataXfer_NACKEvent());
+//        }
+//    }
+//}
 //-------------------------------------------------------------------------
 void DcXferMachine::xferTimeout()
 {
     _watchdog.stop();
 
-    if( --_retryCount <= 0 )
+    DCLOG() << (_isWriteMachine ? "Write Preset" : "Read Preset" ) << " Transfer Timeout";
+
+    if( --_retryCount < 0 )
     {
+        DCLOG() << "No more retries, notify user";
         _progressDialog->setError( "Unable to communicate with the device." );
-        DCLOG() << "Transfer Timeout";
         _machine->postEvent( new DataXfer_TimeoutEvent() );
     }
     else
     {
-        // Retry the Write Command
-
-        DCLOG() << "Timeout but retrying";
         QThread::msleep( 100 );
+        if(!_midiOut->isSafeMode())
+        {
+            DCLOG() << "Throttling back MIDI out data rate";
+            _midiOut->setSafeMode();
+        }
 
-        DCLOG() << "Throttling back MIDI output rate";
-        _midiOut->setSafeMode();
         _midiOut->dataOutThrottled( _activeCmd);
-        // Restart watchdog
 
+        // Restart watchdog
         _watchdog.start( _timeout );
     }
 }
@@ -274,9 +285,6 @@ DcState* DcXferMachine::setupStateMachine(QStateMachine* m,DcMidiOut* out,DcStat
 {
     _machine = m;
     _midiOut = out;
-
-
-
 
     DcState *sendNext        = new DcState(QString("sendNext"));
   
@@ -327,8 +335,9 @@ void DcXferMachine::append( DcMidiData& cmd )
 }
 
 //-------------------------------------------------------------------------
-void DcXferMachine::reset()
+void DcXferMachine::reset(bool isWriteMachine)
 {
+    _isWriteMachine = isWriteMachine;
     _writeSuccessList.clear();
     _cmdList.clear();
     _midiDataList.clear();
@@ -348,7 +357,7 @@ void DcXferMachine::go(DcDeviceDetails* devDetails, int maxPacketSize/*=-1*/, in
 
     _timeout = 2000;
     _cancel = false;
-    _numRetries = 4;
+    _numRetries = kNumRetries;
     _progressDialog->setProgress(0);
     _progressDialog->setMax(_cmdList.length());
     _progressDialog->show();

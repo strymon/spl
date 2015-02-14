@@ -61,6 +61,12 @@ public:
      */
     void setSafeMode();
 
+    /** Return true if in 'safe mode'
+     *
+     * @return bool
+     */
+    bool isSafeMode() const { return (_maxDataOut==kSafeMaxPacketSize) && (_delayBetweenPackets==kSafeDelayBetweenPackets);}
+
 signals:
     void dataOutMonitor(const DcMidiData& data);
 

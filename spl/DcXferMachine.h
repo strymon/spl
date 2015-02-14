@@ -35,10 +35,14 @@ class DcXferMachine : public QObject
 
     Q_OBJECT
 public:
-    DcXferMachine() { }
 
+    static const int kNumRetries = 4;
+
+    DcXferMachine() { }
      ~DcXferMachine () {}
-   DcMidiDataList_t getCmdsWritten();
+
+    DcMidiDataList_t getCmdsWritten();
+
 public slots:
 
  /*!
@@ -86,8 +90,8 @@ public slots:
 
   void append( DcMidiData& cmdStr );
 
-  void reset();
-  void strickedReplySlotForDataOut( const DcMidiData &data );
+  void reset(bool isWriteMachine);
+  //void strickedReplySlotForDataOut( const DcMidiData &data );
 private:
 
     int _timeout;
@@ -106,5 +110,6 @@ private:
     DcDeviceDetails* _devDetails;
     int _retryCount;
     int _numRetries;
+    bool _isWriteMachine;
     DcMidiDataList_t _writeSuccessList;
 };
