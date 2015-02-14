@@ -1,5 +1,11 @@
 # Strymon Librarian
 
+## Downloads
+
+| version | date | osx | win |
+|---------|------|-----|-----|
+| lastest | 02/14/2015 | [0.9.4.2]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.dmg ) | [0.9.4.2]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.exe ) |
+| released | 11/01/2013 | [0.9.3.9]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) | [0.9.3.9]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.9.exe ) |
 
 ## Description
 
