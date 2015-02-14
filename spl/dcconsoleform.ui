@@ -39,7 +39,7 @@
      </property>
      <property name="font">
       <font>
-       <family>Lucida Console</family>
+       <family>Courier New</family>
       </font>
      </property>
      <property name="acceptDrops">
@@ -101,6 +101,11 @@
        </property>
        <item>
         <widget class="QLineEdit" name="lineEdit">
+         <property name="font">
+          <font>
+           <family>Courier New</family>
+          </font>
+         </property>
          <property name="frame">
           <bool>false</bool>
          </property>
@@ -113,6 +118,11 @@
            <width>48</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Courier New</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);
