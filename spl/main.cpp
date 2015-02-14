@@ -22,7 +22,7 @@
 #include "DcConArgs.h"
 
 
-static const char* kDcVersionString = "0.9.4.1";
+static const char* kDcVersionString = "0.9.4.2";
 
 
 
