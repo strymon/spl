@@ -520,6 +520,7 @@ void DcPresetLib::userCanFetch_entered()
             }
         }
         
+        _dirtyItemsIndex.clear();
         ui.workList->clear();
         ui.deviceList->clear();
         _workListData.clear();
@@ -667,6 +668,8 @@ void DcPresetLib::setupStateMachineHandler()
     // State readPreset will call setupReadPresetXfer and transition to the xferMachine
     QObject::connect(setupReadPresetsState, SIGNAL(entered()), this, SLOT(setupReadPresetXfer_entered())); // IN
     setupReadPresetsState->addTransition(this,SIGNAL(readPresets_setupDone_signal()),xferInState); // OUT - procDataIn
+    
+    setupReadPresetsState->addTransition( this,SIGNAL( readPresets_abort_signal() ),presetEdit ); 
 
     QObject::connect(readPresetsCompleteState, SIGNAL(entered()), this, SLOT(readPresetsComplete_entered()));
     DcCustomTransition* wpt = new DcCustomTransition(FetchCompleteSuccessEvent::TYPE,readPresetsCompleteState);
@@ -745,6 +748,22 @@ void DcPresetLib::noDevice_entered()
 //-------------------------------------------------------------------------
 void DcPresetLib::setupReadPresetXfer_entered()
 {
+    if( _dirtyItemsIndex.length() )
+    {
+        QMessageBox::StandardButton c = QMessageBox::question( this,"Work List contains modified presets",
+            "Would you like to save the Work List before fetching?",QMessageBox::Save | QMessageBox::No | QMessageBox::Abort );
+        if( QMessageBox::Save ==  c)
+        {
+            on_actionSave_triggered();
+        }
+        else if( QMessageBox::Abort == c )
+        {
+            emit readPresets_abort_signal();
+            return;
+        }
+    }
+
+    _dirtyItemsIndex.clear();
     ui.deviceList->clear();
     ui.workList->clear();
     _workListDataDeviceUid = 0;
@@ -829,6 +848,7 @@ void DcPresetLib::presetEdit_entered()
 {
     // Now, create a backup of this fresh data
     backupDeviceList();
+
    // updateWorkListFromDeviceList();
 
     Q_ASSERT(_deviceListData.length());
@@ -1131,8 +1151,6 @@ void DcPresetLib::readPresetsComplete_entered()
     
     // Keep track of what device this data was for
     _workListDataDeviceUid = _devDetails.getUid();
-
-
 
     _machine.postEvent(new FetchCompleteSuccessEvent());
 }

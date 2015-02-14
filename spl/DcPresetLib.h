@@ -69,6 +69,7 @@ signals:
     void deviceNotFound();
     void readPresets_setupDone_signal();
     void writePresets_setupDone_signal();
+    void readPresets_abort_signal();
 
 private slots:
 
