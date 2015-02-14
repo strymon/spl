@@ -37,15 +37,16 @@ OSX ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.dmg ) <br>
 Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.exe ) <br>
 
 ### Pre Release
-Version: 0.9.4.1 <br>
-Date: 01/27/2015 <br>
+Version: 0.9.4.2 <br>
+Date: 02/13/2015 <br>
 
-OSX: [strymon_lib_setup_0.9.4.1.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.1.dmg ) <br>
-Windows: [strymon_lib_setup_0.9.4.1.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.1.exe ) <br>
+OSX: [strymon_lib_setup_0.9.4.2.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.dmg ) <br>
+Windows: [strymon_lib_setup_0.9.4.2.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.exe ) <br>
 
-#### What's New in 0.9.4.1
+#### What's New in 0.9.4.2
 + - Improved preset fetch performance
-+ - Verified OSX 10.10 support
++ - OSX 10.10 support
++ - Mac version has been code-signed for trouble free Yosemite support
 + - Improved error recovery and support for problematic MIDI interfaces 
 + * Proper behavior after canceling operations 
 
