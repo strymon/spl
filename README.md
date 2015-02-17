@@ -4,7 +4,7 @@
 
 | version | date | osx | win |
 |---------|------|-----|-----|
-| lastest | 02/14/2015 | [0.9.4.2]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.dmg ) | [0.9.4.2]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.exe ) |
+| release candidate | 02/16/2015 | [0.9.4.3]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.dmg ) | [0.9.4.3]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.exe ) |
 | released | 11/01/2013 | [0.9.3.9]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) | [0.9.3.9]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.9.exe ) |
 
 ## Description
@@ -43,11 +43,11 @@ OSX ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.dmg ) <br>
 Windows ( http://www.strymon.net/downloads/spl/strymon_lib_setup_0.9.1.1.exe ) <br>
 
 ### Pre Release
-Version: 0.9.4.2 <br>
-Date: 02/13/2015 <br>
+Version: 0.9.4.3 <br>
+Date: 02/16/2015 <br>
 
-OSX: [strymon_lib_setup_0.9.4.2.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.dmg ) <br>
-Windows: [strymon_lib_setup_0.9.4.2.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.2.exe ) <br>
+OSX: [strymon_lib_setup_0.9.4.3.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.dmg ) <br>
+Windows: [strymon_lib_setup_0.9.4.3.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.exe ) <br>
 
 #### What's New in 0.9.4.2
 + - Improved preset fetch performance
