@@ -91,7 +91,7 @@ const char* DcMidiDevDefs::kMobiusIdent   = "F0 7E .. 06 02 00 01 55 12 00 02"; 
 const char* DcMidiDevDefs::kBigSkyIdent   = "F0 7E .. 06 02 00 01 55 12 00 03"; // Big sky
 const char* DcMidiDevDefs::kTestDevice    = "F0 7E .. 06 02 00 01 55 12 00 04"; // Test Device
 
-bool gUseAltPresetSize = true;
+bool gUseAltPresetSize = false;
 
 DcPresetLib::DcPresetLib(QWidget *parent)
     : QMainWindow(parent)
@@ -299,7 +299,9 @@ void DcPresetLib::readSettings()
     _maxMsgSize = settings.value("MaxMsgSize",-1).toInt();
     _delayPerMsgChunk = settings.value("DelayPerMsgChunk",0).toInt();
     settings.endGroup();
+    DCLOG() << "fastfetch: " << gUseAltPresetSize;
     gUseAltPresetSize = settings.value("fastfetch",false).toBool();
+    DCLOG() << "fastfetch is now: " << gUseAltPresetSize;
 
 }
 
@@ -2774,19 +2776,19 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
     bool rtval = true;
     int fastfetch_feature_thresh = 9999;
 
+
+    // Enable/disable fast fetch feature
+
+
     if(data.contains(DcMidiDevDefs::kTimeLineIdent) || data.contains("0001551201"))
     {
-        setFamilyDetails(details);
         details.Name                    = "TimeLine";
         details.PresetsPerBank          = 2;
         details.PresetCount             = 200;
         fastfetch_feature_thresh        = 156;
-        
     }
     else if(data.contains(DcMidiDevDefs::kMobiusIdent) ||  data.contains("0001551202") )
     {
-        setFamilyDetails(details);
-        
         details.Name                      = "Mobius";
         details.PresetsPerBank          = 2;
         details.PresetCount             = 200;
@@ -2794,8 +2796,6 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
     }
     else if(data.contains(DcMidiDevDefs::kBigSkyIdent) ||  data.contains("0001551203"))
     {
-        setFamilyDetails(details);
-        
         details.Name                      = "Big Sky";
         details.PresetsPerBank          = 3;
         details.PresetCount             = 300;
@@ -2806,15 +2806,18 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
         rtval = false;
     }
     
-    // Enable/disable fast fetch feature
     if( fastfetch_feature_thresh != 9999 && details.FwVerInt >= fastfetch_feature_thresh )
     {
+        DCLOG() << "Fastfetch feature auto enabled";
         gUseAltPresetSize = true;
     }
     else
     {
+        DCLOG() << "Fastfetch feature auto disabled";
         gUseAltPresetSize = false;
     }
+
+    setFamilyDetails( details );
 
     return rtval;
 }
