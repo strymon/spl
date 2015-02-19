@@ -237,6 +237,7 @@ class DcBootControl
 public:    
     
     DcBootControl(DcMidiIn& i, DcMidiOut& o);
+
     ~DcBootControl()
     {
 

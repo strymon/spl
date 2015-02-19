@@ -1,7 +1,7 @@
 QT       += core gui network 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+DEFINES += BAD_MIDI_WORKAROUND
 TARGET = spl
 
 TEMPLATE = app

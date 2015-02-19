@@ -188,6 +188,7 @@ void MidiSettings::accept()
     QSettings settings;
     settings.setValue("midi/inport-name",ui.midiInCombo->currentText());
     settings.setValue("midi/outport-name",ui.midiOutCombo->currentText());
+
     settings.sync();
     
     cleanup();

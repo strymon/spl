@@ -22,8 +22,10 @@
 //#define VERBOSE_MIDI_DEBUG 1
 //-------------------------------------------------------------------------
 DcMidiOut::DcMidiOut(QObject* parent)
-    : DcMidi(parent),_rtMidiOut(0),_maxDataOut(0),_delayBetweenPackets(0)
+    : DcMidi(parent),_rtMidiOut(0),_maxDataOut(0),_delayBetweenPackets(0),_safeModeMax(kDefaultSafeMaxPacketSize),
+      _safeModeDelay(kDefaultSafeDelayBetweenPackets)
 {
+
 }
 
 //-------------------------------------------------------------------------
@@ -81,7 +83,7 @@ void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayMs )
 {
     if(maxMsg <= 0 || data.length() < maxMsg)
     {
-        dataOut(data);
+        dataOutNoSplit(data);
     }
     else
     {
@@ -89,23 +91,28 @@ void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayMs )
         QList<DcMidiData>::iterator i;
         for (i = list.begin(); i != list.end(); ++i)
         {
-            dataOut(*i);
+            _time.restart();
+            dataOutNoSplit(*i);
             if(delayMs > 0)
             {
-                QThread::msleep(delayMs);
+                int t = delayMs - _time.elapsed();
+                if(t<0)
+                {
+                    QThread::msleep(t);
+                }
             }
         }
     }
 }
 
 //-------------------------------------------------------------------------
-void DcMidiOut::dataOut( const DcMidiData& data )
+void DcMidiOut::dataOutNoSplit( const DcMidiData& data )
 {
     std::vector<unsigned char> vec;
     data.copyToStdVec(vec);
     if(isOk())
     {
-        try 
+        try
         {
             _rtMidiOut->sendMessage( &vec );
             emit dataOutMonitor(data);
@@ -114,7 +121,7 @@ void DcMidiOut::dataOut( const DcMidiData& data )
         {
             qDebug() << "Error: " << error.getMessage().c_str();
             setError("RtMidiOut::dataOut ",error.getMessage());
-        } 
+        }
 
 
 
@@ -124,6 +131,11 @@ void DcMidiOut::dataOut( const DcMidiData& data )
 
 
     }
+}
+//-------------------------------------------------------------------------
+void DcMidiOut::dataOut( const DcMidiData& data )
+{
+    dataOutSplit(data,_maxDataOut,_delayBetweenPackets);
 }
 
 //-------------------------------------------------------------------------
@@ -151,12 +163,17 @@ void DcMidiOut::setDelayBetweenBackets( int ms )
 void DcMidiOut::resetSpeed()
 {
     _delayBetweenPackets = -1;
-    _maxDataOut = -1;
+}
+
+void DcMidiOut::setSafeModeDefaults(int maxSizePerCmd, int delay)
+{
+    _safeModeDelay = (delay==-1) ? kDefaultSafeDelayBetweenPackets : delay;
+    _safeModeMax = (maxSizePerCmd==-1) ? kDefaultSafeMaxPacketSize : maxSizePerCmd;
 }
 
 void DcMidiOut::setSafeMode()
 {
-    setMaxPacketSize(kSafeMaxPacketSize);
-    setDelayBetweenBackets(kSafeDelayBetweenPackets);
+    setMaxPacketSize(_safeModeMax);
+    setDelayBetweenBackets(_safeModeDelay);
 }
 

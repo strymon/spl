@@ -108,6 +108,8 @@ DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::getLatestAndShowDialog()
                         {
                             DCWARN() << "There was a problem during the update";
                             rtval = _installUpdateResult;
+                            _progressDialog->hide();
+                            _lastErrorMsgStr = "<h2>Update Failed</h2>";
                         }
                     }
                     else

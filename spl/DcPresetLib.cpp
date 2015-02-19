@@ -313,6 +313,7 @@ void DcPresetLib::detectDevice_entered()
 
     QString in_port = _midiSettings->getInPortName();
     QString out_port = _midiSettings->getOutPortName();
+
     
     DCLOG() << "Detecting devices on ports: " << in_port << "," << out_port;
     
@@ -329,6 +330,14 @@ void DcPresetLib::detectDevice_entered()
         _midiIn.init();
         _midiOut.init();
 
+
+        QSettings settings;
+        settings.beginGroup("midiio");
+        _midiOut.setSafeModeDefaults(settings.value("SafeModeMaxMsgSize",-1).toInt(),
+                                     settings.value("SafeModeDelayPerMsgChunk",-1).toInt());
+        settings.endGroup();
+
+
         if(_midiIn.open( in_port) && _midiOut.open( out_port ))
         {
             QThread::msleep(25);
@@ -338,7 +347,7 @@ void DcPresetLib::detectDevice_entered()
             _midiOut.setMaxPacketSize(_maxMsgSize);
 
             // Send global Identify Request
-            _midiOut.dataOut("F0 7E 7F 06 01 F7");
+            _midiOut.dataOut("F0 00 01 55 12 01 21 F7 F0 7E 7F 06 01 F7");
             
             // Devices only have 2 seconds to reply with the identity information
             _watchdog_timer.setInterval(2000);
@@ -735,8 +744,7 @@ void DcPresetLib::noDevice_entered()
 
     if(!_devDetails.Family.isEmpty())
     {
-        *_con << "Unsupported Device: " << _devDetails.toString();
-        qWarning() <<  "Unsupported Device: " << _devDetails.toString();
+        *_con << "Unsupported Device: " << _devDetails.toString() << "\n";
     }
     
     // Have the system watch for identity data:
@@ -2119,7 +2127,7 @@ void DcPresetLib::setupConsole()
     _con->addCmd("selectbank",this,SLOT(conCmd_changeActiveBootBank(DcConArgs)),"While in boot code, select bank 0 or bank 1" );
     
     _con->addCmd("info",this,SLOT(conCmd_getBootCodeInfo(DcConArgs)),"Display information about the boot code the contents of the code banks" );
-    _con->addCmd("ioconf",this,SLOT(conCmd_ioConfig(DcConArgs)),"[<max msg sz> <delay per msg>] Displays or configures MIDI I/O settings" );
+    _con->addCmd("ioconf",this,SLOT(conCmd_ioConfig(DcConArgs)),"[<max msg sz> <delay per msg> [<'true' to set savemode default>]] Displays or configures MIDI I/O settings. " );
     
     
     _con->addCmd("sleep",this,SLOT(conCmd_delay(DcConArgs)),"<time in micro-seconds> - sleep for give time" );
@@ -2425,27 +2433,49 @@ void DcPresetLib::conCmd_ioConfig( DcConArgs args )
     Q_UNUSED(args);
     if(args.noArgs())
     {
-        *_con << "MIDI I/O Configuration\n";
-        *_con << "------------------------\n";
-        *_con << "Max Message Size: " << _maxMsgSize << " bytes\n";
-        *_con << "Delay Per Message Chunk: " << _delayPerMsgChunk << "ms\n";
+        *_con << "\nCurrent MIDI OUT Configuration\n";
+        *_con << "-------------------------------\n";
+        *_con << "  Max Message Size: " << _maxMsgSize << " bytes\n";
+        *_con << "  Delay Per Chunk: " << _delayPerMsgChunk << " ms\n" << "\n";
+
+        *_con << "Current MIDI OUT 'safemode' Settings:\n";
+        *_con << "  Max Message Size: " << _midiOut.getSafeModeMaxPacketSize() << " bytes\n";
+        *_con << "  Delay Per Chunk: " << QString::number(_midiOut.getSafeModeDelay()) << " ms\n";
+        *_con << "  Safemode State: " << ((_midiOut.isSafeMode()) ? "ENABLED" : "DISABLED") << "\n";
     }
     else
     {
         int maxMsgSize = args.first().toInt();
         int delayPerMsgChunk = args.second().toInt();
+        bool setSafeModeDefault = args.thirdTruthy();
 
-        _maxMsgSize = maxMsgSize;
-        _delayPerMsgChunk = delayPerMsgChunk;
+        if(setSafeModeDefault)
+        {
+            _midiOut.setSafeModeDefaults(maxMsgSize,delayPerMsgChunk);
 
-        _midiOut.setDelayBetweenBackets(_delayPerMsgChunk);
-        _midiOut.setMaxPacketSize(_maxMsgSize);
+            QSettings settings;
+            settings.beginGroup("midiio");
+            settings.setValue("SafeModeMaxMsgSize", maxMsgSize);
+            settings.setValue("SafeModeDelayPerMsgChunk",delayPerMsgChunk);
+            settings.endGroup();
 
-        QSettings settings;
-        settings.beginGroup("midiio");
-        settings.setValue("MaxMsgSize", maxMsgSize);
-        settings.setValue("DelayPerMsgChunk",delayPerMsgChunk);
-        settings.endGroup();
+            *_con << "MIDI OUT Safemode Defaults Updated\n";
+
+        }
+        else
+        {
+            _maxMsgSize = maxMsgSize;
+            _delayPerMsgChunk = delayPerMsgChunk;
+
+            _midiOut.setDelayBetweenBackets(_delayPerMsgChunk);
+            _midiOut.setMaxPacketSize(_maxMsgSize);
+
+            QSettings settings;
+            settings.beginGroup("midiio");
+            settings.setValue("MaxMsgSize", maxMsgSize);
+            settings.setValue("DelayPerMsgChunk",delayPerMsgChunk);
+            settings.endGroup();
+        }
     }
 }
 
