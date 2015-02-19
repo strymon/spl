@@ -22,7 +22,7 @@ DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o )
     _pMidiOut = &o;
     _lastErrorMsg.setString(&_lastErrorMsgStr);
 }
-#define BAD_MIDI_WORKAROUND
+
 bool DcBootControl::enableBootcode( )
 {
     DcMidiData md;
