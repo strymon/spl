@@ -165,7 +165,7 @@ public:
     { stream->ts << m; requestRefresh(); return *this; }
     
 
-
+    bool isHtmlMode() const { return _con_html; }
 
 public slots:
     virtual void setVisible(bool visible);
@@ -197,6 +197,8 @@ private slots:
     void cmd_ts(DcConArgs args);
     void cmd_aboutQt(DcConArgs args);
     void cmd_exit(DcConArgs args);
+
+    
 
 protected:
 
