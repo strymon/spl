@@ -116,6 +116,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     _supportedDevicesSet.insert(DcMidiDevDefs::kMobiusIdent);
     _supportedDevicesSet.insert(DcMidiDevDefs::kBigSkyIdent);
     
+    _midiSettings = new MidiSettings(this);
     _midiSettings->addSupportedIdentities(_supportedDevicesSet);
 
     _workListControls << ui.renameButton << ui.moveButton << ui.loadOneButton << ui.saveOneButton;
