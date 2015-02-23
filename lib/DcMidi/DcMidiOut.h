@@ -22,7 +22,7 @@
 #include <QHash>
 #include <QTextStream>
 #include <QObject>
-#include <QTime>
+#include <QElapsedTimer>
 
 #include "DcMidi.h"
 
@@ -34,7 +34,7 @@ class DcMidiOut : public DcMidi
     Q_OBJECT
 
     static const int kDefaultSafeMaxPacketSize = 32;
-    static const int kDefaultSafeDelayBetweenPackets = 20;
+    static const int kDefaultSafeDelayBetweenPackets = 20000;
 
 public:
 
@@ -47,10 +47,10 @@ public:
      */
     void setMaxPacketSize(int szInBytes);
     /** Set the minimum time between MIDI packets
-     *  int ms - time in milliseconds
+     *  int us - time in microseconds
      *  @return void
      */
-    void setDelayBetweenBackets(int ms);
+    void setDelayBetweenBackets(int micros);
     /** Reset the transfer speed settings.
      *  
      *  @return void
@@ -105,6 +105,5 @@ private:
     int _delayBetweenPackets;
     int _safeModeMax;
     int _safeModeDelay;
-    QTime _time;
 };
 #endif // DcMidiOut_h__
