@@ -19,6 +19,23 @@
 #include <QDateTime>
 #include <QTime>
 #include <QSysInfo>
+#include <QStringList>
+
+int DcQUtils::verStrToDec( const QString& str )
+{
+    int rtval = 0;
+    QStringList vlst;
+    vlst = str.split( "." );
+    if( vlst.length() == 4 )
+    {
+        rtval =  vlst[0].toInt() << 24;
+        rtval += vlst[1].toInt() << 16;
+        rtval += vlst[2].toInt() << 8;
+        rtval += vlst[3].toInt();
+    }
+        
+    return rtval;
+}
 
 //-------------------------------------------------------------------------
 QString DcQUtils::getTimeStamp()
