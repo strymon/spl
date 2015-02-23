@@ -41,6 +41,9 @@ public slots:
     void setMessage( QString msg );
     void setFormat(QString fmt);
     void setNoCancel( bool noCan );
+    void useOkButton( bool useOk );
+    void setIoHealth( int badnessLvl );
+    
 
 protected:
     void showEvent(QShowEvent *e);
@@ -50,6 +53,8 @@ private:
     Ui_IoProgressDialog ui;
     bool _hasCancled;
     QWidget* _parent;
+
+
 };
 
 

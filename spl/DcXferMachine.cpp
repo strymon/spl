@@ -165,6 +165,7 @@ void DcXferMachine::replySlotForDataOut( const DcMidiData &data )
                 {
                     DCLOG() << "Throttling back MIDI output rate";
                     _midiOut->setSafeMode();
+                    _progressDialog->setIoHealth( 1 );
                 }
 
                 DCLOG() << "NAK - retry count at " << _retryCount;
@@ -249,27 +250,35 @@ void DcXferMachine::xferTimeout()
 {
     _watchdog.stop();
 
-    DCLOG() << (_isWriteMachine ? "Write Preset" : "Read Preset" ) << " Transfer Timeout";
-
-    if( --_retryCount < 0 )
+    if( _progressDialog->cancled() )
     {
-        DCLOG() << "No more retries, notify user";
-        _progressDialog->setError( "Unable to communicate with the device." );
-        _machine->postEvent( new DataXfer_TimeoutEvent() );
+        DCLOG() << (_isWriteMachine ? "Write Preset" : "Read Preset") << " cancled";
+        _machine->postEvent( new DataXfer_CancledEvent() );
     }
     else
     {
-        QThread::msleep( 100 );
-        if(!_midiOut->isSafeMode())
+        DCLOG() << (_isWriteMachine ? "Write Preset" : "Read Preset") << " Transfer Timeout";
+        if( --_retryCount < 0 )
         {
-            DCLOG() << "Throttling back MIDI out data rate";
-            _midiOut->setSafeMode();
+            DCLOG() << "No more retries, notify user";
+            _progressDialog->setError( "Unable to communicate with the device." );
+            _machine->postEvent( new DataXfer_TimeoutEvent() );
         }
+        else
+        {
+            QThread::msleep( 100 );
+            if( !_midiOut->isSafeMode() )
+            {
+                DCLOG() << "Throttling back MIDI out data rate";
+                _midiOut->setSafeMode();
+                _progressDialog->setIoHealth( 1 );
+            }
 
-        _midiOut->dataOutThrottled( _activeCmd);
+            _midiOut->dataOutThrottled( _activeCmd );
 
-        // Restart watchdog
-        _watchdog.start( _timeout );
+            // Restart watchdog
+            _watchdog.start( _timeout );
+        }
     }
 }
 
@@ -361,6 +370,11 @@ void DcXferMachine::go(DcDeviceDetails* devDetails, int maxPacketSize/*=-1*/, in
     _progressDialog->setProgress(0);
     _progressDialog->setMax(_cmdList.length());
     _progressDialog->show();
+    
+    if( _midiOut->isSafeMode() )
+    {
+        _progressDialog->setIoHealth( 1 );
+    }
 }
 
 //-------------------------------------------------------------------------
