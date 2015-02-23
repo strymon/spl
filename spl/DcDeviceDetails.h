@@ -45,6 +45,7 @@ struct DcDeviceDetails : public DcMidiDevIdent
         PresetNameLen = 0;
         PresetNameOffset = 0;
         DeviceIconResPath.clear();
+        CrippledIo = false;
     }
 
     bool isEmpty()
@@ -83,6 +84,7 @@ struct DcDeviceDetails : public DcMidiDevIdent
 
     QRegExp PresetRd_NAK;
     QRegExp PresetRd_ACK;
+    bool     CrippledIo;
 
 
 };

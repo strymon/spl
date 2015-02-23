@@ -14,12 +14,9 @@ const char* DcBootControl::kFUBad = "F0 00 01 55 42 0C 01 F7";
 const char* DcBootControl::kFUFailed = "F0 00 01 55 42 0C 02 F7";
 const char* DcBootControl::kFUResponcePattern = "F0 00 01 55 42 0C .. F7";
 
-DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o )
+DcBootControl::DcBootControl( DcMidiIn& i, DcMidiOut& o, DcDeviceDetails& d)
+    : _pMidiIn(&i),_pMidiOut(&o),_pDevDetails(&d),_blindMode(d.CrippledIo)
 {
-    // TODO: sharing the DcMidiIn and DcMidiOut objects should be managed properly 
-    // and in a brainless easy manner.
-    _pMidiIn = &i;
-    _pMidiOut = &o;
     _lastErrorMsg.setString(&_lastErrorMsgStr);
 }
 
@@ -37,15 +34,18 @@ bool DcBootControl::enableBootcode( )
     
     DcMidiData priRst = makePrivateResetCmd();
     if(0 == priRst.length())
+    {
         return false;
+    }
 
-#ifdef BAD_MIDI_WORKAROUND
-    DcMidiTrigger tc("F0 00 01 55");
-#else
-    DcMidiTrigger tc(RESPONCE_ENABLE_RECOVERY_ANY);
-#endif
 
+    DcMidiTrigger tc( _blindMode ? "F0 00 01 55" : RESPONCE_ENABLE_RECOVERY_ANY );
     DcAutoTrigger autoch(&tc,_pMidiIn);
+    
+    if( _blindMode )
+    {
+        DCLOG() << "Attempting to enable boot code in blind mode";
+    }
     
     // Issue a private reset
     _pMidiOut->dataOut(priRst);
@@ -62,43 +62,49 @@ bool DcBootControl::enableBootcode( )
             break;
         }
     }
-#ifdef BAD_MIDI_WORKAROUND
-    return true;
-#endif
 
-
+    
     bool rtval = false;
-    if(responceData.match(RESPONCE_ENABLE_RECOVERY_ACK))
+    if(_blindMode )
     {
-        // Verify device is in boot code
-        if(!isBootcode())
-        {
-            DCLOG() << "Failed to verify device is in boot code";
-            // Blind reset
-            _pMidiOut->dataOut("F0 00 01 55 42 01 F7");
-        }
-        else
-        {
-            DCLOG() << "Device is running boot code";
-            rtval = true;
-        }
-    }
-    else if(responceData.match(RESPONCE_ENABLE_RECOVERY_REJECTED))
-    {
-        DCLOG() << "The device has rejected the enable recovery command";
-    }
-    else if(responceData.match(RESPONCE_ENABLE_RECOVERY_FAILED))
-    {
-        DCLOG() << "Device has failed the enabled recovery command";
+        DCLOG() << "Device is running 'blind mode' boot code";
+        rtval = true;
     }
     else
     {
-        // Never saw the requested responce from the device
-        // Who knows what's going on now - incase the device is in boot-mode
-        // Send a reset command.
-        _pMidiOut->dataOut("F0 00 01 55 42 01 F7");
+        
+        if( responceData.match( RESPONCE_ENABLE_RECOVERY_ACK ) )
+        {
+            // Verify device is in boot code
+            if( !isBootcode() )
+            {
+                DCLOG() << "Failed to verify device is in boot code";
+                // Just send a reset in case status was lost
+                _pMidiOut->dataOut( "F0 00 01 55 42 01 F7" );
+            }
+            else
+            {
+                DCLOG() << "Device is running boot code";
+                rtval = true;
+            }
+        }
+        else if( responceData.match( RESPONCE_ENABLE_RECOVERY_REJECTED ) )
+        {
+            DCLOG() << "The device has rejected the enable recovery command";
+        }
+        else if( responceData.match( RESPONCE_ENABLE_RECOVERY_FAILED ) )
+        {
+            DCLOG() << "Device has failed the enabled recovery command";
+        }
+        else
+        {
+            // Never saw the requested responce from the device
+            // Who knows what's going on now - incase the device is in boot-mode
+            // Send a reset command.
+            _pMidiOut->dataOut( "F0 00 01 55 42 01 F7" );
 
-        DCLOG() << "Timeout entering boot code";
+            DCLOG() << "Timeout entering boot code";
+        }
     }
     return rtval;
 }
@@ -106,25 +112,38 @@ bool DcBootControl::enableBootcode( )
 bool DcBootControl::identify(DcMidiDevIdent* id /*=0 */)
 {
     bool rtval = false;
-
-    DcAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
-#ifdef BAD_MIDI_WORKAROUND
-    _pMidiOut->dataOut("F0 00 01 55 12 01 21 F7 F0 7E 7F 06 01 F7");
-#else
-       _pMidiOut->dataOut("F0 7E 7F 06 01 F7");
-#endif
+    DcAutoTrigger autotc(_blindMode ? "F0 7E .. 06" :  "F0 7E .. 06 02 00 01 55",_pMidiIn );
+    _pMidiOut->dataOut( "F0 7E 7F 06 01 F7" );
 
     // Wait for the response data, or timeout after 300ms
-    if(autotc.wait(3000))
+    if( autotc.wait( 3000 ) )
     {
-        if(id)
+        if( id )
         {
             DcMidiData md;
-            if(autotc.dequeue(md))
+            if( autotc.dequeue( md ) )
             {
-                id->fromIdentData(md);
-                DCLOG() << id->toString() << "\n";
-                rtval = true;
+                if( _blindMode && _pDevDetails && !_pDevDetails->isEmpty())
+                {
+                    
+                    DcMidiDevIdent* dcid = static_cast<DcMidiDevIdent*>(_pDevDetails);
+                    if( dcid )
+                    {
+                        *id = *dcid;
+                        DCLOG() << "BootControl 'blind mode' Id Result: " << id->toString() << "\n";
+                        rtval = true;
+                    }
+                    else
+                    {
+                        DCLOG() << "BootControl 'blind mode' FAIL\n";
+                    }
+                }
+                else
+                {
+                    id->fromIdentData( md );
+                    DCLOG() << "BootControl Id Result: " << id->toString() << "\n";
+                    rtval = true;
+                }
             }
         }
         else
@@ -134,15 +153,16 @@ bool DcBootControl::identify(DcMidiDevIdent* id /*=0 */)
     }
     else
     {
-        _lastErrorMsg << "Timeout waiting for identity response";
+        _lastErrorMsg << "Timeout waiting for identity response in BootControl";
     }
+    
     
     return rtval;
 }
 
 bool DcBootControl::writeMidi(DcMidiData& msg)
 {
-    _pMidiOut->dataOutThrottled(msg);
+    _pMidiOut->dataOut(msg);
     return true;
 }
 
@@ -150,17 +170,13 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
 {
     bool rtval = false;
 
-#ifdef BAD_MIDI_WORKAROUND
-    DcAutoTrigger autotc("F0 00 01 55 42",_pMidiIn);
-#else
-    DcAutoTrigger autotc(kFUResponcePattern,_pMidiIn);
-#endif
+    DcAutoTrigger autotc( _blindMode ? "F0 00 01 55" : kFUResponcePattern ,_pMidiIn );
 
-    // Magic number 8 is the response control flags, a 3 will
-    // deliver status.
+    
+    // Magic number 8 is the response control flags, a 3 will deliver status.
     msg[8] = 0x03;
 
-    _pMidiOut->dataOutThrottled(msg);
+    _pMidiOut->dataOut(msg);
 
     DcMidiData md;
 
@@ -170,30 +186,38 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
         if(autotc.dequeue(md))
         {
 
-#ifdef BAD_MIDI_WORKAROUND
-            // nop - can't get full status from a bad midi device
-            rtval =  true;
-#else
-            if(md == kFUGood)
+            if(_blindMode )
             {
-                rtval =  true;
-            }
-            else if(md == kFUBad)
-            {
-                DCLOG() << "kFUBad";
-                _lastErrorMsg << "Device reject firmware command - BAD packet.";
-            }
-            else if(md == kFUFailed)
-            {
-                DCLOG() << "kFUFailed";
-                _lastErrorMsg << "Device failed firmware command.";
+                // We expect this, so log anything else
+                if(!md.match("F0 00 01 55 42") )
+                {
+                    DCLOG() << "blindMode write responce: " << md.toString();
+                }
+
+                rtval = true;
             }
             else
             {
-                DCLOG() << "Unknown response: " << md.toString(' ') << "\n";
-                _lastErrorMsg << "Firmware write generated an unknown response from the device.";
+                if( md == kFUGood )
+                {
+                    rtval = true;
+                }
+                else if( md == kFUBad )
+                {
+                    DCLOG() << "kFUBad";
+                    _lastErrorMsg << "Device reject firmware command - BAD packet.";
+                }
+                else if( md == kFUFailed )
+                {
+                    DCLOG() << "kFUFailed";
+                    _lastErrorMsg << "Device failed firmware command.";
+                }
+                else
+                {
+                    DCLOG() << "Unknown response: " << md.toString( ' ' ) << "\n";
+                    _lastErrorMsg << "Firmware write generated an unknown response from the device.";
+                }
             }
-#endif
         }
     }
     else
@@ -273,8 +297,8 @@ bool DcBootControl::getBootCodeInfo(DcBootCodeInfo& bcInfo)
 
 bool DcBootControl::isBootcode()
 {
-    DcAutoTrigger autotc(RESPONCE_BANK_INFO_ANY,_pMidiIn);
-    _pMidiOut->dataOutThrottled(CMD_GET_BANK0_INFO);
+    DcAutoTrigger autotc(_blindMode ? "F0 00 01 55" : RESPONCE_BANK_INFO_ANY,_pMidiIn);
+    _pMidiOut->dataOut(CMD_GET_BANK0_INFO);
     
     bool rtval = autotc.wait(400);
 
@@ -285,7 +309,7 @@ bool DcBootControl::checkPid(int pid)
 {
     QString responce = QString( RESPONCE_READ_PID_FID ).arg( (pid & 0xFF00) >> 8).arg(pid & 0xFF);
     DcAutoTrigger autotc( responce,_pMidiIn );
-    _pMidiOut->dataOutThrottled( DCBC_READ_PID_FID);
+    _pMidiOut->dataOut( DCBC_READ_PID_FID);
 
     bool rtval = autotc.wait( 400 );
 
@@ -294,8 +318,15 @@ bool DcBootControl::checkPid(int pid)
 
 int DcBootControl::countResponcePattern( const QString& cmd, const QString& pattern, int timeOutMs /*= 800*/)
 {
-    DcAutoTrigger autotc( pattern,_pMidiIn );
-    _pMidiOut->dataOutThrottled( cmd);
+    DcMidiData md( pattern );
+    
+    if( _blindMode )
+    {
+        md = md.mid( 0,4 );
+    }
+    
+    DcAutoTrigger autotc( md.toString(),_pMidiIn );
+    _pMidiOut->dataOut( cmd);
     QThread::msleep( timeOutMs );
     int cnt = autotc.getCount();
     return cnt;
@@ -309,9 +340,21 @@ void DcBootControl::setMidiOutSafeMode()
     }
 }
 
+bool DcBootControl::isBlindMode()
+{
+    return _blindMode;
+}
+
 bool DcBootControl::activateBank( int bankNumber )
 {
     bool rtval = false;
+
+    // Fail this command in blind mode
+    if( _blindMode )
+    {
+        DCLOG() << "activateBank " << bankNumber << " is not available in blind mode - fail";
+        return false;
+    }
 
     // Parameter Checking
     if(bankNumber != 0 && bankNumber != 1)
@@ -366,14 +409,9 @@ bool DcBootControl::exitBoot( DcMidiDevIdent* id /*= 0*/ )
 {
     bool rtval = false;
     
-#ifdef BAD_MIDI_WORKAROUND
-    DcAutoTrigger autotc("F0 7E .. 06",_pMidiIn);
-    _pMidiOut->dataOutThrottled("F0 00 01 55 42 01 F7");
-#else
     // Setup to wait for Strymon identity data
-    DcAutoTrigger autotc("F0 7E .. 06 02 00 01 55",_pMidiIn);
-    _pMidiOut->dataOutThrottled("F0 00 01 55 42 01 F7");
-#endif
+    DcAutoTrigger autotc(_blindMode ? "F0 7E .. 06" : "F0 7E .. 06 02 00 01 55",_pMidiIn);
+    _pMidiOut->dataOut("F0 00 01 55 42 01 F7");
 
     // Wait 4 seconds for the response data
     if(autotc.wait(4000))
@@ -402,7 +440,7 @@ DcMidiData DcBootControl::makePrivateResetCmd()
 {
     DcMidiDevIdent id;
     DcMidiData priRst;
-
+    
     // Verify we can ID the connected device
     if(false == identify(&id))
     {
@@ -426,7 +464,7 @@ bool DcBootControl::privateReset()
         return false;
     }
     
-    _pMidiOut->dataOutThrottled(priRst);
+    _pMidiOut->dataOut(priRst);
     
     return true;
 }
