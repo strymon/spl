@@ -11,5 +11,8 @@
         <file>res/round_check_green.png</file>
         <file>res/tri_bang.png</file>
         <file>res/bigsky_100.png</file>
+        <file>res/detect_device_100.png</file>
+        <file>res/midi_timing.gif</file>
+        <file>res/bootcode_100.png</file>
     </qresource>
 </RCC>
