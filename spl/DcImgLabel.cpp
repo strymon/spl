@@ -104,3 +104,25 @@ void DcImgLabel::dragMoveEvent(QDragMoveEvent *event)
 {
     event->acceptProposedAction();
 }
+
+void DcImgLabel::mouseMoveEvent( QMouseEvent * )
+
+{
+    emit mouseMoved();
+    
+}
+
+void DcImgLabel::enterEvent( QEvent * )
+{
+    
+//     _orgW = this->pixmap()->width();
+//     _orgH = this->pixmap()->height();
+//     setPixmap( this->pixmap()->scaled( _orgW - 1,_orgH - 1 ) );
+    emit on_enter();
+}
+
+void DcImgLabel::leaveEvent( QEvent * )
+{
+//    setPixmap( this->pixmap()->scaled( _orgW ,_orgH) );
+    emit on_leave();
+}
