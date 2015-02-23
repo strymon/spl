@@ -366,6 +366,9 @@
                 <height>100</height>
                </size>
               </property>
+              <property name="mouseTracking">
+               <bool>true</bool>
+              </property>
               <property name="acceptDrops">
                <bool>true</bool>
               </property>
@@ -491,6 +494,7 @@
     <bool>false</bool>
    </attribute>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>

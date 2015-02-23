@@ -70,6 +70,7 @@ signals:
     void readPresets_setupDone_signal();
     void writePresets_setupDone_signal();
     void readPresets_abort_signal();
+    void midiDeviceCrippled_about_signal();
 
 private slots:
 
@@ -109,7 +110,12 @@ private slots:
        (like a watchdog timer, etc..., yes, very complected indeed)
     */ 
     void recvIdData(const DcMidiData &data);
-   
+
+    void SetupAppWithDevice( const DcMidiData &data );
+
+    void updateStatusbar();
+
+
     /*!
       Identity response MIDI "trigger" slot.  Method
       is assigned to the "Identify Device" MIDI trigger.
@@ -142,6 +148,15 @@ private slots:
     void clearDeviceUI();
 
     void detectDevice_entered();
+
+    void checkTestAndConfigureMidiPorts( const QString &in_port,const QString &out_port );
+
+    void dlgMsg(const QString& msg);
+
+  
+
+   
+
     void erroRecovery_entered();
     void shutdownMidiIo();
 
@@ -356,7 +371,7 @@ private:
     DcMidiIn           _midiIn;
     DcMidiOut          _midiOut;
 
-    IoProgressDialog* _progressDialog;
+    IoProgressDialog* _iodlg;
 
     QTimer          _watchdog_timer;
 
@@ -406,9 +421,8 @@ protected:
     // QSettings helpers
     void writeSettings();
     void readSettings();
-
-
-    bool savePresetBinary(const QString &fileName,const QList<DcMidiData>& dataList);
+    bool sendAndWait( DcMidiData& md,const QString& cmd,const QString& waitForData,int timeout );
+    bool savePresetBinary( const QString &fileName,const QList<DcMidiData>& dataList );
     bool savePresetBinary(const QString &fileName,const DcMidiData& md);
     bool loadPresetBinary(const QString &fileName,QList<DcMidiData>& dataList);
     bool loadPresetBinary( const QString &fileName,DcMidiData& md );
@@ -437,11 +451,229 @@ protected:
 #ifdef DCSIO_FEATURE
         DcQSio* _sio;
 #endif
+        bool _crippledMode;
+        int _msgDelayTime;
+        QString _devInfo;
+        QPixmap  _devPix;
+        //    QDir  _pluginsDir;
 
-    //    QDir  _pluginsDir;
+        struct DeviceGuessData
+        {
+            DeviceGuessData() {}
+            DeviceGuessData( const QString& n,const QString& mId,const QString& f,const QString& p ) :
+                name( n ),manId( mId ),fid( f ),pid( p )
+            {}
+
+            DeviceGuessData( const DeviceGuessData& other )
+            {
+                name = other.name;
+                manId = other.manId;
+                pid = other.pid;
+                fid = other.fid;
+            }
+
+            // Device name: e.g. Mobius, BigSky, or TimeLine
+            QString name;
+            
+            // Manufacture ID: e.g. 00 01 55
+            QString manId;
+
+            // Product id byte: 01 or 02
+            QString pid;
+            
+            // Family id byte: 12
+            QString fid;
+            
+            QString MakeCmd( const QString& cmdByte )
+            {
+                return SoxHdr() + " " + cmdByte + " F7";
+            }
+            
+            /** Return Id response limited by number of given bytes
+             * bcnt - number of bytes, or all if zero
+             *  @return QString
+             */
+            QString IdResponce(int bcnt = 0)
+            {
+                QString rtval = QString( "F0 7E 00 06 02 %1 %2 00 %3 00 .. .. .. .. F7" ).arg( manId ).arg( fid ).arg( pid );
+
+                bcnt = qMin( bcnt,rtval.length() / 3 );
+
+                if( bcnt )
+                {
+                    rtval = rtval.mid( 0,bcnt * 3 ).trimmed();
+                }
+
+                return rtval;
+            }
+
+            // Return an id response with the given version string.
+            // ver must be formated: ver=
+            QString IdResponceWithVersion(int M, int m, int i)
+            {
+                QString MM = QString::number( 0x30 + M,16 );
+                QString mm = QString::number( 0x30 + m,16 );
+                QString ii = QString::number( 0x30 + i,16 );
+                return QString( "F0 7E 00 06 02 %1 %2 00 %3 00 %4 %5 %6 %7 F7" ).arg( manId ).arg( fid ).arg( pid ).arg("00").arg(MM).arg(mm).arg(ii);
+            }
 
 
+            // Drop every 'cnt' bytes in the given midi data
+            QString DropEvery(const QString& md, int cnt)
+            {
+                QString srcStr = md;
+                srcStr.replace( ' ',"" );
+                int lc = srcStr.length()/2;
 
+                int num = (cnt - 1) * 2;
+                Q_ASSERT( lc > cnt );
+                
+                QString rtval;
+                lc = lc / (cnt-1);
+                
+                
+                int acc = 0;
+                for (int ii = 0; ii < lc ; ii++)
+                {
+                    rtval +=  srcStr.mid(acc,num);
+                    acc += num + 2;
+                    if( acc > srcStr.length() - cnt )
+                    {
+                        break;
+                    }
+                }
+
+                srcStr = rtval;
+                rtval.clear();
+                for (int idx = 0; idx < srcStr.length() ; idx+=2)
+                {
+                    rtval += srcStr.mid( idx,2 ) + " ";
+                }
+               
+                return rtval.trimmed();
+            }
+            
+            
+            /** Return Sox and manufacture id: e.g. F0 00 01 55
+             *  @return QT_NAMESPACE::QString
+             */
+             QString SoxManId()
+            {
+                return QString( "F0 %1" ).arg( manId );
+            }
+
+            /** Returns a Sox and header: e.g. F0 00 01 55 12 01
+             *  @return QT_NAMESPACE::QString
+             */
+             QString SoxHdr()
+            {
+                return QString( "F0 %1 %2 %3" ).arg( manId ).arg(fid).arg(pid);
+            }
+// Test
+//              DeviceGuessData dgd( "BigSky","00 01 55","12","03" );
+// 
+//              Q_ASSERT( dgd.MakeCmd( "21" ) == "F0 00 01 55 12 03 21 F7" );
+// 
+//              QString ss = dgd.IdResponce();
+// 
+//              QString str = dgd.DropEvery( ss,6 );
+//              Q_ASSERT( str == "F0 7E 00 06 02 01 55 12 00 03 .. .. .. .. F7" );
+
+        };
+
+    class IoTestResultInfo
+    {
+    public:
+        enum TestResult
+        {
+            ok,
+            portOpenError,
+            canceledTest,
+        };
+
+        IoTestResultInfo() : _validResults( false ),_devCrippled( false ),resultCode( ok ) {}
+        IoTestResultInfo( const QString& in,const QString& out ) : inName( in ),outName( out ),_validResults( false ),_devCrippled( true ),resultCode( ok ) {}
+        void clear()
+        {
+            _spewOfMessages.clear();
+            _devCrippled = false;
+            _validResults = false;
+            resultCode = ok;
+            _idData.clear();
+            _isStrymon = false;
+            inName.clear();
+            outName.clear();
+        }
+
+        bool isValid() { return _validResults; }
+        
+        bool isCrippled() const{ return _devCrippled; }
+        
+        void setCrippled( bool yesNo )
+        {
+            _devCrippled = yesNo;
+        }
+
+        void setValid( bool yesNo = true ) { _validResults = yesNo; }
+        
+        void log( const QString& msg )
+        {
+            _spewOfMessages << msg;
+        }
+        
+        void setResult( IoTestResultInfo::TestResult r )
+        {
+            resultCode = r;
+        }
+
+        TestResult getResult() const { return resultCode; }
+        
+        bool wasCanceled() const { return resultCode == canceledTest; }
+        bool wasPortError() const { return resultCode == portOpenError; }
+
+        void setIdData( const DcMidiData& md )
+        {
+            _idData = md;
+        }
+
+        DcMidiData getIdData()
+        {
+            return _idData;
+        }
+        
+        bool isStrymon() const { return _isStrymon; }
+        
+        void setStrymon( bool yesNo = true )
+        {
+            _isStrymon = yesNo;
+        }
+
+        QString getLog(const QString& joinStr = "\n") const
+        {
+            return _spewOfMessages.join(joinStr);
+        }
+        
+        void setPortNames( const QString& in,const QString& out )
+        {
+            inName = in;
+            outName = out;
+        }
+
+    private:
+        QString inName;
+        QString outName;
+        QStringList _spewOfMessages;
+        DcMidiData _idData;
+        bool _validResults;
+        bool _devCrippled;
+        bool _isStrymon;
+        TestResult resultCode;
+        
+
+    } _ioTestResults;
+
+    bool guessAndCheckDevice( DeviceGuessData& dgd,IoTestResultInfo &tinfo );
+    bool verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevIdent &id,IoTestResultInfo& tinfo ); 
 };
 
 #endif // DcPresetLib_H
