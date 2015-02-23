@@ -26,10 +26,14 @@
 #include "DcDeviceDetails.h"
 
 
+
 MidiSettings::MidiSettings( QWidget *parent /*= 0*/ )
-    : QDialog(parent)
+    : QDialog( parent)
 {
     ui.setupUi(this);
+
+    // Remove the 
+     setWindowFlags( (windowFlags() & (~Qt::WindowContextHelpButtonHint)) );
 }
 
 
@@ -65,7 +69,7 @@ MidiSettings::MidiSettings( QWidget *parent /*= 0*/ )
      ui.midiOutCombo->setCurrentIndex(idx);
 
      ui.resultLabel->setText("no result");
-     ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 170, 0);}");
+     ui.resultLabel->setStyleSheet("background-color: rgb(255, 170, 0)");
 
       this->setWindowIcon(QIcon(":/images/res/dcpm_256x256x32.png"));
 
@@ -97,14 +101,17 @@ void MidiSettings::on_testButton_clicked()
 
     _midiIn.init();
     _midiOut.init();
+    _midiOut.setDelayBetweenBackets( 320 );
+    _midiOut.setMaxPacketSize( 1 );
 
     _testResult = DcTestResults::NotFoundTimeout;
-    ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 170, 0);}");
+    //ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 170, 0);}");
+    ui.resultLabel->setStyleSheet( "background-color: rgb(255, 170, 0)" );
 
     if(!_midiOut.open(ui.midiOutCombo->currentText()))
     {
         ui.resultLabel->setText("MIDI Out Busy");
-        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
+        ui.resultLabel->setStyleSheet("background-color: rgb(170, 0, 0)");
         _testResult = DcTestResults::PortBusy;;
         qDebug() << "MIDI OUT device " << ui.midiOutCombo->currentText() << " is busy";
     }
@@ -112,7 +119,7 @@ void MidiSettings::on_testButton_clicked()
     if(!_midiIn.open(ui.midiInCombo->currentText()))
     {
         ui.resultLabel->setText("MIDI In Busy");
-        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
+        ui.resultLabel->setStyleSheet("background-color: rgb(170, 0, 0)");
         _testResult = DcTestResults::PortBusy;
         qDebug() << "MIDI IN device " << ui.midiInCombo->currentText() << " is busy";
     }
@@ -173,12 +180,20 @@ void MidiSettings::recvDataForTest(const DcMidiData &data)
         }
         else
         {
-            _testResult = DcTestResults::UnknownDevice;
-            _unkownDevList.append(ident);
-            qWarning() << "A device responded: " << ident.getManufactureName() << " " << ident.toString();
-            qWarning() << "It's not supported, data= " << data.toString(' ');
+            if( data.match( "F0 7E .. 06 02 .. .. .. .. " )  && data.length() == 15)
+            {
+                _testResult = DcTestResults::CrippledInterface;
+            }
+            else
+            {
+                _testResult = DcTestResults::UnknownDevice;
+                _unkownDevList.append( ident );
+                qWarning() << "A device responded: " << ident.getManufactureName() << " " << ident.toString();
+                qWarning() << "It's not supported, data= " << data.toString( ' ' );
+            }
         }
     }
+
 
 }
 
@@ -202,7 +217,7 @@ void MidiSettings::checkPortSelections()
 {
     bool selectionsMade = isPortPairSelected();
     ui.testButton->setEnabled(selectionsMade);
-    ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 59, 48;}");
+    ui.resultLabel->setStyleSheet("background-color: rgb(255, 59, 48)");
     ui.resultLabel->setText("Not Tested");
 }
 
@@ -231,7 +246,7 @@ void MidiSettings::updateTestResult()
     if(_testResult == DcTestResults::Success)
     {
         ui.resultLabel->setText("success");
-        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(85, 170, 0);}");
+        ui.resultLabel->setStyleSheet("background-color: rgb(85, 170, 0)");
     }
     else if(_testResult == DcTestResults::UnknownDevice)
     {
@@ -243,14 +258,20 @@ void MidiSettings::updateTestResult()
         }
         
         ui.resultLabel->setText(lastUnkownInList);
-        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(255, 255, 102);}");
+        ui.resultLabel->setStyleSheet("background-color: rgb(255, 255, 102)");
 
     }
     else if(_testResult == DcTestResults::NotFoundTimeout)
     {
         qDebug() << "No response from the MIDI port";
         ui.resultLabel->setText("no response");
-        ui.resultLabel->setStyleSheet("QLabel {background-color: rgb(170, 0, 0);}");
+        ui.resultLabel->setStyleSheet("background-color: rgb(170, 0, 0)");
+    }
+    else if( _testResult == DcTestResults::CrippledInterface )
+    {
+        qDebug() << "Crippled device response from the MIDI port";
+        ui.resultLabel->setText( "might work" );
+        ui.resultLabel->setStyleSheet( "background-color: rgb(255,222, 170)" );
     }
 }
 

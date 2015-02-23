@@ -35,7 +35,9 @@ namespace DcTestResults
         Success,          // A supported device was found
         UnknownDevice,    // Somethings there, but it's not supported
         NotFoundTimeout,  // Nothing came back
-        PortBusy          // Can't open port
+        PortBusy,          // Can't open port
+        CrippledInterface
+
     };
 }
 
