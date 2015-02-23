@@ -1192,7 +1192,7 @@ void DcConsoleForm::requestRefresh()
 void DcConsoleForm::cmd_exit(DcConArgs args)
 {
     Q_UNUSED(args);
-    QApplication::quit();
+    QApplication::closeAllWindows();
 }
 
 
