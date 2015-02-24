@@ -60,8 +60,6 @@ QString DcQUtils::getOsVersion()
             return "Unknown Windows";
     }
 #elif defined Q_OS_MAC
-    int foo = (int)QSysInfo::MacintoshVersion;
-
     switch (QSysInfo::MacintoshVersion)
     {
         case QSysInfo::MV_Unknown: return "Unknown Mac";

@@ -7,7 +7,7 @@ TARGET = spl
 TEMPLATE = app
 
 include("$$top_srcdir/defaults.pri")
-CONFIG += depend_includepath
+CONFIG += depend_includepath c++11
 
 INCLUDEPATH += $$top_srcdir/spl
 

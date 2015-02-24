@@ -1,6 +1,7 @@
 TARGET   = dcmidi
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += c++11
 
 RTMIDI_DIR = RtMidi
 
