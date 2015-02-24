@@ -478,11 +478,11 @@ protected:
             // Manufacture ID: e.g. 00 01 55
             QString manId;
 
-            // Product id byte: 01 or 02
-            QString pid;
-            
             // Family id byte: 12
             QString fid;
+
+            // Product id byte: 01 or 02
+            QString pid;
             
             QString MakeCmd( const QString& cmdByte )
             {

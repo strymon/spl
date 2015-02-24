@@ -618,6 +618,12 @@ void DcPresetLib::dlgMsg( const QString& msg )
     QApplication::processEvents();
     QThread::msleep( _msgDelayTime );
 }
+//
+// On an MacMini runnint OSX 10.10.2 I saw this after MIDI device usage:
+// Feb 23 18:19:44 yellow kernel[0]: USBF:    1114812. 60    The IOUSBFamily was not able to enumerate a device.
+// Feb 23 18:19:45 yellow kernel[0]: USBF:    1114812.591    The IOUSBFamily is having trouble enumerating a USB device that has been plugged in.
+// It will keep retrying.  (Port 1 of Hub at 0x14800000)
+// <sigh>
 
 bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevIdent &id,IoTestResultInfo& tinfo )
 {
@@ -635,7 +641,7 @@ bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevI
         }
 
         tinfo.log( "send: F0 7E 7F 06 01 F7, wait for partial identity data: 'F0 7E .. 06 02'" );
-        if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",500 ) )
+        if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",1000 ) )
         {
             // F0 7E 00 06 02 00 01 55 12 00 .. 00 3B 31 32 34 F7
             tinfo.log( "ok: now match more of the identity data: F0 7E .. 06 02 00 .. .. .. " );
@@ -689,7 +695,7 @@ bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevI
                 }
 
                 // Resend the ID response
-                if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",500 ) )
+                if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",1000 ) )
                 {
                     tinfo.log( "ok: received response " + md.toString(' ') );
                     
@@ -750,12 +756,12 @@ bool DcPresetLib::guessAndCheckDevice(DeviceGuessData& dgd, IoTestResultInfo &ti
 //    tinfo.log( devName + "? send: F0 00 01 55 " + sysexId + " 21 F7 and wait for: F0 00 01 55" );
 
     // Got partial response,try to discover a device
-    if( sendAndWait( rdesn,dgd.MakeCmd( "21" ),dgd.SoxManId(),500 ) )
+    if( sendAndWait( rdesn,dgd.MakeCmd( "21" ),dgd.SoxManId(),1000 ) )
     {
         tinfo.log( "ok: this must be a " + dgd.name );
 
         tinfo.log( "try: resend id request: F0 7E 7F 06 01 F7 and wait for F0 7E .. 06 02, this might be a valid " + dgd.name + " response" );
-        if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",200 ) )
+        if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",1000 ) )
         {
             tinfo.log( "ok: see if the data is valid: " + md.toString( ' ' ) );
             tinfo.setStrymon( true );
@@ -3772,3 +3778,4 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
     }
     ui.devImgLabel->setDisabled(false);
 }
+
