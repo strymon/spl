@@ -22,8 +22,10 @@
 
 
 #include "DcMidi/DcMidiData.h"
-#include <QKeyEvent>
+#include "DcMidiDevDefs.h"
+#include "DcMidi/DcMidiIdent.h"
 
+#include <QKeyEvent>
 #include <QDir>
 #include <QSysInfo>
 #include <QStandardPaths>
@@ -49,7 +51,6 @@
 #include <QGraphicsOpacityEffect>
 
 #include "MidiSettings.h"
-#include "DcMidiDevDefs.h"
 #include <QThread>
 #include "RenameDialog.h"
 #include "MoveDialog.h"
@@ -65,7 +66,8 @@
 
 #include "ui_DcplAbout.h"
 #include <QApplication>
-#include "DcMidi/DcMidiIdent.h"
+
+
 
 #include "DcConsoleForm.h"
 #include "DcUpdateDialogMgr.h"
@@ -137,35 +139,52 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     ui.mainToolBar->hide();
     this->setWindowIcon(QIcon(":/images/res/dcpm_256x256x32.png"));
 
-  
+    ui.devImgLabel->setNormalImgName( ":/images/res/devunknown_100.png" );
+    ui.devImgLabel->setHoverImgName( ":/images/res/detect_device_100.png" );
+
+
     //QObject::connect(ui.devImgLabel,SIGNAL(clicked()),this,SLOT(on_devImgClicked()));
     
     connect( ui.devImgLabel,&DcImgLabel::clicked, [&]() {
         
-        _machine.postEvent( new VerifyDeviceConnection() );
-       ui.devImgLabel->setPixmap( QPixmap( ":/images/res/detect_device_100.png" ) );
-         _devPix = *ui.devImgLabel->pixmap();
-         _devInfo = ui.devInfoLabel->text();
-       ui.devInfoLabel->setText( "Detect Device" );
+        QString inp = _midiSettings->getInPortName();
+        QString outp = _midiSettings->getOutPortName();
+        if( inp.isEmpty() || outp.isEmpty() || 
+            !_midiIn.getPortNames().contains( inp ) 
+            || !_midiOut.getPortNames().contains(outp) )
+        {
+            QMetaObject::invokeMethod( ui.actionMIDI_Ports,"triggered",Qt::QueuedConnection );
+        }
+        else
+        {
+            _machine.postEvent( new VerifyDeviceConnection() );
+
+//             ui.devImgLabel->setPixmap( QPixmap( ) );
+//             _devPix = *ui.devImgLabel->pixmap();
+//             _devInfo = ui.devInfoLabel->text();
+//            ui.devInfoLabel->setText( "Detect Device" );
+
+        }
+
         
     } );
 
     connect( ui.devImgLabel,&DcImgLabel::on_enter,[&]() {
-        QString lbl = "Detect Device";
-        if( ui.devInfoLabel->text() != lbl )
-        {
-            _devPix = *ui.devImgLabel->pixmap();
-            ui.devImgLabel->setPixmap( QPixmap( ":/images/res/detect_device_100.png" ) );
-            _devInfo = ui.devInfoLabel->text();
-        }
-        ui.devInfoLabel->setText( lbl );
+//         QString lbl = "Detect Device";
+//         if( ui.devInfoLabel->text() != lbl )
+//         {
+//             _devPix = *ui.devImgLabel->pixmap();
+//             ui.devImgLabel->setPixmap( QPixmap( ":/images/res/detect_device_100.png" ) );
+//             _devInfo = ui.devInfoLabel->text();
+//         }
+//         ui.devInfoLabel->setText( lbl );
     } );
 
     connect( ui.devImgLabel,&DcImgLabel::on_leave,[&]() {
         
-        ui.devInfoLabel->setText( _devInfo );
-        ui.devImgLabel->setPixmap( _devPix );
-        _devInfo = "";
+//         ui.devInfoLabel->setText( _devInfo );
+//         ui.devImgLabel->setPixmap( _devPix );
+//         _devInfo = "";
     } );
 
 //    QObject::connect(ui.devImgLabel,SIGNAL( clicked() ),this,SLOT( on_devImgClicked() ) );
@@ -385,50 +404,60 @@ void DcPresetLib::detectDevice_entered()
 
     QString in_port = _midiSettings->getInPortName();
     QString out_port = _midiSettings->getOutPortName();
-    
+
     DCLOG() << "Detecting devices on ports: " << in_port << "," << out_port;
-    
-    bool success = false;
     
     _devDetails.clear();
     conResetReadOnlySymbolDefines();
     
-    
-    checkTestAndConfigureMidiPorts( in_port,out_port );
-
-    // Need to set this state after checkTestAndConfigureMidiPorts
-    _crippledMode = false;
-
-    QSettings settings;
-    _midiOut.setSafeModeDefaults( settings.value( "midiio/SafeModeMaxMsgSize",32 ).toInt(),
-        settings.value( "midiio/SafeModeDelayPerMsgChunk",50000 ).toInt() );
-
-
-    return;
-
-    if(!success)
+    if( checkTestAndConfigureMidiPorts( in_port,out_port ) )
     {
+        emit deviceReady();
+    }
+    else
+    {
+        // Reset the crippled mode
+        _crippledMode = false;
+
+        // Setup the defaults
+        QSettings settings;
+        _midiOut.setSafeModeDefaults( settings.value( "midiio/SafeModeMaxMsgSize",32 ).toInt(),
+        settings.value( "midiio/SafeModeDelayPerMsgChunk",50000 ).toInt() );
+        ui.devImgLabel->setNormalImgName( ":/images/res/devunknown_100.png" );
+        ui.devInfoLabel->setText( "" );
         emit deviceNotFound();
     }
-
+    updateStatusbar();
 }
 
 
-void DcPresetLib::checkTestAndConfigureMidiPorts( const QString &in_port,const QString &out_port )
+bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_port )
 {
-    _ioTestResults.clear();
-    _ioTestResults.setPortNames(in_port,out_port);
-    
     // Test DeviceGuessdata
     DeviceGuessData dgd;
 
+    _midiIn.init();
+    _midiOut.init();
+
+    // Verify the port names passed in are still contained in the avalible port lists:
+
+    if( !in_port.isEmpty() )
+    {
+        if( !_midiIn.getPortNames().contains( in_port ) )
+            in_port.clear();
+    }
+
+    if( !out_port.isEmpty() )
+    {
+        if( !_midiOut.getPortNames().contains( out_port ) )
+            out_port.clear();
+    }
+
+    _ioTestResults.clear();
+    _ioTestResults.setPortNames( in_port,out_port );
 
     if( !in_port.isEmpty() && !out_port.isEmpty() )
     {
-        _midiIn.init();
-        _midiOut.init();
-        
-        
         // UI: clear status
         statusBar()->showMessage( "" );
         statusBar()->setStyleSheet( "" );
@@ -532,10 +561,8 @@ void DcPresetLib::checkTestAndConfigureMidiPorts( const QString &in_port,const Q
             
             // Setup a midi auto trigger in case a device arrives
             _midiIn.addTrigger( *_idResponceTrigger );
-            clearDeviceUI();
             DCLOG() << _ioTestResults.getLog();
-            emit deviceNotFound();
-            return;
+            return false;
 
         } while( false );
 
@@ -547,8 +574,7 @@ void DcPresetLib::checkTestAndConfigureMidiPorts( const QString &in_port,const Q
             _iodlg->hide();
 
             _midiIn.addTrigger( *_idResponceTrigger );
-            clearDeviceUI();
-            emit deviceNotFound();
+            return false;
         }
         else if(_ioTestResults.wasPortError() )
         {
@@ -557,8 +583,7 @@ void DcPresetLib::checkTestAndConfigureMidiPorts( const QString &in_port,const Q
             _iodlg->setNoCancel( false );
             _iodlg->exec();
             _midiIn.addTrigger( *_idResponceTrigger );
-            clearDeviceUI();
-            emit deviceNotFound();
+            return false;
         }
         else
         {
@@ -568,50 +593,20 @@ void DcPresetLib::checkTestAndConfigureMidiPorts( const QString &in_port,const Q
                 _devDetails.fromIdentData( _ioTestResults.getIdData());
                 SetupAppWithDevice( _ioTestResults.getIdData() );
                 _iodlg->hide();
-                updateStatusbar();
-                emit deviceReady();
+                return true;
             }
             else
             {
                 dlgMsg( "Unsupported Device Detected" );
                 _iodlg->hide();
                 _midiIn.addTrigger( *_idResponceTrigger );
-                clearDeviceUI();
-                updateStatusbar();
-                emit deviceNotFound();
+                return false;
             }
 
         }
-        /*
-
-                QSettings settings;
-                _midiOut.setSafeModeDefaults(settings.value("midiio/SafeModeMaxMsgSize",1).toInt(),
-                settings.value("midiio/SafeModeDelayPerMsgChunk",320).toInt());
-
-                if(_midiIn.open( in_port) && _midiOut.open( out_port ))
-                {
-                QThread::msleep(25);
-                QObject::connect(&_midiIn, &DcMidiIn::dataIn, this, &DcPresetLib::recvIdData);
-
-                _midiOut.setDelayBetweenBackets(_delayPerMsgChunk);
-                _midiOut.setMaxPacketSize(_maxMsgSize);
-
-                // Send global Identify Request
-                _midiOut.dataOut("F7 F0 7E 7F 06 01 F7");
-
-                // Devices only have 2 seconds to reply with the identity information
-                _watchdog_timer.setInterval(2000);
-                _watchdog_timer.start();
-
-                success = true;
-                }
-                else
-                {
-                _midiIn.close();
-                _midiOut.close();
-                }
-                */
     }
+
+    return false;
 }
 
 void DcPresetLib::dlgMsg( const QString& msg )
@@ -892,25 +887,26 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
     _devDetails.CrippledIo = _crippledMode;
     updateStatusbar();
 
-    QPixmap pm;
+    QString devImgName;
     if( data.contains( DcMidiDevDefs::kTimeLineIdent ) )
     {
         _devDetails.DeviceIconResPath = ":/images/res/timeline_100.png";
-        pm = QPixmap( ":/images/res/timeline_100.png" );
+        devImgName = ":/images/res/timeline_100.png";
     }
     else if( data.contains( DcMidiDevDefs::kMobiusIdent ) )
     {
         _devDetails.DeviceIconResPath = ":/images/res/mobius_100.png";
-        pm = QPixmap( ":/images/res/mobius_100.png" );
+        devImgName =  ":/images/res/mobius_100.png" ;
     }
     else if( data.contains( DcMidiDevDefs::kBigSkyIdent ) )
     {
         _devDetails.DeviceIconResPath = ":/images/res/bigsky_100.png";
-        pm = QPixmap( ":/images/res/bigsky_100.png" );
+        devImgName = ":/images/res/bigsky_100.png";
     }
     else
     {
-        pm = QPixmap( ":/images/res/bootcode_100.png" );
+        devImgName = ":/images/res/bootcode_100.png";
+        _devDetails.DeviceIconResPath = ":/images/res/bootcode_100.png";
     }
 
     _maxPresetCount = _devDetails.PresetCount;
@@ -921,17 +917,19 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
     {
         devNameVer += " v" + _devDetails.FwVersion.mid( 2 );
     }
+    
+    ui.devImgLabel->setNormalImgName( _devDetails.DeviceIconResPath );
 
-
-    if( _devInfo.isEmpty())
-    {
-        ui.devImgLabel->setPixmap( pm );
-    }
-    else
-    {
-        _devPix = pm;
-        _devInfo = devNameVer;
-    }
+//     if( _devInfo.isEmpty())
+//     {
+//         ui.devImgLabel->setPixmap( devImgName );
+//     }
+//     else
+//     {
+//         _devPix = devImgName;
+//         _devInfo = devNameVer;
+//     }
+//     
     ui.devInfoLabel->setText( devNameVer );
     ui.devImgLabel->setAcceptDrops( true );
 
@@ -1206,7 +1204,7 @@ void DcPresetLib::noDevice_entered()
 {
     DCLOG() <<  "NO DEVICE state entered";
     conResetReadOnlySymbolDefines();
-    clearDeviceUI();
+//    clearDeviceUI();
 
     if(!_devDetails.Family.isEmpty())
     {
@@ -1241,6 +1239,7 @@ void DcPresetLib::setupReadPresetXfer_entered()
     if( _crippledMode )
     {
         QMessageBox::StandardButton c = QMessageBox::information( this,"SORRY!!","The MIDI Interface does not support fetching presets.");
+        (void)c;
         emit midiDeviceCrippled_about_signal();
         return;
     }
@@ -3621,8 +3620,20 @@ void DcPresetLib::clearDeviceUI()
 {
     QPixmap pm = QPixmap(":/images/res/devunknown_100.png");
 
-    ui.devImgLabel->setPixmap(pm);
-    ui.devInfoLabel->setText("");
+    if( _devInfo.isEmpty() )
+    {
+        ui.devImgLabel->setPixmap( pm );
+        _devPix = pm;
+        _devInfo.clear();
+
+    }
+    else
+    {
+        _devPix = pm;
+        _devInfo.clear();
+    }
+//     ui.devImgLabel->setPixmap(pm);
+//     ui.devInfoLabel->setText("");
 }
 
 void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)

@@ -149,7 +149,7 @@ private slots:
 
     void detectDevice_entered();
 
-    void checkTestAndConfigureMidiPorts( const QString &in_port,const QString &out_port );
+    bool checkTestAndConfigureMidiPorts( QString in_port,QString out_port );
 
     void dlgMsg(const QString& msg);
 

@@ -22,12 +22,29 @@
 #include <QMimeData>
 #include <QWidget>
 #include <QDebug>
+
 DcImgLabel::DcImgLabel(QWidget *parent) :
-    QLabel(parent)
+QLabel(parent),enterCnt(0)
 {
+
+    setMouseTracking( true );
 }
 
-void DcImgLabel::mousePressEvent(QMouseEvent *ev)
+void DcImgLabel::setNormalImgName( const QString& resPath )
+{
+    _normalImagename = resPath;
+    if( !underMouse())
+    {
+        setPixmap( QPixmap( _normalImagename ) );
+    }
+}
+
+void DcImgLabel::setHoverImgName( const QString& resPath )
+{
+    _hoverImageName = resPath;
+}
+
+void DcImgLabel::mousePressEvent( QMouseEvent *ev )
 {
     Q_UNUSED(ev);
 
@@ -48,8 +65,7 @@ void DcImgLabel::mouseReleaseEvent(QMouseEvent *ev)
 
     if(!this->pixmap())
         return;
-
-
+    
     this->setPixmap(this->pixmap()->scaled(_orgW,_orgH));
 
     emit clicked();
@@ -109,20 +125,18 @@ void DcImgLabel::mouseMoveEvent( QMouseEvent * )
 
 {
     emit mouseMoved();
-    
 }
 
 void DcImgLabel::enterEvent( QEvent * )
 {
-    
-//     _orgW = this->pixmap()->width();
-//     _orgH = this->pixmap()->height();
-//     setPixmap( this->pixmap()->scaled( _orgW - 1,_orgH - 1 ) );
+    setPixmap( QPixmap( _hoverImageName ) );
+    qDebug() << "imgLable ENTER";
     emit on_enter();
 }
 
 void DcImgLabel::leaveEvent( QEvent * )
 {
-//    setPixmap( this->pixmap()->scaled( _orgW ,_orgH) );
+    setPixmap( QPixmap( _normalImagename ) );
+    qDebug() << "imgLable leave";
     emit on_leave();
 }

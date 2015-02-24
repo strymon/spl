@@ -24,12 +24,17 @@
 #define DCIMGLABEL_H
 
 #include <QLabel>
+#include <QString>
 
 class DcImgLabel : public QLabel
 {
     Q_OBJECT
 public:
     explicit DcImgLabel(QWidget *parent = 0);
+    
+    void setNormalImgName( const QString& resPath );
+    void setHoverImgName( const QString& resPath );
+
 
 signals:
     void clicked();
@@ -41,6 +46,7 @@ signals:
 public slots:
 
 protected:
+
     void mousePressEvent(QMouseEvent * ev);
     void mouseReleaseEvent(QMouseEvent *ev);
     int _orgW, _orgH;
@@ -49,13 +55,16 @@ protected:
     void dropEvent(QDropEvent *event);
     void dragLeaveEvent(QDragLeaveEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
-
     virtual void mouseMoveEvent( QMouseEvent * );
-
     virtual void enterEvent( QEvent * );
-
     virtual void leaveEvent( QEvent * );
+    
+    QString _hoverImageName;
 
+    QString _normalImagename;
+
+    // Debug
+    int enterCnt;
 };
 
 #endif // DCIMGLABEL_H
