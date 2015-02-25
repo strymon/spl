@@ -61,6 +61,7 @@ public:
 //    QDir locatePluginsPath();
 
 
+
 signals:
 
 // State Machine Signals
@@ -189,6 +190,8 @@ private slots:
     //void conCmd_devTestExec( DcConArgs args );
     //void launchDeviceTester( DcConArgs &args );
     //void conCmd_portTestExec( DcConArgs args );
+
+    void conCmd_listdevs(DcConArgs args);
 
     void conCmd_GetUrl(DcConArgs args);
     void conDownloadDone();

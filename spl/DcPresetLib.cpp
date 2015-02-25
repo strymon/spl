@@ -2492,6 +2492,7 @@ void DcPresetLib::conCmd_MidiWriteFile( DcConArgs args )
     if(args.argCount() == 0)
     {
         fileName = execOpenDialog( settings.value( "conCmd_MidiWriteFile/lastOpen","" ).toString() );
+        QApplication::processEvents();
         if(fileName.isEmpty())
         {
             // User canceled
@@ -2607,6 +2608,8 @@ void DcPresetLib::setupConsole()
     
     _con->addCmd("info",this,SLOT(conCmd_getBootCodeInfo(DcConArgs)),"Display information about the boot code the contents of the code banks" );
     _con->addCmd("ioconf",this,SLOT(conCmd_ioConfig(DcConArgs)),"[<max msg sz> <delay per msg in microseconds> [<'true' if 3rd arg true, set 'safe mode' defaults>]] Displays or configures MIDI OUT data rate." );
+
+    _con->addCmd("lsdev",this,SLOT(conCmd_listdevs(DcConArgs)),"[<pattern>] List the MIDI interface port names" );
     
     
     _con->addCmd("sleep",this,SLOT(conCmd_delay(DcConArgs)),"<time in micro-seconds> - sleep for give time" );
@@ -2635,6 +2638,7 @@ void DcPresetLib::conCmd_smtrace( DcConArgs args )
 {
     if(args.argCount() == 0)
     {
+        *_con << "<hr><center>UX State Machine Trace</center>\n";
         *_con << _stateTrace.join("\n");
     }
 }
@@ -2805,6 +2809,44 @@ void DcPresetLib::conCmd_outn( DcConArgs args )
             qApp->processEvents();
         }
     }
+}
+void DcPresetLib::conCmd_listdevs( DcConArgs args )
+{
+    QStringList sl;
+    sl << "<hr><center>midi device listing</center>";
+
+    QString in,out;
+
+    sl<<"in<ol>";
+    if(!_midiIn.isOpen())
+    {
+        _midiIn.init();
+        _midiOut.init();
+    }
+
+    foreach(QString pname, _midiIn.getPortNames())
+    {
+        if(args.oneArg())
+        {
+            if(pname.contains(QRegExp(args.first().toString())))
+                continue;
+        }
+        sl << QString("<li>%1 %2</li>").arg(pname).arg(_midiIn.getPortName()==pname ? "<b>OPEN</b>" : "");
+    }
+    sl <<"</ol>\n";
+    sl << "out\n<ol>";
+    foreach(QString pname, _midiOut.getPortNames())
+    {
+        if(args.oneArg())
+        {
+            if(pname.contains(QRegExp(args.first().toString())))
+                continue;
+        }
+        sl << QString("<li>%1 %2</li>").arg(pname).arg(_midiOut.getPortName()==pname ? "<b>OPEN</b>" : "");
+    }
+
+    *_con << sl.join("\n");
+    *_con << "</ol>\n";
 }
 
 //-------------------------------------------------------------------------
@@ -3522,9 +3564,9 @@ void DcPresetLib::ioMidiListToDevice( QList<DcMidiData> &sysexList )
     _iodlg->setMax( sysexList.count() );
     _iodlg->setMessage( "Writing MIDI File" );
     _iodlg->show();
-    QApplication::processEvents();
-    int donecnt = 0;
 
+    clearMidiInConnections();
+    QApplication::processEvents();
     DcBootControl bc( _midiIn,_midiOut,_devDetails );
     bc.setBlindMode( true );
     bc.enableBootcode();
@@ -3533,15 +3575,7 @@ void DcPresetLib::ioMidiListToDevice( QList<DcMidiData> &sysexList )
     for (int i = 0; i < sysexList.count() ; i++)
     {
         _midiOut.dataOutThrottled(sysexList.at(i));
-            _iodlg->setLable( sysexList.at( i ).toString( ' ' ).mid(0,72));
-       
-//          if( !autotc.wait( 3000 ) )
-//          {
-//              *_con << "Timeout\n";
-//              bc.exitBoot();
-//              break;
-//          }
-
+        _iodlg->setLable( sysexList.at( i ).toString( ' ' ).mid(0,72));
         _iodlg->inc();
         QApplication::processEvents();
 
@@ -3556,6 +3590,7 @@ void DcPresetLib::ioMidiListToDevice( QList<DcMidiData> &sysexList )
     _iodlg->hide();
 
     _con->setInputReady(true);
+    _machine.postEvent( new VerifyDeviceConnection() );
 }
 
 //-------------------------------------------------------------------------
