@@ -130,13 +130,11 @@ void DcImgLabel::mouseMoveEvent( QMouseEvent * )
 void DcImgLabel::enterEvent( QEvent * )
 {
     setPixmap( QPixmap( _hoverImageName ) );
-    qDebug() << "imgLable ENTER";
     emit on_enter();
 }
 
 void DcImgLabel::leaveEvent( QEvent * )
 {
     setPixmap( QPixmap( _normalImagename ) );
-    qDebug() << "imgLable leave";
     emit on_leave();
 }
