@@ -175,8 +175,11 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
     
     // Magic number 8 is the response control flags, a 3 will deliver status.
     msg[8] = 0x03;
-
-    _pMidiOut->dataOut(msg);
+//     if(_blindMode )
+//     {
+//         DCLOG() << "SEND: " << msg.toString(' ');
+//     }
+     _pMidiOut->dataOut(msg);
 
     DcMidiData md;
 
@@ -186,37 +189,42 @@ bool DcBootControl::writeFirmwareUpdateMsg(DcMidiData& msg,int timeOutMs /*= 200
         if(autotc.dequeue(md))
         {
 
-            if(_blindMode )
+          if(_blindMode )
             {
-                // We expect this, so log anything else
-                if(!md.match("F0 00 01 55 42") )
+                if(md.match("F0 00 01 55 42 00") )
                 {
-                    DCLOG() << "blindMode write responce: " << md.toString();
+                    md = kFUGood;
                 }
+                else if(md.match("F0 00 01 55 42 01") )
+                {
+                    DCLOG() << "RECVD: " << md.toString(' ');
+                    md = kFUBad;
+                }
+                else if(md.match("F0 00 01 55 42 02"))
+                {
+                    DCLOG() << "RECVD: " << md.toString(' ');
+                    md = kFUFailed;
+                }
+            }
 
+            if( md == kFUGood )
+            {
                 rtval = true;
+            }
+            else if( md == kFUBad )
+            {
+                DCLOG() << "kFUBad";
+                _lastErrorMsg << "Device reject firmware command - BAD packet.";
+            }
+            else if( md == kFUFailed )
+            {
+                DCLOG() << "kFUFailed";
+                _lastErrorMsg << "Device failed firmware command.";
             }
             else
             {
-                if( md == kFUGood )
-                {
-                    rtval = true;
-                }
-                else if( md == kFUBad )
-                {
-                    DCLOG() << "kFUBad";
-                    _lastErrorMsg << "Device reject firmware command - BAD packet.";
-                }
-                else if( md == kFUFailed )
-                {
-                    DCLOG() << "kFUFailed";
-                    _lastErrorMsg << "Device failed firmware command.";
-                }
-                else
-                {
-                    DCLOG() << "Unknown response: " << md.toString( ' ' ) << "\n";
-                    _lastErrorMsg << "Firmware write generated an unknown response from the device.";
-                }
+                DCLOG() << "Unknown response: " << md.toString( ' ' ) << "\n";
+                _lastErrorMsg << "Firmware write generated an unknown response from the device.";
             }
         }
     }
