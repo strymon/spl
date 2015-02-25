@@ -22,7 +22,7 @@ IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
     :QDialog(parent),_parent(parent)
 {
     ui.setupUi(this);
-    ui.progressBar->setFormat("%v/%m");
+
     setSizeAndPosition( _parent);
     Qt::WindowFlags flags;
     
@@ -31,9 +31,10 @@ IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
 #else
     // flags = Qt::SplashScreen;
     flags = Qt::SplashScreen;
-    this->setWindowOpacity(0.8);
+    ui.progressBar->setFormat("%v/%m");
+    ui.progressBar->setTextVisible(true);
 #endif
-    
+    this->setWindowOpacity(0.8);
     flags ^= Qt::NoDropShadowWindowHint;
     setWindowFlags(flags);
 
@@ -88,6 +89,7 @@ void IoProgressDialog::reset()
     ui.progressBar->reset();
     adjustPosition(_parent);
     ui.pushButton->setText( "Cancel" );
+    ui.label->setText("");
 
     _hasCancled = false;
     ui.msgLabel->clear();
