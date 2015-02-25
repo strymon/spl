@@ -2486,16 +2486,18 @@ void DcPresetLib::on_workList_currentRowChanged(int row)
 void DcPresetLib::conCmd_MidiWriteFile( DcConArgs args )
 {
     QString fileName;
-
+    QSettings settings;
+    
     // check args
     if(args.argCount() == 0)
     {
-        fileName = execOpenDialog("");
+        fileName = execOpenDialog( settings.value( "conCmd_MidiWriteFile/lastOpen","" ).toString() );
         if(fileName.isEmpty())
         {
             // User canceled
             return;
         }
+        settings.setValue("conCmd_MidiWriteFile/lastOpen",fileName );
     }
     else
     {
@@ -3514,24 +3516,45 @@ void DcPresetLib::conCmd_exitBootcode( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcPresetLib::ioMidiListToDevice( QList<DcMidiData> &sysexList )
 {
-    bool prevState = enableMidiMonitor(false);
+   // bool prevState = enableMidiMonitor(false);
     _con->setInputReady(false);
-
-    int outputStat= sysexList.count()/20;
+    _iodlg->reset();
+    _iodlg->setMax( sysexList.count() );
+    _iodlg->setMessage( "Writing MIDI File" );
+    _iodlg->show();
+    QApplication::processEvents();
     int donecnt = 0;
+
+    DcBootControl bc( _midiIn,_midiOut,_devDetails );
+    bc.setBlindMode( true );
+    bc.enableBootcode();
+
+//    DcAutoTrigger autotc("*",&_midiIn );
     for (int i = 0; i < sysexList.count() ; i++)
     {
         _midiOut.dataOutThrottled(sysexList.at(i));
-        if(i % outputStat == 0)
-        {
-            *_con << (donecnt*5) << "% complete " << "\n";
-            donecnt++;
-        }
+            _iodlg->setLable( sysexList.at( i ).toString( ' ' ).mid(0,72));
+       
+//          if( !autotc.wait( 3000 ) )
+//          {
+//              *_con << "Timeout\n";
+//              bc.exitBoot();
+//              break;
+//          }
+
+        _iodlg->inc();
         QApplication::processEvents();
 
-    }
+        if( _iodlg->cancled() )
+        {
+            bc.exitBoot();
+            break;
+        }
 
-    enableMidiMonitor(prevState);
+    }
+    // enableMidiMonitor(prevState);
+    _iodlg->hide();
+
     _con->setInputReady(true);
 }
 
