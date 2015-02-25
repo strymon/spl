@@ -25,7 +25,7 @@ IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
     ui.progressBar->setFormat("%v/%m");
     setSizeAndPosition( _parent);
     Qt::WindowFlags flags;
-
+    
 #ifdef Q_OS_OSX
     flags = Qt::Sheet;
 #else
@@ -33,7 +33,7 @@ IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
     flags = Qt::SplashScreen;
     this->setWindowOpacity(0.8);
 #endif
-
+    
     flags ^= Qt::NoDropShadowWindowHint;
     setWindowFlags(flags);
 
@@ -125,6 +125,11 @@ void IoProgressDialog::showEvent( QShowEvent *e )
     Q_UNUSED(e);
     ui.pushButton->setFocus();
 
+}
+
+void IoProgressDialog::setLable( const QString & str )
+{
+    ui.label->setText( str);
 }
 
 //-------------------------------------------------------------------------

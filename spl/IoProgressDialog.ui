@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>161</height>
+    <width>708</width>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,12 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QFrame" name="frame">
+     <property name="maximumSize">
+      <size>
+       <width>690</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Box</enum>
      </property>
@@ -76,6 +82,28 @@
         </property>
         <property name="format">
          <string>%p%</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <family>Cordia New</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgba(79, 79, 79, 200);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

@@ -43,11 +43,12 @@ public slots:
     void setNoCancel( bool noCan );
     void useOkButton( bool useOk );
     void setIoHealth( int badnessLvl );
-    
+      void setLable( const QString & str );
 
 protected:
     void showEvent(QShowEvent *e);
-    
+  
+
 private:
 
     Ui_IoProgressDialog ui;
