@@ -673,6 +673,9 @@ void DcConsoleForm::cmd_help( DcConArgs args )
         while (i.hasNext()) 
         {
             i.next();
+            if(args.first().isValid() && !i.key().contains(QRegExp(args.first(".").toString())))
+                continue;
+
             txtStrm.setPadChar('.');
             txtStrm << i.key().trimmed();
             txtStrm.setPadChar(' ');
@@ -694,6 +697,8 @@ void DcConsoleForm::cmd_help( DcConArgs args )
         while (i.hasNext()) 
         {
             i.next();
+            if(args.first().isValid() && !i.key().contains(QRegExp(args.first(".").toString())))
+                continue;
             txtStrm << "<tr><td>" << i.key().trimmed() << "</td>";
             txtStrm << "<td>" << i.value().helpString << "</td></tr>";
         }
@@ -1152,7 +1157,7 @@ void DcConsoleForm::requestRefresh()
         // html tag of some kind.
         if( ! buf.contains(QRegExp("(<.+|/>)")))
         {
-            buf.prepend("<br>");
+            buf.replace('\n',"<br>");
         }
         
         // Always replace the newlines
