@@ -180,3 +180,30 @@ QString DcMidiDevIdent::getShortId()
     rtval.sprintf("%02X%02X",getFamilyByte(),getProductByte());
     return rtval;
 }
+
+QString DcMidiDevIdent::getProductName() 
+{
+    QString rtval = "Unknown";
+
+    // We only know about a few devices based on there ID
+    if( getManufactureName() == "Strymon" )
+    {
+        if( getFamilyByte() == 0x12 )
+        {
+            if( getProductId() == 1 )
+            {
+                rtval = "TimeLine";
+            }
+            else if( getProductId() == 2 )
+            {
+                rtval = "Mobius";
+            }
+            else if( getProductId() == 3 ) 
+            {
+                rtval = "BigSky";
+            }
+        }
+    }
+
+    return rtval;
+}

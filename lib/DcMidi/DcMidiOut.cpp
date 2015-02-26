@@ -94,7 +94,8 @@ void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayUs )
         //sendtime.start();
         for (i = list.begin(); i != list.end(); ++i)
         {
-            dataOutNoSplit(*i);
+            if( !dataOutNoSplit( *i ) )
+                break;
             // This is a very gross timing loop - it's not
             // very real time and it will probably be way longer than the values suggest
             if(delayUs >= 320 && delayUs < 10000000)
@@ -110,8 +111,9 @@ void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayUs )
 }
 
 //-------------------------------------------------------------------------
-void DcMidiOut::dataOutNoSplit( const DcMidiData& data )
+bool DcMidiOut::dataOutNoSplit( const DcMidiData& data )
 {
+    bool rtval = false;
     std::vector<unsigned char> vec;
     data.copyToStdVec(vec);
     if(isOk())
@@ -119,6 +121,7 @@ void DcMidiOut::dataOutNoSplit( const DcMidiData& data )
         try
         {
             _rtMidiOut->sendMessage( &vec );
+            rtval = true;
             emit dataOutMonitor(data);
         }
         catch (RtMidiError &error)
@@ -135,6 +138,7 @@ void DcMidiOut::dataOutNoSplit( const DcMidiData& data )
 
 
     }
+    return rtval;
 }
 //-------------------------------------------------------------------------
 void DcMidiOut::dataOut( const DcMidiData& data )
