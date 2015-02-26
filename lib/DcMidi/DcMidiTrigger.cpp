@@ -48,6 +48,14 @@ bool DcMidiTrigger::dequeue( DcMidiData& md )
     return false;
 }
 
+void DcMidiTrigger::clear()
+{
+    QMutexLocker locker( &_mtx );
+    _queue.clear();
+    _count = 0;
+
+}
+
 //-------------------------------------------------------------------------
 bool DcMidiTrigger::handler( DcMidiData& md )
 {
@@ -112,9 +120,19 @@ bool DcMidiTrigger::wait( unsigned long time /*= ULONG_MAX*/ )
     return rtval;
 }
 
+quint32 DcMidiTrigger::clearCount()
+{
+    QMutexLocker locker( &_mtx );
+    int r = _count;
+    _count = 0; 
+    
+    return r;
+}
+
 //-------------------------------------------------------------------------
 void DcMidiTrigger::reset()
 {
+    QMutexLocker locker( &_mtx );
     _queue.clear();
     _count = 0;
     _waitting = false;
