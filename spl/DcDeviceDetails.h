@@ -61,6 +61,9 @@ struct DcDeviceDetails : public DcMidiDevIdent
             DcMidiDevIdent::Product.toString() + 
             DcMidiDevIdent::Manufacture.toString());
     }
+    
+    bool isCrippled() const { return CrippledIo; }
+
     quint8  PresetNumberOffset;
     quint16 PresetSize;
     quint16 PresetCount;
