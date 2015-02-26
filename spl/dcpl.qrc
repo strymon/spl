@@ -13,5 +13,6 @@
         <file>res/bigsky_100.png</file>
         <file>res/detect_device_100.png</file>
         <file>res/bootcode_100.png</file>
+        <file>res/global_midi_thru_off.png</file>
     </qresource>
 </RCC>
