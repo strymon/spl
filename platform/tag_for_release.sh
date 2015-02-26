@@ -1,21 +1,4 @@
 #!/bin/bash - 
-#===============================================================================
-#
-#          FILE: take_for_release.sh
-# 
-#         USAGE: ./take_for_release.sh 
-# 
-#   DESCRIPTION: 
-# 
-#       OPTIONS: ---
-#  REQUIREMENTS: ---
-#          BUGS: ---
-#         NOTES: ---
-#        AUTHOR: YOUR NAME (), 
-#  ORGANIZATION: 
-#       CREATED: 1/27/2015 2:17:28 PM Pacific Standard Time
-#      REVISION:  ---
-#===============================================================================
 # Assume this is executed from <root>/platform, so the project root is $pwd/..
 EXPECTED_ARGS=1
 E_BADARGS=65
@@ -37,7 +20,7 @@ else
   python inc_version.py -s $ver_str -f ../spl/main.cpp -v kDcVersionString
   python inc_version.py -f ./osx/Info.plist -v string -s $ver_str
   git commit -a -m"version bump to $ver_str"
-  git tag $ver_str
+  git tag -a $ver_str -m"version $ver_str"
 fi
 
 
