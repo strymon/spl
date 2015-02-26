@@ -84,7 +84,7 @@ public slots:
     void dataOut( const char* hexStr);
 
     void dataOutSplit( const DcMidiData& data, int maxMsg, int delayPerMsg );
-    void dataOutNoSplit(const DcMidiData &data);
+    bool dataOutNoSplit(const DcMidiData &data);
     
     void dataOutThrottled(const DcMidiData& data);
 
