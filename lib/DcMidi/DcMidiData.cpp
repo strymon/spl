@@ -308,6 +308,7 @@ bool DcMidiData::match( QRegExp rx,bool must_start_with /*= false*/) const
 {
     QString thisData = this->toString();
     bool rtval;
+    rx.setCaseSensitivity( Qt::CaseInsensitive );
     int pos = rx.indexIn(thisData);
 
     if(must_start_with)
