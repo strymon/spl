@@ -622,6 +622,7 @@ protected:
         void log( const QString& msg )
         {
             _spewOfMessages << msg;
+            DCLOG() << msg;
         }
         
         void setResult( IoTestResultInfo::TestResult r )
@@ -651,11 +652,15 @@ protected:
             _isStrymon = yesNo;
         }
 
-        QString getLog(const QString& joinStr = "\n") const
+        void dumpLog() const
         {
-            return _spewOfMessages.join(joinStr);
+            foreach(QString str, _spewOfMessages)
+            {
+                DCLOG() << str;
+            }
+
         }
-        
+
         void setPortNames( const QString& in,const QString& out )
         {
             inName = in;
