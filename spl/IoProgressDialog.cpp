@@ -24,16 +24,18 @@ IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
     ui.setupUi(this);
 
     setSizeAndPosition( _parent);
+
     Qt::WindowFlags flags;
-    
+    ui.label->setOpenExternalLinks( true );
+    ui.msgLabel->setOpenExternalLinks( true );
 #ifdef Q_OS_OSX
     flags = Qt::Sheet;
 #else
-    // flags = Qt::SplashScreen;
     flags = Qt::SplashScreen;
     ui.progressBar->setFormat("%v/%m");
     ui.progressBar->setTextVisible(true);
 #endif
+
     this->setWindowOpacity(0.8);
     flags ^= Qt::NoDropShadowWindowHint;
     setWindowFlags(flags);
@@ -41,7 +43,7 @@ IoProgressDialog::IoProgressDialog( QWidget *parent /*= 0*/ )
     setWindowModality(Qt::WindowModal);
     setModal(true);
      this->setWindowIcon(QIcon(":/images/res/dcpm_256x256x32.png"));
-
+     _s = size();
      setIoHealth( 0 );
 }
 
@@ -54,16 +56,16 @@ void IoProgressDialog::setProgress( int v )
 //-------------------------------------------------------------------------
 void IoProgressDialog::reject()
 {
-    _hasCancled = true;
-    QDialog::reject();
+    if( ui.pushButton->text() == "Cancel" )
+    {
+        _hasCancled = true;
+        QDialog::reject();
+    }
+    else
+    {
+        QDialog::accept();
+    }
 }
-
-//-------------------------------------------------------------------------
-// void IoProgressDialog::inc()
-// {
-//     int v = ui.progressBar->value() + 1;
-//     ui.progressBar->setValue(v);
-// }
 
 void IoProgressDialog::inc()
 {
@@ -85,20 +87,23 @@ bool IoProgressDialog::cancled()
 void IoProgressDialog::reset()
 {
     setProgress(0);
+    ui.progressBar->setVisible( true );
     ui.progressBar->setTextVisible(false);
     ui.progressBar->reset();
-    adjustPosition(_parent);
     ui.pushButton->setText( "Cancel" );
-    ui.label->setText("");
-
+    ui.label->clear();
     _hasCancled = false;
     ui.msgLabel->clear();
     ui.pushButton->show();
     setIoHealth( 0 );
+    resize( 10,10 );
+    setSizeAndPosition( _parent );
+    adjustPosition( _parent );
 }
 //-------------------------------------------------------------------------
 void IoProgressDialog::setError( QString msg )
 {
+    ui.msgLabel->clear();
     ui.msgLabel->setStyleSheet("color: rgb(255, 0, 0)");
     ui.msgLabel->setText(msg);
 }
@@ -129,14 +134,24 @@ void IoProgressDialog::showEvent( QShowEvent *e )
 
 }
 
-void IoProgressDialog::setLable( const QString & str )
+void IoProgressDialog::setLableText( const QString & str )
 {
+    ui.label->clear();
     ui.label->setText( str);
+    ui.label->setAlignment( Qt::AlignLeft );
+}
+
+void IoProgressDialog::setLableImage( const QString & imgPath )
+{
+    ui.label->clear();
+    ui.label->setPixmap( QPixmap( imgPath ) );
+    ui.label->setAlignment( Qt::AlignHCenter );
 }
 
 //-------------------------------------------------------------------------
 void IoProgressDialog::setMessage( QString msg )
 {
+    ui.msgLabel->clear();
     ui.msgLabel->setStyleSheet("color: rgb(0,0,0)");
     ui.msgLabel->setText(msg);
 }
@@ -155,7 +170,14 @@ void IoProgressDialog::setNoCancel( bool noCan )
 
 void IoProgressDialog::useOkButton( bool useOk)
 {
-    useOk ? ui.pushButton->setText( "Ok" ) : ui.pushButton->setText( "Cancel" );
+    if(useOk)
+    {
+        ui.pushButton->setText( "Ok" );
+    }
+    else
+    {
+        ui.pushButton->setText( "Cancel" );
+    }
 }
 
 
@@ -174,6 +196,6 @@ void IoProgressDialog::setIoHealth( int badnessLvl )
     else if( badnessLvl == 2 )
     {
         ui.ioStatusLable->setText( "  workaround mode  " );
-        ui.ioStatusLable->setStyleSheet( "background-color: rgba(255, 0, 0, 230);border-radius: 44px;" );
+        ui.ioStatusLable->setStyleSheet( "background-color: rgba(255, 0, 0, 230);border-radius: 4px;" );
     }
 }

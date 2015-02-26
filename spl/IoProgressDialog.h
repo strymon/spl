@@ -36,6 +36,8 @@ public slots:
     void inc();
     bool cancled();
     void reset();
+    void hideProgress(bool h) 
+    { ui.progressBar->setVisible(!h); }
     void setMax(int max);
     void setError( QString msg );
     void setMessage( QString msg );
@@ -43,7 +45,8 @@ public slots:
     void setNoCancel( bool noCan );
     void useOkButton( bool useOk );
     void setIoHealth( int badnessLvl );
-      void setLable( const QString & str );
+    void setLableText( const QString & str );
+    void setLableImage( const QString & imgPath );
 
 protected:
     void showEvent(QShowEvent *e);
@@ -54,7 +57,7 @@ private:
     Ui_IoProgressDialog ui;
     bool _hasCancled;
     QWidget* _parent;
-
+    QSize _s;
 
 };
 
