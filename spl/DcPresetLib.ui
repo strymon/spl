@@ -469,6 +469,8 @@
     </property>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_Log"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -575,6 +577,11 @@
   <action name="actionShow_Update_Pandel">
    <property name="text">
     <string>Software Update</string>
+   </property>
+  </action>
+  <action name="actionShow_Log">
+   <property name="text">
+    <string>Show Log</string>
    </property>
   </action>
  </widget>
