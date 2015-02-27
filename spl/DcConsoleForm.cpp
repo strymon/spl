@@ -662,12 +662,12 @@ void DcConsoleForm::cmd_help( DcConArgs args )
     {
         txtStrm.setFieldWidth(20);
         txtStrm.setFieldAlignment(QTextStream::AlignLeft);
-        txtStrm << "Command Name";
+        txtStrm << "Command ";
         txtStrm << " | Help Text";
         *this << s << "\n";
         s.clear();
         *this << "-------------------- | ----------------------------\n";
-        
+
         // Print the user command help
         QHashIterator<QString, DcConItem> i(_cmdHash);
         while (i.hasNext()) 
@@ -687,12 +687,12 @@ void DcConsoleForm::cmd_help( DcConArgs args )
     else
     {
        s.clear();
-        txtStrm <<  "<table border='0' cellspacing='0' cellpadding='0' bgcolor='silver' >";
-        txtStrm << "<tr>";
-        txtStrm << "<td><b>Command Name   </b></td>";
-        txtStrm << "<td><b>Help Text</b></td>";
+        txtStrm <<  "<table border='0' cellspacing='0' cellpadding='0' bgcolor='#F9F9F9' >";
+        txtStrm << "<tr bgcolor='#e0e0e0'>";
+        txtStrm << "<td><b>Command</b></td>";
+        txtStrm << "<td><b>Help String</b></td>";
         txtStrm << "</tr>";
-        
+
         QHashIterator<QString, DcConItem> i(_cmdHash);
         while (i.hasNext()) 
         {
@@ -700,7 +700,7 @@ void DcConsoleForm::cmd_help( DcConArgs args )
             if(args.first().isValid() && !i.key().contains(QRegExp(args.first(".").toString())))
                 continue;
             txtStrm << "<tr><td>" << i.key().trimmed() << "</td>";
-            txtStrm << "<td>" << i.value().helpString << "</td></tr>";
+            txtStrm << "<td>" << i.value().helpString.toHtmlEscaped() << "</td></tr>";
         }
         txtStrm << "</table>\n";
         *this << s;
