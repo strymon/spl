@@ -380,6 +380,8 @@ void DcPresetLib::detectDevice_entered()
     clearMidiInConnections();
     shutdownMidiIo();
 
+     _crippledMode = false;
+
     QString in_port = _midiSettings->getInPortName();
     QString out_port = _midiSettings->getOutPortName();
 
