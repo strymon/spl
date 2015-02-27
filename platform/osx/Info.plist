@@ -38,7 +38,7 @@
 	<key>CFBundleName</key>
 	<string>Strymon Librarian</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.4.9</string>
+	<string>kDcVersionString</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
 	<key>NSHumanReadableCopyright</key>
