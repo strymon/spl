@@ -62,6 +62,10 @@ public:
 
 
 
+    void pushUsersLog(const QString note = "");
+
+public slots:
+    void conCmd_sharelog(DcConArgs args);
 signals:
 
 // State Machine Signals
@@ -228,6 +232,8 @@ private slots:
       MIDI Monitor data OUT to console handler
     */ 
     void midiDataOutToConHandler(const DcMidiData &data);
+
+    void on_actionShow_Log_triggered();
 
 private:
     

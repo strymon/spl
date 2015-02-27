@@ -84,6 +84,8 @@
 #include "cmn/DcLog.h"
 #include <QDesktopWidget>
 
+#include <qs3/qs3.h>
+#include <DcLogDialog.h>
 
 // Strymon Pedal Specific
 const char* DcMidiDevDefs::kStrymonDevice = "F0 00 01 55";
@@ -2681,7 +2683,9 @@ void DcPresetLib::setupConsole()
     _con->addCmd("lswl",this,SLOT(conCmd_lswl(DcConArgs)),"list the working list" );
 
     _con->addCmd("exec",this,SLOT(conCmd_exec(DcConArgs)),"Shell executes the file" );
-    _con->addCmd("showlog",this,SLOT(conCmd_showlog(DcConArgs)),"Shell executes the logfile path" );
+    _con->addCmd("showlog",this,SLOT(conCmd_showlog(DcConArgs)),"Display the program log in your text file editor." );
+    _con->addCmd("log.show",this,SLOT(conCmd_showlog(DcConArgs)),"Show the log." );
+    _con->addCmd("log.share",this,SLOT(conCmd_sharelog(DcConArgs)),"Share the log with support." );
     _con->addCmd("char",this,SLOT(conCmd_char(DcConArgs)),"Converts the HEX byte strings to ASCII" );
     _con->addCmd("uuid",this,SLOT(conCmd_uuid(DcConArgs)),"Return a UUID");
     _con->addCmd("outn",this,SLOT(conCmd_outn(DcConArgs)),"<count> <midi hex bytes> - write midi bytes to connected device 'count' times" );
@@ -3750,11 +3754,16 @@ void DcPresetLib::conCmd_uuid( DcConArgs args )
     *_con << md.toString(' ') << "\n";
 }
 
+
 //-------------------------------------------------------------------------
 void DcPresetLib::conCmd_showlog( DcConArgs args )
 {
-    (void)args;
     _con->execCmd("exec logfile");
+}
+
+void DcPresetLib::conCmd_sharelog( DcConArgs args )
+{
+  pushUsersLog(args.first().toString());
 }
 
 //-------------------------------------------------------------------------
@@ -3868,7 +3877,7 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
         }
         else if( result == DcUpdateDialogMgr::DcUpdate_Success )
         {
-            msgBox->setText( QLatin1String( "The update has completed successfully." ) );
+            msgBox->setText( QLatin1String( "The update attempt has completed." ) );
             msgBox->setIcon( QMessageBox::Information );
         }
         else if( result == DcUpdateDialogMgr::DcUpdate_PresetUpdateCancled )
@@ -3922,3 +3931,87 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
     ui.devImgLabel->setDisabled(false);
 }
 
+ void DcPresetLib::pushUsersLog(const QString note /*=""*/)
+ {
+     const QString s3Host = "s3.amazonaws.com";
+     const QString s3Proxy = "";
+     QS3::S3 s3(s3Host, s3Proxy);
+     // The S3 keys will get you access to the strymon-inbox, it will allow object writes only.
+     QScopedPointer<QS3::Bucket> bucket(s3.bucket("strymon-inbox", "AKIAJZFPMQ3GFR57BS4A", "ecYiGu3RD4jPOyrEMHHfPHw4W9nKcPM3CfcHuQwX"));
+
+      QByteArray logdata;
+
+     if(!note.isEmpty())
+     {
+         logdata = "User Note: ";
+         logdata += note;
+         logdata += "\n";
+     }
+
+
+     QString logpath = _log->getLogPath();
+
+
+     {
+        QFile f( logpath );
+        f.open( QIODevice::ReadOnly | QIODevice::Text );
+        if( f.isOpen() )
+        {
+             logdata += f.readAll();
+        }
+     }
+
+     logpath = _log->getLogPath(0);
+     {
+         QFile f( logpath );
+         if(f.exists())
+         {
+             f.open( QIODevice::ReadOnly | QIODevice::Text );
+             if( f.isOpen() )
+             {
+                 logdata += f.readAll();
+             }
+         }
+     }
+
+     QString logName = "spl.log.";
+     QString username = "unknown";
+     QStringList environment = QProcess::systemEnvironment();
+     int index = environment.indexOf(QRegExp("USER*"));
+     if (index != -1)
+     {
+        QStringList stringList = environment.at(index).split('=');
+        if (stringList.size() == 2)
+        {
+            username = stringList.at(1).toUtf8();
+         }
+     }
+
+     logName += username;
+     QByteArray compressedData = qCompress(logdata);
+     QByteArray uncompresseddata = qUncompress(compressedData);
+     if(uncompresseddata == logdata)
+     {
+         *_con << "same\n";
+     }
+
+     bucket->upload("test_01.zip", compressedData);
+
+     _iodlg->reset();
+     _iodlg->show();
+     dlgMsg("Sending Log to Strymon");
+     // wait finish
+     QEventLoop loop;
+     connect(bucket.data(), SIGNAL(finished()), &loop, SLOT(quit()));
+     loop.exec();
+     _iodlg->hide();
+
+ }
+
+void DcPresetLib::on_actionShow_Log_triggered()
+{
+    DcLogDialog* ld = new DcLogDialog(this,_log);
+    ld->setModal(true);
+    ld->exec();
+    delete ld;
+}
