@@ -2531,7 +2531,10 @@ void DcPresetLib::conCmd_RenameItemInWorklist( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcPresetLib::midiDataInToConHandler( const DcMidiData &data )
 {
-    DCLOG() << "RX: " << data.toString();
+    if(_debugControls.logIO)
+    {
+        DCLOG() << "RX: " << data.toString();
+    }
 
     if(_con->isVisible())
     {
@@ -2544,7 +2547,10 @@ void DcPresetLib::midiDataInToConHandler( const DcMidiData &data )
 //-------------------------------------------------------------------------
 void DcPresetLib::midiDataOutToConHandler( const DcMidiData &data )
 {
-    DCLOG() << "TX: " << data.toString();
+    if(_debugControls.logIO)
+    {
+        DCLOG() << "TX: " << data.toString();
+    }
 
     if(_con->isVisible())
     {

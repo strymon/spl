@@ -682,6 +682,14 @@ protected:
 
     bool guessAndCheckDevice( DeviceGuessData& dgd,IoTestResultInfo &tinfo );
     bool verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevIdent &id,IoTestResultInfo& tinfo ); 
+
+    struct DevParams
+    {
+        DevParams() : fetchCrippled( false ), logIO(false) {}
+        bool fetchCrippled;
+        bool logIO; // Log the I/O during device detection/test/verify
+    } _debugControls;
+
 };
 
 #endif // DcPresetLib_H
