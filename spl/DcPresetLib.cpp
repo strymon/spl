@@ -158,36 +158,16 @@ DcPresetLib::DcPresetLib(QWidget *parent)
         else
         {
             _machine.postEvent( new VerifyDeviceConnection() );
-
-//             ui.devImgLabel->setPixmap( QPixmap( ) );
-//             _devPix = *ui.devImgLabel->pixmap();
-//             _devInfo = ui.devInfoLabel->text();
-//            ui.devInfoLabel->setText( "Detect Device" );
-
         }
 
         
     } );
 
     connect( ui.devImgLabel,&DcImgLabel::on_enter,[&]() {
-//         QString lbl = "Detect Device";
-//         if( ui.devInfoLabel->text() != lbl )
-//         {
-//             _devPix = *ui.devImgLabel->pixmap();
-//             ui.devImgLabel->setPixmap( QPixmap( ":/images/res/detect_device_100.png" ) );
-//             _devInfo = ui.devInfoLabel->text();
-//         }
-//         ui.devInfoLabel->setText( lbl );
     } );
 
     connect( ui.devImgLabel,&DcImgLabel::on_leave,[&]() {
-        
-//         ui.devInfoLabel->setText( _devInfo );
-//         ui.devImgLabel->setPixmap( _devPix );
-//         _devInfo = "";
     } );
-
-//    QObject::connect(ui.devImgLabel,SIGNAL( clicked() ),this,SLOT( on_devImgClicked() ) );
 
     QObject::connect(ui.devImgLabel,SIGNAL( fileDropped( const QString& ) ),this,SLOT( on_fileDropped( const QString& ) ),Qt::QueuedConnection);
     setupConsole();
@@ -215,16 +195,12 @@ DcPresetLib::DcPresetLib(QWidget *parent)
         move(cw,ch);
     }
 
-
     // Do the rest of the application startup in this timer callback
      QTimer::singleShot(50, this, SLOT(setupStateMachineHandler()));
 
      _idResponceTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(recvIdDataTrigger(void*)));
 
-    // _idResponceTrigger = new DcMidiTrigger( DcMidiDevDefs::kIdentReply,this,[=]() { /* response */ } ) );
-
-    
-    // _portScanTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(portScanTrigger(void*)));
+     // _portScanTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(portScanTrigger(void*)));
     // loadConsolePlugins();
      
      _crippledMode = false;
@@ -478,10 +454,6 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
         
         do
         {
-            // UI: setup progress dialog
-//             delete _iodlg;
-//             _iodlg = new IoProgressDialog( this );
-//             _iodlg->setModal( true );
 
             _msgDelayTime = 1;
             _iodlg->setNoCancel( false );
@@ -641,19 +613,16 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
 
             _ioTestResults.log( "error: nothing found on this midi bus" );
             _ioTestResults.setValid( true );
-
-//             dlgMsg( "nothing was found on this midi bus" );
             _iodlg->hide();
             
             // Setup a midi auto trigger in case a device arrives
             _midiIn.addTrigger( *_idResponceTrigger );
-            //_ioTestResults.dumpLog();
             return false;
 
         } while( false );
 
         _iodlg->inc();
-
+        
         _ioTestResults.setValid( true );
         if( _ioTestResults.wasCanceled() )
         {
