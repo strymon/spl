@@ -467,10 +467,9 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionShow_Log"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
-    <addaction name="separator"/>
-    <addaction name="actionShow_Log"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -478,6 +477,7 @@
     </property>
     <addaction name="actionShow_Console"/>
     <addaction name="actionShow_Update_Pandel"/>
+    <addaction name="actionShow_Log"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuEdit"/>
