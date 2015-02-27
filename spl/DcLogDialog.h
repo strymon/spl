@@ -50,6 +50,8 @@ private slots:
 
     void on_horizontalSlider_sliderReleased();
 
+    void on_lineEdit_returnPressed();
+
 private:
     DcLog* _log;
     Ui::DcLogDialog *ui;

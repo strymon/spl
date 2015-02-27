@@ -23,6 +23,7 @@ DcLogDialog::DcLogDialog(QWidget *parent, DcLog *lg) :
         //ui->textBrowser->setText( d );
         startTimer(1);
     }
+    ui->controlFrame->setVisible(false);
 }
 
 DcLogDialog::~DcLogDialog()
@@ -77,7 +78,7 @@ void DcLogDialog::timerEvent(QTimerEvent *e)
 
             ui->lineEdit->setFocus();
 
-            QString logName = GetEnviValue("USERNAME") + "_" + GetEnviValue("COMPUTERNAME") + "_" + DcQUtils::getTimeStamp() + "_spl.log";
+            QString logName = GetEnviValue("USERNAME") + "_" + GetEnviValue("COMPUTERNAME");
             QApplication::processEvents();
             setWindowTitle(logName);
             QApplication::processEvents();
@@ -135,17 +136,17 @@ void DcLogDialog::pushUsersLog(const QString textToSend, const QString note /*="
 
     QByteArray logdata;
 
+    logdata += textToSend.toLatin1();
+
     if(!note.isEmpty())
     {
-        logdata = "User Note: ";
+        logdata += "\n\nUser Note: ";
         logdata += note;
         logdata += "\n";
     }
 
-    logdata += textToSend.toLatin1();
-
     
-    // QString logName = GetEnviValue("(USER:USERNAME") + "_" + GetEnviValue("(HOSTNAME|COMPUTERNAME") + "_" + DcQUtils::getTimeStamp() + "_spl.log"; 
+     QString logName = windowTitle() + "_" + DcQUtils::getTimeStamp() + "_spl.log";
     
 
     if(_useCompression)
@@ -163,7 +164,8 @@ void DcLogDialog::pushUsersLog(const QString textToSend, const QString note /*="
     dlg->show();
     QApplication::processEvents();
 
-    bucket->upload(windowTitle(),logdata);
+
+    bucket->upload(logName,logdata);
 
     bool done = false;
     connect(bucket.data(), &QS3::Bucket::finished, [&] ()
@@ -217,7 +219,7 @@ void DcLogDialog::on_pushButton_3_clicked()
      QApplication::processEvents();
      QScrollBar *sb = ui->textEdit->verticalScrollBar();
      sb->setValue(sb->maximum() - 1);
-
+     //GetEnviValue("USERNAME") + "_" + GetEnviValue("COMPUTERNAME") + "_" + DcQUtils::getTimeStamp() + "_spl.log");
      ui->pushButton->setEnabled(true);
 }
 
@@ -239,4 +241,13 @@ void DcLogDialog::on_horizontalSlider_sliderMoved(int)
 void DcLogDialog::on_horizontalSlider_sliderReleased()
 {
     _t = startTimer(400);
+}
+
+void DcLogDialog::on_lineEdit_returnPressed()
+{
+    if(ui->lineEdit->text() ==
+            "show")
+    {
+        ui->controlFrame->setVisible(true);
+    }
 }
