@@ -17,7 +17,7 @@ public:
     explicit DcLogDialog(QWidget *parent = 0,DcLog* lg =0);
     ~DcLogDialog();
 
-    void pushUsersLog(const DcLog& log, const QString note);
+    void pushUsersLog(const QString textToSend, const QString note);
 
     QByteArray LoadLog(const DcLog &log);
 private slots:
@@ -28,6 +28,7 @@ private slots:
 private:
     DcLog* _log;
     Ui::DcLogDialog *ui;
+    QString _logText;
 
     // QWidget interface
 protected:

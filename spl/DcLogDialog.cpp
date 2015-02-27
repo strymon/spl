@@ -35,7 +35,8 @@ void DcLogDialog::on_pushButton_2_clicked()
 void DcLogDialog::on_pushButton_clicked()
 {
     // send to strymon
-    pushUsersLog(*_log,ui->lineEdit->text());
+
+    pushUsersLog(_logText, ui->lineEdit->text());
 
 }
 
@@ -52,7 +53,8 @@ void DcLogDialog::timerEvent(QTimerEvent *e)
     {
         QString d = LoadLog(*_log);
         int len = qMin(100000,d.length());
-        ui->textEdit->setText(d.right(len));
+        _logText = d.right(len);
+        ui->textEdit->setText(_logText);
     }
 
 
@@ -182,7 +184,6 @@ void DcLogDialog::pushUsersLog(const QString textToSend, const QString note /*="
         dlg->inc();
     }
     dlg->hide();
-
-    delete dlg;
+    dlg->deleteLater();
 
 }

@@ -4013,5 +4013,5 @@ void DcPresetLib::on_actionShow_Log_triggered()
     DcLogDialog* ld = new DcLogDialog(this,_log);
     ld->setModal(true);
     ld->exec();
-    delete ld;
+    ld->deleteLater();
 }
