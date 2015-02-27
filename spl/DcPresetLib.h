@@ -66,6 +66,7 @@ public:
 
 public slots:
     void conCmd_sharelog(DcConArgs args);
+     void conCmd_PrintEnvi( DcConArgs args );
 signals:
 
 // State Machine Signals
@@ -184,6 +185,7 @@ private slots:
     void conCmd_cpsel( DcConArgs args );
     void conCmd_MidiMonCtrl(DcConArgs args);
     void conCmd_MidiOut(DcConArgs args);
+    void conCmd_DbgControl( DcConArgs args );
 
     void conCmd_MidiWriteFile(DcConArgs args);
     void conCmd_ExportWorklistPresets(DcConArgs args);
@@ -688,12 +690,15 @@ protected:
 
     bool guessAndCheckDevice( DeviceGuessData& dgd,IoTestResultInfo &tinfo );
     bool verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevIdent &id,IoTestResultInfo& tinfo ); 
+   
 
     struct DevParams
     {
-        DevParams() : fetchCrippled( false ), logIO(false) {}
+        DevParams() : fetchCrippled( false ), logIO(false),showMidiActiveSense(false),showMidiClock(false) {}
         bool fetchCrippled;
         bool logIO; // Log the I/O during device detection/test/verify
+        bool showMidiActiveSense;
+        bool showMidiClock;
     } _debugControls;
 
 };

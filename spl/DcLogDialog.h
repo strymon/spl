@@ -19,24 +19,54 @@ public:
 
     void pushUsersLog(const QString textToSend, const QString note);
 
-    QByteArray LoadLog(const DcLog &log);
+    QString GetEnviValue( const QString& key );
+
+    QByteArray LoadLog(const DcLog &log,bool lastlogtoo,int limit=999999999);
+
+    QByteArray Load( const QString& logpath)
+    {
+        QByteArray rtdata;
+        QFile f( logpath );
+        
+        f.open( QIODevice::ReadOnly | QIODevice::Text );
+        if( f.isOpen() )
+        {
+            rtdata += f.readAll();
+        }
+        
+        return rtdata;
+    }
+
 private slots:
     void on_pushButton_2_clicked();
 
     void on_pushButton_clicked();
 
+    void on_pushButton_3_clicked();
+
+    void on_horizontalSlider_rangeChanged(int min, int max);
+
+    void on_horizontalSlider_sliderMoved(int position);
+
+    void on_horizontalSlider_sliderReleased();
+
 private:
     DcLog* _log;
     Ui::DcLogDialog *ui;
     QString _logText;
-
+    bool _useCompression;
     // QWidget interface
+    int _t;
+    int _max;
 protected:
     void showEvent(QShowEvent *);
 
     // QObject interface
 protected:
     void timerEvent(QTimerEvent *);
+
+    void Load(bool lastonetoo);
+
 };
 
 #endif // DCLOGDIALOG_H

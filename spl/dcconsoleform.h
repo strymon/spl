@@ -166,6 +166,8 @@ public:
     
 
     bool isHtmlMode() const { return _con_html; }
+    
+    void append(const QString& str, int bytecnt);
 
 public slots:
     virtual void setVisible(bool visible);
@@ -264,7 +266,8 @@ private:
     void setNoClrOnReturnOnce(bool val) { _noClrOnReturnOnce = val; }
     QStringList tokenize(QString& sexp);
     DcFnSymDef parseFn(QString sexp);
-   
+    
+
 };
 
 #endif // DCCONSOLEFORM_H

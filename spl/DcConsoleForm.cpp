@@ -1061,15 +1061,27 @@ void DcConsoleForm::cmd_append( DcConArgs args )
     if(!_appendOk)
         return;
     
+
     
     if(!checkArgCnt(args,1))
     {
     	return;
     }
+
 	QString val = args.at(1).toString();
     // setNoClrOnReturnOnce(true);
     ui->lineEdit->setText(_curLineEditText + " " + val);
     
+}
+
+void DcConsoleForm::append(const QString& str, int bytecnt)
+{
+    if(!_appendOk)
+        return;
+    
+
+    ui->lineEdit->setText(_curLineEditText + " " + str);
+    incCounterDisplay(bytecnt);
 }
 
 
@@ -1114,7 +1126,7 @@ void DcConsoleForm::cmd_conHtml( DcConArgs args )
         else
         {
             _con_html = false;
-            *this << "Consolue is using plain text\n";
+            *this << "Console is using plain text\n";
         }
         clear();
     }
@@ -1134,6 +1146,7 @@ void DcConsoleForm::requestRefresh()
     // -------------------------------------------
     // FILTER OUTPUT
 
+/*
     // Messages can be filtered from the display.
     if(stream->buffer.contains("F8\n"))
     {
@@ -1148,6 +1161,7 @@ void DcConsoleForm::requestRefresh()
         stream->buffer.clear();
         return;
     }
+*/
 
     // -----------------------------------------
     // TRANSFORM OUTPUT

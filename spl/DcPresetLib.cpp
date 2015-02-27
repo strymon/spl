@@ -2537,12 +2537,28 @@ void DcPresetLib::midiDataInToConHandler( const DcMidiData &data )
     {
         DCLOG() << "RX: " << data.toString();
     }
-
+    
     if(_con->isVisible())
     {
+        _con->incCounterDisplay(data.length());
+        
+        // We expect the parsing to be done, e.g. if the legal sequence 
+        // B0 F8 01 03 this code will not see it.
+        // 
+        if(data == "F8")
+        {
+             if(!_debugControls.showMidiClock)
+                 return;
+        }
+        
+        if(data == "FE")
+        {
+            if(!_debugControls.showMidiActiveSense)
+                return;
+        }
+        // _con->append(data.toString(),data.length());
         _con->execCmd("append " + data.toString());
         *_con << "IN: " << data.toString().trimmed() << "\n";
-        _con->incCounterDisplay(data.length());
     }
 }
 
@@ -2645,6 +2661,51 @@ void DcPresetLib::conCmd_GetUrl( DcConArgs args )
     
 }
 
+void DcPresetLib::conCmd_DbgControl( DcConArgs args )
+{
+    if(args.first().toString() == "-h" || args.argCount() < 1 )
+    {
+        *_con << "\n";
+        *_con << "       fetchCrippled : " << (_debugControls.fetchCrippled ? "true\n" : "false\n");
+        *_con <<  "              logIO : " << (_debugControls.logIO ? "true\n" : "false\n");
+        *_con <<  "showMidiActiveSense : " << (_debugControls.showMidiActiveSense ? "true\n" : "false\n");
+        *_con <<  "      showMidiClock : " << (_debugControls.showMidiClock ? "true\n" : "false\n");
+    }
+    else 
+    {
+    	QString dbgVal = args.first().toString();
+        
+        if(dbgVal == "fetchCrippled")
+        {
+            if(args.argCount() > 1 ) 
+                _debugControls.fetchCrippled = args.second().toBool();
+            else 
+                *_con <<  (_debugControls.fetchCrippled ? "true\n" : "false\n");
+        }
+        else if(dbgVal == "logIO")
+        {
+            if(args.argCount() > 1 ) 
+                _debugControls.logIO = args.second().toBool();
+            else
+                *_con <<  (_debugControls.logIO ? "true\n" : "false\n");
+        }
+        else if(dbgVal == "showMidiActiveSense")
+        {
+            if(args.argCount() > 1 ) 
+                _debugControls.showMidiActiveSense = args.second().toBool();
+            else
+                *_con <<  (_debugControls.showMidiActiveSense ? "true\n" : "false\n");
+        }
+        else if(dbgVal == "showMidiClock")
+        {
+            if(args.argCount() > 1 ) 
+                _debugControls.showMidiClock = args.second().toBool();
+            else
+                *_con <<  (_debugControls.showMidiClock ? "true\n" : "false\n");
+        }
+        
+    }
+}
 //-------------------------------------------------------------------------
 void DcPresetLib::conCmd_UpdateFirmware( DcConArgs args )
 {
@@ -2665,7 +2726,7 @@ void DcPresetLib::setupConsole()
     _con = ui.console;
     _con->setVisible(false);
     //_con->addCmd("fetch",ui.fetchButton,SLOT(clicked( )),"Execute a fetch");
-
+    _con->addCmd("dctrl",this,SLOT(conCmd_DbgControl(DcConArgs))," <dbg param> [<value>]");
     _con->addCmd("sync",ui.syncButton,SLOT(clicked( )),"Synchronize worklist with device (write preset changes)");
     _con->addCmd("midi.out.hex",_midiOutDecimalMode,SLOT(toggle()),"Toggles using hex or dec values for MIDI out data");
 
@@ -2713,6 +2774,9 @@ void DcPresetLib::setupConsole()
     _con->addCmd("cpsel",this,SLOT(conCmd_cpsel(DcConArgs)),"Copies the selected presets to the specified stating location" );
     _con->addCmd("exportwl",this,SLOT(conCmd_ExportWorklistPresets(DcConArgs)),"Export the worklist to given the path" );
     _con->addCmd("exportfile",this,SLOT(conCmd_SplitPresetBundle(DcConArgs)),"<source preset file> [<destination path>] - export each preset found in the provided file." );
+
+    _con->addCmd("printenv",this,SLOT(conCmd_PrintEnvi(DcConArgs))," print the system environment");
+
     _con->setBaseDir(_dataPath);
     
     // Call the defld command
@@ -2720,6 +2784,19 @@ void DcPresetLib::setupConsole()
 
 }
 
+
+void DcPresetLib::conCmd_PrintEnvi( DcConArgs args )
+{
+    if(args.first().toString() == "-h")
+    {
+        *_con << args.meta("doc") << "\n";
+    }
+    else
+    {
+    	QStringList environment = QProcess::systemEnvironment();
+        *_con << environment.join("\n");
+    }
+}
 
 //-------------------------------------------------------------------------
 // display state machine history
@@ -2780,6 +2857,7 @@ void DcPresetLib::conCmd_enableFastFetch( DcConArgs args )
         *_con << "fastfetch is enabled\n";
     }
 }
+
 
 //-------------------------------------------------------------------------
 void DcPresetLib::conCmd_char( DcConArgs args )
@@ -4010,8 +4088,6 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
 
 void DcPresetLib::on_actionShow_Log_triggered()
 {
-    DcLogDialog* ld = new DcLogDialog(this,_log);
-    ld->setModal(true);
-    ld->exec();
-    ld->deleteLater();
+    DcLogDialog* ld = new DcLogDialog(0,_log);
+    ld->show();
 }
