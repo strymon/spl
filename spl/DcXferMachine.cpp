@@ -43,8 +43,21 @@ void DcXferMachine::sendNext_entered()
     else
     {
         _activeCmd = _cmdList.takeFirst();
+
+        if( !_isWriteMachine && _devDetails->isCrippled() )
+        {
+            _midiOut->dataOut( _devDetails->SOXHdr + "21 F7" );
+        }
+
         _midiOut->dataOutThrottled(_activeCmd);
+
+        if( _isWriteMachine && _devDetails->isCrippled() )
+        {
+            _midiOut->dataOut( _devDetails->SOXHdr + "21 F7" );
+        }
+
         _retryCount = _numRetries;
+
         _watchdog.start(_timeout);
     }
 }
