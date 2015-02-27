@@ -188,7 +188,7 @@ int DcLog::getFileOrdinal( const QString& fileName )
     return ord;
 }
 
-QString DcLog::setFileOrdinal(const QString& fileName, int ord)
+QString DcLog::setFileOrdinal(const QString& fileName, int ord) const
 {
     QString newName = fileName;
 
@@ -237,5 +237,5 @@ void DcLog::printLogHdr()
     qDebug() << "APP VERSION: " << QApplication::applicationVersion();
     qDebug() << "PID: " << QApplication::applicationPid();
     qDebug() << "APP PATH: " << QApplication::applicationFilePath();
-    qDebug() << "OS VERSION: " << DcQUtils::getOsVersion();
+    qDebug() << "OS: " << QSysInfo::prettyProductName();
 }
