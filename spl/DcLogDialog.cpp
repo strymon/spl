@@ -7,6 +7,7 @@
 #include "cmn/DcQUtils.h"
 #include <qs3/qs3.h>
 #include <QScrollBar>
+#include <QHostInfo>
 
 DcLogDialog::DcLogDialog(QWidget *parent, DcLog *lg) :
     QDialog(parent),
@@ -78,7 +79,12 @@ void DcLogDialog::timerEvent(QTimerEvent *e)
 
             ui->lineEdit->setFocus();
 
-            QString logName = GetEnviValue("USERNAME") + "_" + GetEnviValue("COMPUTERNAME");
+#ifdef Q_OS_OSX
+            QString logName = GetEnviValue("USER") + "_" + QHostInfo::localHostName();
+#else
+    QString logName = GetEnviValue("USERNAME") + "_" + GetEnviValue("COMPUTERNAME");
+#endif
+
             QApplication::processEvents();
             setWindowTitle(logName);
             QApplication::processEvents();
@@ -219,13 +225,14 @@ void DcLogDialog::on_pushButton_3_clicked()
      QApplication::processEvents();
      QScrollBar *sb = ui->textEdit->verticalScrollBar();
      sb->setValue(sb->maximum() - 1);
-     //GetEnviValue("USERNAME") + "_" + GetEnviValue("COMPUTERNAME") + "_" + DcQUtils::getTimeStamp() + "_spl.log");
+
      ui->pushButton->setEnabled(true);
 }
 
 void DcLogDialog::on_horizontalSlider_rangeChanged(int min, int max)
 {
-
+(void)min;
+    (void)max;
 }
 
 void DcLogDialog::on_horizontalSlider_sliderMoved(int)

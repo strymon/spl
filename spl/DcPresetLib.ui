@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>771</width>
+    <width>774</width>
     <height>865</height>
    </rect>
   </property>
@@ -434,8 +434,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>771</width>
-     <height>21</height>
+     <width>774</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -477,7 +477,6 @@
     </property>
     <addaction name="actionShow_Console"/>
     <addaction name="actionShow_Update_Pandel"/>
-    <addaction name="actionShow_Log"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuEdit"/>
