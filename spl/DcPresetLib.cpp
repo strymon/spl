@@ -3836,6 +3836,7 @@ void DcPresetLib::conCmd_uuid( DcConArgs args )
 //-------------------------------------------------------------------------
 void DcPresetLib::conCmd_showlog( DcConArgs args )
 {
+    (void)args;
     _con->execCmd("exec logfile");
 }
 
