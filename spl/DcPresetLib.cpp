@@ -540,6 +540,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                 _devDetails.fromIdentData( _ioTestResults.getIdData() );
 
                 _iodlg->setMessage( "Preparing to work with a incompatible MIDI interface..." );
+                _iodlg->inc();
                 QApplication::processEvents();
 
                 DcMidiData md;
@@ -549,7 +550,6 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                 {
                     DcAutoTrigger autotc( "",&_midiIn );
                     int trycnt = 5;
-                    int cnt;
                     // Wait for any strangler MIDI messages from crappy interfaces
                     QThread::msleep( 250 );
                     
@@ -565,9 +565,26 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                     }
                 
                 }
+                bool yesThruIsOn = sendAndWait( md,"F0 F7","F0 F7",1000 );
+                
+                if(!yesThruIsOn)
+                {
+                    // Hmmm, wait and try again
+                    QThread::msleep( 300 );
+                    QApplication::processEvents();
+                    yesThruIsOn = sendAndWait( md,"F0 F7","F0 F7",1000 );
+                }
+                
+                if( _iodlg->cancled() )
+                {
+                    _devDetails.clear();
+                    _ioTestResults.log( "disable MIDI thru cancled" );
+                    _ioTestResults.setResult( IoTestResultInfo::canceledTest );
+                    break;
+                }
 
                 // A crippled device must not have MIDI thru enabled.
-                if( sendAndWait( md,"BF 01 00","",1000 ) )
+                if(yesThruIsOn)
                 {
                     QApplication::processEvents();
                     DCLOG() << "MIDI thru, got something first check, retest";
@@ -575,12 +592,14 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                     {
                         QApplication::processEvents();
                         DCLOG() << "MIDI thru was detected";
+                        
+                        _iodlg->inc();
                         _iodlg->setMessage( "To continue,<br><big>Manually set the <i>" + _devDetails.getProductName() + "'s</i> global <b>MIDITH</b> parameter <b>OFF.</b></big><hr><small>This will disable the MIDI thru feature off your pedal and is only required<br>because your MIDI interface is incompatible.<br>MIDI thru may be enabled when not using this MIDI interface.<br><br>Click <a href='http://www.strymon.net/support/update/'>here</a> for more information.</small><br>" );
-                        //_iodlg->setMessage( "Change the MIDI thru global parameter to OFF . <a href='http://www.strymon.net'>why?</a>" );
                         _iodlg->setLableImage( ":/images/res/global_midi_thru_off.png" );
                         _iodlg->hideProgress( true );
                         _iodlg->setNoCancel( false );
                         _iodlg->useOkButton( false );
+                        
                         qreal wo = _iodlg->windowOpacity();
                         while( !_iodlg->cancled() )
                         {
@@ -595,9 +614,11 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
 
                         if( _iodlg->cancled() )
                         {
+                            _devDetails.clear();
                             _ioTestResults.log( "disable MIDI thru cancled" );
                             _ioTestResults.setResult( IoTestResultInfo::canceledTest );
                         }
+
                         _iodlg->hideProgress( false );
                         _iodlg->setMax( 4 );
                         _iodlg->setWindowOpacity( wo );
