@@ -98,13 +98,14 @@ const char* DcMidiDevDefs::kTestDevice    = "F0 7E .. 06 02 00 01 55 12 00 04"; 
 bool gUseAltPresetSize = false;
 
 DcPresetLib::DcPresetLib(QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),_log(0)
 {
-    ui.setupUi(this);
-
     setupFilePaths();
-
     _log = new DcLog(QDir::toNativeSeparators(_dataPath + QApplication::applicationName() + ".log"));
+
+     ui.setupUi(this);
+
+
 
     ui.actionOpen->setEnabled(false);
     ui.actionSave->setEnabled(false);
@@ -206,6 +207,9 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     // loadConsolePlugins();
      
      _crippledMode = false;
+
+
+
 }
 
 void DcPresetLib::on_devImgClicked()
@@ -389,7 +393,9 @@ void DcPresetLib::detectDevice_entered()
     
     _devDetails.clear();
     conResetReadOnlySymbolDefines();
-    
+
+    // Turn on io logging
+    int ll = _midiIn.getLoglevel();
     bool chkResults = checkTestAndConfigureMidiPorts( in_port,out_port );
     
     if( chkResults && !_devDetails.isCrippled() )
@@ -398,6 +404,9 @@ void DcPresetLib::detectDevice_entered()
         chkResults = checkTestAndConfigureMidiPorts( in_port,out_port );
     }
 
+    // restore io logging
+    _midiIn.setLoglevel( ll );
+    _midiOut.setLoglevel( ll );
 
     if( chkResults  )
     {
@@ -428,6 +437,9 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
 
     _midiIn.init();
     _midiOut.init();
+    _midiOut.setLoglevel( 1 );
+    _midiIn.setLoglevel( 1 );
+
 
     _iodlg->reset();
 
@@ -2672,6 +2684,7 @@ void DcPresetLib::conCmd_DbgControl( DcConArgs args )
         *_con <<  "              logIO : " << (_debugControls.logIO ? "true\n" : "false\n");
         *_con <<  "showMidiActiveSense : " << (_debugControls.showMidiActiveSense ? "true\n" : "false\n");
         *_con <<  "      showMidiClock : " << (_debugControls.showMidiClock ? "true\n" : "false\n");
+        *_con << "      iotrace: " << (_debugControls.iotrace ? "true\n" : "false\n");
     }
     else 
     {
@@ -2705,7 +2718,22 @@ void DcPresetLib::conCmd_DbgControl( DcConArgs args )
             else
                 *_con <<  (_debugControls.showMidiClock ? "true\n" : "false\n");
         }
-        
+        else if( dbgVal == "iotrace" )
+        {
+            if( args.argCount() > 1 )
+            {
+                _debugControls.iotrace = args.second().toBool();
+                _midiIn.setLoglevel( _debugControls.iotrace );
+                _midiOut.setLoglevel( _debugControls.iotrace );
+
+                *_con << "iotrace is " << (_debugControls.iotrace ? "on\n" : "off\n");
+            }
+            else
+            {
+                *_con << (_debugControls.iotrace ? "true\n" : "false\n");
+            }
+
+        }
     }
 }
 //-------------------------------------------------------------------------

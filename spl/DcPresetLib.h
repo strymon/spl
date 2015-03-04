@@ -694,11 +694,12 @@ protected:
 
     struct DevParams
     {
-        DevParams() : fetchCrippled( false ), logIO(false),showMidiActiveSense(false),showMidiClock(false) {}
+        DevParams() : fetchCrippled( false ), logIO(false),showMidiActiveSense(false),showMidiClock(false),iotrace(false) {}
         bool fetchCrippled;
         bool logIO; // Log the I/O during device detection/test/verify
         bool showMidiActiveSense;
         bool showMidiClock;
+        bool iotrace;
     } _debugControls;
 
 };

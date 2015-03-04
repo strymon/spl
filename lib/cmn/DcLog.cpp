@@ -40,6 +40,9 @@ void DbgMessageOutput(QtMsgType type, const QMessageLogContext &context, const Q
 {
     Q_UNUSED(type);
 
+    static int recur = 0;
+    recur++;
+
     if(!DcLog::LogPath)
         return;
 
@@ -53,6 +56,8 @@ void DbgMessageOutput(QtMsgType type, const QMessageLogContext &context, const Q
     log_file.open (QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
     QTextStream text_stream (&log_file);
     text_stream << DcQUtils::getTimeStamp() << QLatin1String(" [") << srcfile << QLatin1String("::") << context.line << QLatin1String("] ") << msg << QLatin1String("\n");
+    recur--;
+
 }
 
 

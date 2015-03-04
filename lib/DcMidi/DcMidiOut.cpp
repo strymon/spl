@@ -81,7 +81,8 @@ void DcMidiOut::dataOutThrottled(const DcMidiData& data)
 //-------------------------------------------------------------------------
 void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayUs )
 {   
-  //  QElapsedTimer sendtime;
+    QElapsedTimer sendtime;
+
     if(maxMsg <= 0 || data.length() < maxMsg)
     {
         //sendtime.start();
@@ -105,8 +106,11 @@ void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayUs )
         }
     }
 
-//    quint64 ns = sendtime.nsecsElapsed();
-//    qDebug() << "Sent " << data.length() << " bytes in " << ns/1000 << "us";
+    if(getLoglevel() == 2)
+    {
+        quint64 ns = sendtime.nsecsElapsed();
+        qDebug() << "Sent " << data.length() << " bytes in " << ns / 1000 << "us";
+    }
 
 }
 
@@ -123,20 +127,22 @@ bool DcMidiOut::dataOutNoSplit( const DcMidiData& data )
             _rtMidiOut->sendMessage( &vec );
             rtval = true;
             emit dataOutMonitor(data);
+
+            if( getLoglevel() )
+            {
+                qDebug() << "tx:" << data.toString();
+            }
+
         }
         catch (RtMidiError &error)
         {
-            qDebug() << "Error: " << error.getMessage().c_str();
+            if( getLoglevel() )
+            {
+                qDebug() << "tx-error:" << data.toString();
+            }
+            qDebug() << "tx-error-message: " << error.getMessage().c_str();
             setError("RtMidiOut::dataOut ",error.getMessage());
         }
-
-
-
-#ifdef VERBOSE_MIDI_DEBUG
-        qDebug() << "DcMidiOut::dataOut: " << data.toString();
-#endif // VERBOSE_MIDI_DEBUG
-
-
     }
     return rtval;
 }
