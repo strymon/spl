@@ -8,6 +8,7 @@
 #include <qs3/qs3.h>
 #include <QScrollBar>
 #include <QHostInfo>
+#include <QClipboard>
 
 DcLogDialog::DcLogDialog(QWidget *parent, DcLog *lg) :
     QDialog(parent),
@@ -40,10 +41,11 @@ void DcLogDialog::on_pushButton_2_clicked()
 
 void DcLogDialog::on_pushButton_clicked()
 {
-    // send to strymon
 
-    pushUsersLog(_logText, ui->lineEdit->text());
+    // pushUsersLog(_logText, ui->lineEdit->text());
 
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(_logText + "\n" + ui->lineEdit->text());
 }
 
 void DcLogDialog::showEvent(QShowEvent *)
@@ -64,9 +66,9 @@ void DcLogDialog::timerEvent(QTimerEvent *e)
             ui->textEdit->setText("<br><br><br><center><h1>Loading...</h1></center>");
             QApplication::processEvents();
 
-            _logText = LoadLog(*_log,true,30000);
+            _logText = LoadLog(*_log,true,250000);
             ui->horizontalSlider->setMaximum(_max);
-            ui->horizontalSlider->setValue(qMin(30000,_max));
+            ui->horizontalSlider->setValue( qMin( 250000,_max ) );
 
             ui->label_3->setText(QString("All(%1)").arg(_max));
             ui->textEdit->setText(_logText);
@@ -137,8 +139,9 @@ void DcLogDialog::pushUsersLog(const QString textToSend, const QString note /*="
 
     QS3::S3 s3(s3Host, s3Proxy);
 
-    // The S3 keys will get you access to the strymon-inbox, it will allow object writes only.
-    QScopedPointer<QS3::Bucket> bucket(s3.bucket("strymon-inbox", "AKIAJZFPMQ3GFR57BS4A", "ecYiGu3RD4jPOyrEMHHfPHw4W9nKcPM3CfcHuQwX"));
+    
+    
+    QScopedPointer<QS3::Bucket> bucket(s3.bucket("strymon-inbox", "a-key", "a-big-secret-number"));
 
     QByteArray logdata;
 

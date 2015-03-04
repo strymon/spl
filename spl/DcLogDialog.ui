@@ -119,7 +119,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Send to Support</string>
+        <string>Copy To Clipboard</string>
        </property>
       </widget>
      </item>
