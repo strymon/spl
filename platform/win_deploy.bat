@@ -27,7 +27,9 @@ set QMAKE_SPEC=win32-msvc2013
 set MSVC_DIR=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC
 set QT_ICU_VER=53
 set D3DVER=47
-set QT_ROOT=C:\Qt\Qt5.4.0_32\5.4\msvc2013
+::set QT_ROOT=C:\Qt\Qt5.4.0_32\5.4\msvc2013 \qt\Qt5.4.1\5.4\msvc2013_64_opengl
+::set QT_ROOT=c:\qt\Qt5.4.1\5.4\msvc2013_64_opengl
+set QT_ROOT=c:\qt\Qt5.4.1_32\5.4\msvc2013
 set MSVC_REDIST_VER=120
 set MSVC_REDIST="%MSVC_DIR%\redist\%PLAT%\Microsoft.VC%MSVC_REDIST_VER%.CRT"
 
@@ -102,12 +104,14 @@ goto :EOF
 :ARGDONE
 
 if not %MANUAL_VER% == AUTO goto set_ver
-::python inc_version.py -f ..\spl\main.cpp -v kDcVersionString --inc_build
+python inc_version.py -f ..\spl\main.cpp -v kDcVersionString --inc_build
+python inc_version.py -f .\osx\Info.plist -v string --inc_build
 goto setup
 
 :set_ver
 if /I "%MANUAL_VER%" == "cur" goto setup 
-::python inc_version.py -s %MANUAL_VER% -f ..\spl\main.cpp -v kDcVersionString
+python inc_version.py -s %MANUAL_VER% -f ..\spl\main.cpp -v kDcVersionString
+python inc_version.py -f .\osx\Info.plist -v string -s %MANUAL_VER%
 
 :setup
 :: Extract version from main.cpp (and use this lame 'cmd.exe for loop' to set VER_STR with output from python script) <sigh>

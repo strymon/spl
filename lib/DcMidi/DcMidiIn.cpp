@@ -99,10 +99,11 @@ void DcMidiIn::midiDataIn( double deltatime, std::vector< unsigned char > * mess
     Q_ASSERT(_assertInCallback);
 #endif
     
-#ifdef VERBOSE_MIDI_DEBUG
-    qDebug() << "DcMidiIn::midiDataIn: " << DcMidiData(*message).toString();
-#endif // VERBOSE_MIDI_DEBUG
-    
+//     if(getLoglevel())
+//     {
+//         qDebug() << "rx:" << DcMidiData( *message ).toString();
+//     }
+//     
     DcMidiData md = DcMidiData(*message,this);
     
    
@@ -136,11 +137,6 @@ void DcMidiIn::setupAfterOpen( quint32 flags /*=0*/)
 #endif
 
     _rtMidiIn->setCallback(&DcMidiIn_midiInCallback,this);
-    
-    #ifdef VERBOSE_MIDI_DEBUG
-qDebug() << "setupAfterOpen - callback registered";
-    #endif // VERBOSE_MIDI_DEBUG
-
 
 #ifdef QRT_ENABLE_BROKEN_SYNC_CODE
     // There might be some junk in the input queue that got missed before
@@ -175,7 +171,10 @@ void DcMidiIn::setSlot( const QObject *receiver,const char *member)
    
     if( !disconnect(this,&DcMidiIn::dataIn,0,0) )
     {
-        qDebug() << __FUNCTION__ << " Failed to disconnect previous receiver";
+//         if( getLoglevel() )
+//         {
+//             qDebug() << __FUNCTION__ << " Failed to disconnect previous receiver";
+//         }
     }
 
     connect(this, SIGNAL(DcMidiIn::dataIn()), receiver, member);

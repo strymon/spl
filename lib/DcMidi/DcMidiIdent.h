@@ -408,6 +408,8 @@ struct DcMidiDevIdent
     // The short id is the lower byte of Family and the lower byte of the product id.
     QString         getShortId();
 
+    QString         getProductName();
+
 
     // Return the two byte family id
     unsigned short  getFamilyId();

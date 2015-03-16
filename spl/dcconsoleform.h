@@ -165,7 +165,9 @@ public:
     { stream->ts << m; requestRefresh(); return *this; }
     
 
-
+    bool isHtmlMode() const { return _con_html; }
+    
+    void append(const QString& str, int bytecnt);
 
 public slots:
     virtual void setVisible(bool visible);
@@ -197,6 +199,8 @@ private slots:
     void cmd_ts(DcConArgs args);
     void cmd_aboutQt(DcConArgs args);
     void cmd_exit(DcConArgs args);
+
+    
 
 protected:
 
@@ -262,7 +266,8 @@ private:
     void setNoClrOnReturnOnce(bool val) { _noClrOnReturnOnce = val; }
     QStringList tokenize(QString& sexp);
     DcFnSymDef parseFn(QString sexp);
-   
+    
+
 };
 
 #endif // DCCONSOLEFORM_H

@@ -22,6 +22,7 @@
 #include <QHash>
 #include <QTextStream>
 #include <QObject>
+#include <QElapsedTimer>
 
 #include "DcMidi.h"
 
@@ -32,8 +33,8 @@ class DcMidiOut : public DcMidi
 {
     Q_OBJECT
 
-    static const int kSafeMaxPacketSize = 32;
-    static const int kSafeDelayBetweenPackets = 20;
+    static const int kDefaultSafeMaxPacketSize = 32;
+    static const int kDefaultSafeDelayBetweenPackets = 20000;
 
 public:
 
@@ -46,10 +47,10 @@ public:
      */
     void setMaxPacketSize(int szInBytes);
     /** Set the minimum time between MIDI packets
-     *  int ms - time in milliseconds
+     *  int us - time in microseconds
      *  @return void
      */
-    void setDelayBetweenBackets(int ms);
+    void setDelayBetweenBackets(int micros);
     /** Reset the transfer speed settings.
      *  
      *  @return void
@@ -65,7 +66,14 @@ public:
      *
      * @return bool
      */
-    bool isSafeMode() const { return (_maxDataOut==kSafeMaxPacketSize) && (_delayBetweenPackets==kSafeDelayBetweenPackets);}
+    bool isSafeMode() const { return (_maxDataOut==_safeModeMax) && (_delayBetweenPackets==_safeModeDelay);}
+
+    int getSafeModeMaxPacketSize() const { return _safeModeMax; }
+    int getSafeModeDelay() const { return _safeModeDelay; }
+
+    int getCurMaxPacketSize() const { return _maxDataOut; }
+    int getCurDelay() const { return _delayBetweenPackets; }
+    void setSafeModeDefaults(int maxSizePerCmd, int delay);
 
 signals:
     void dataOutMonitor(const DcMidiData& data);
@@ -74,7 +82,9 @@ public slots:
     void dataOut( const DcMidiData& data );
     void dataOut( const QString& hexStr);
     void dataOut( const char* hexStr);
+
     void dataOutSplit( const DcMidiData& data, int maxMsg, int delayPerMsg );
+    bool dataOutNoSplit(const DcMidiData &data);
     
     void dataOutThrottled(const DcMidiData& data);
 
@@ -93,5 +103,7 @@ private:
     // working around poor MIDI devices
     int _maxDataOut;
     int _delayBetweenPackets;
+    int _safeModeMax;
+    int _safeModeDelay;
 };
 #endif // DcMidiOut_h__

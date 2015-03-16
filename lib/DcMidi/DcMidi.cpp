@@ -23,11 +23,12 @@
 DcMidi::DcMidi()
 {
     _curOpenPortIdx = kNotOpen;
+    _loglevel = 0;
 }
 
 //-------------------------------------------------------------------------
 DcMidi::DcMidi( QObject* parent )
-    : QObject(parent)
+    : QObject( parent ),_loglevel( 0 )
 {
     _curOpenPortIdx = kNotOpen;
 }

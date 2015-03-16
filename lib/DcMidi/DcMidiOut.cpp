@@ -22,8 +22,10 @@
 //#define VERBOSE_MIDI_DEBUG 1
 //-------------------------------------------------------------------------
 DcMidiOut::DcMidiOut(QObject* parent)
-    : DcMidi(parent),_rtMidiOut(0),_maxDataOut(0),_delayBetweenPackets(0)
+    : DcMidi(parent),_rtMidiOut(0),_maxDataOut(0),_delayBetweenPackets(0),_safeModeMax(kDefaultSafeMaxPacketSize),
+      _safeModeDelay(kDefaultSafeDelayBetweenPackets)
 {
+
 }
 
 //-------------------------------------------------------------------------
@@ -77,53 +79,77 @@ void DcMidiOut::dataOutThrottled(const DcMidiData& data)
 }
 
 //-------------------------------------------------------------------------
-void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayMs )
-{
+void DcMidiOut::dataOutSplit( const DcMidiData& data, int maxMsg, int delayUs )
+{   
+    QElapsedTimer sendtime;
+
     if(maxMsg <= 0 || data.length() < maxMsg)
     {
-        dataOut(data);
+        //sendtime.start();
+        dataOutNoSplit(data);
     }
     else
     {
         QList<DcMidiData> list = data.split(maxMsg);
         QList<DcMidiData>::iterator i;
+        //sendtime.start();
         for (i = list.begin(); i != list.end(); ++i)
         {
-            dataOut(*i);
-            if(delayMs > 0)
+            if( !dataOutNoSplit( *i ) )
+                break;
+            // This is a very gross timing loop - it's not
+            // very real time and it will probably be way longer than the values suggest
+            if(delayUs >= 320 && delayUs < 10000000)
             {
-                QThread::msleep(delayMs);
+                QThread::usleep( delayUs);
             }
         }
     }
+
+    if(getLoglevel() == 2)
+    {
+        quint64 ns = sendtime.nsecsElapsed();
+        qDebug() << "Sent " << data.length() << " bytes in " << ns / 1000 << "us";
+    }
+
 }
 
 //-------------------------------------------------------------------------
-void DcMidiOut::dataOut( const DcMidiData& data )
+bool DcMidiOut::dataOutNoSplit( const DcMidiData& data )
 {
+    bool rtval = false;
     std::vector<unsigned char> vec;
     data.copyToStdVec(vec);
     if(isOk())
     {
-        try 
+        try
         {
             _rtMidiOut->sendMessage( &vec );
+            rtval = true;
             emit dataOutMonitor(data);
+
+            if( getLoglevel() )
+            {
+                qDebug() << "tx:" << data.toString();
+            }
+
         }
         catch (RtMidiError &error)
         {
-            qDebug() << "Error: " << error.getMessage().c_str();
+            if( getLoglevel() )
+            {
+                qDebug() << "tx-error:" << data.toString();
+            }
+            qDebug() << "tx-error-message: " << error.getMessage().c_str();
             setError("RtMidiOut::dataOut ",error.getMessage());
-        } 
-
-
-
-#ifdef VERBOSE_MIDI_DEBUG
-        qDebug() << "DcMidiOut::dataOut: " << data.toString();
-#endif // VERBOSE_MIDI_DEBUG
-
-
+        }
     }
+    return rtval;
+}
+//-------------------------------------------------------------------------
+void DcMidiOut::dataOut( const DcMidiData& data )
+{
+    dataOutSplit(data,_maxDataOut,_delayBetweenPackets);
 }
 
 //-------------------------------------------------------------------------
@@ -143,20 +169,25 @@ void DcMidiOut::setMaxPacketSize( int szInBytes )
     _maxDataOut = szInBytes;
 }
 
-void DcMidiOut::setDelayBetweenBackets( int ms )
+void DcMidiOut::setDelayBetweenBackets( int micros )
 {
-    _delayBetweenPackets = ms;
+    _delayBetweenPackets = micros;
 }
 
 void DcMidiOut::resetSpeed()
 {
     _delayBetweenPackets = -1;
-    _maxDataOut = -1;
+}
+
+void DcMidiOut::setSafeModeDefaults(int maxSizePerCmd, int delay)
+{
+    _safeModeDelay = (delay==-1) ? kDefaultSafeDelayBetweenPackets : delay;
+    _safeModeMax = (maxSizePerCmd==-1) ? kDefaultSafeMaxPacketSize : maxSizePerCmd;
 }
 
 void DcMidiOut::setSafeMode()
 {
-    setMaxPacketSize(kSafeMaxPacketSize);
-    setDelayBetweenBackets(kSafeDelayBetweenPackets);
+    setMaxPacketSize(_safeModeMax);
+    setDelayBetweenBackets(_safeModeDelay);
 }
 

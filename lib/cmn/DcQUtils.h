@@ -22,7 +22,11 @@ class DcQUtils
 public:
 	DcQUtils();
 	~DcQUtils();
-
+    /** Given a version string in format MM.mm.inc.bld e.g. 0.2.3.4 -> 0x00020304
+     *  @param str
+     *  @return int
+     */
+     static int verStrToDec( const QString& str );
     static QString getTimeStamp();
     static QString getOsVersion();
 protected:

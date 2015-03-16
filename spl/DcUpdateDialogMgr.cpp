@@ -108,6 +108,8 @@ DcUpdateDialogMgr::DcUpdate_Result DcUpdateDialogMgr::getLatestAndShowDialog()
                         {
                             DCWARN() << "There was a problem during the update";
                             rtval = _installUpdateResult;
+                            _progressDialog->hide();
+                            _lastErrorMsgStr = "<h2>Update Failed</h2>";
                         }
                     }
                     else
@@ -377,9 +379,17 @@ bool DcUpdateDialogMgr::updateFirmware(QString fileName )
                                 {
                                     totalWriteErrorCount++;
                                     DCLOG() << "Firmware Write Failure" << ((retryCnt > 0) ? " Trying again" : "Giving Up");
-
-                                    // Trottel back on the MIDI data rate.
                                     _bootCtl->setMidiOutSafeMode();
+
+                                    if( _bootCtl->isBlindMode() )
+                                    {
+                                        _progressDialog->setIoHealth( 2 );
+                                    }
+                                    else
+                                    {
+                                        _progressDialog->setIoHealth( 1 );
+                                    }
+
                                 }
                             }
 

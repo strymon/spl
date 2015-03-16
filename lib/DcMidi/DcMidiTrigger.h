@@ -62,6 +62,8 @@ public:
 
     bool dequeue(DcMidiData& md);
 
+    void clear();
+
     bool allowFutherProcessing() const { return _allowFutherProcessing; }
     
     void setAllowFutherProcessing(bool val) { _allowFutherProcessing = val; }
@@ -73,7 +75,7 @@ public:
     void unlock() {_mtx.unlock();}
 
     quint32 getCount() { return _count; }
-    quint32 clearCount() { return _count; }
+    quint32 clearCount();
 
 private:
     friend class DcMidiIn;
@@ -145,6 +147,7 @@ public:
     }
 
     inline bool dequeue(DcMidiData& md) {return _tc->dequeue(md);}
+    inline void clear() { _tc->clear(); }
     inline bool wait(unsigned int timems) {return _tc->wait(timems);}
     inline quint32 getCount() {return _tc->getCount();}
     inline void clearCount() {_tc->clearCount();}

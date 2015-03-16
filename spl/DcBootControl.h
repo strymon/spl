@@ -27,6 +27,7 @@
 
 #include <DcMidi/DcMidiIn.h>
 #include <DcMidi/DcMidiOut.h>
+#include "DcDeviceDetails.h"
 
 struct DcMidiDevIdent;
 
@@ -225,8 +226,8 @@ private:
 
 /*! A class to query boot code and and manipulate code blocks */
 class DcBootControl 
-{
 
+{
     static const char* kPrivateResetPartial; /* = "F0 00 01 55 vv vv 1B F7" */
     static const char* kFUResponcePattern; /* = "F0 00 01 55 42 0C .. F7" */
     static const char* kFUGood; /* = "F0 00 01 55 42 0C 00 F7" */
@@ -236,7 +237,8 @@ class DcBootControl
 
 public:    
     
-    DcBootControl(DcMidiIn& i, DcMidiOut& o);
+    DcBootControl(DcMidiIn& i, DcMidiOut& o,DcDeviceDetails& d);
+
     ~DcBootControl()
     {
 
@@ -330,11 +332,21 @@ public:
     int countResponcePattern( const QString& cmd, const QString& pattern, int timeOutMs = 800 );
 
     void setMidiOutSafeMode();
+
+    bool getBlindMode() const { return _blindMode; }
+
+    void setBlindMode( bool val ) { _blindMode = val; }
+    bool isBlindMode();
 private:
 
     DcMidiIn*   _pMidiIn;
     DcMidiOut* _pMidiOut;
+    DcDeviceDetails* _pDevDetails;
     
+    // Blind mode - when true, the class will make assumptions about identity, and ignore some return status.
+    // This feature was added as a workaround for MIDI devices that have problems with messages larger than 4 bytes.
+    // This is a gross work-around/last resort mode of operation.
+    bool        _blindMode;
     QTextStream _lastErrorMsg;
-    QString _lastErrorMsgStr;    
+    QString     _lastErrorMsgStr;    
 };

@@ -24,6 +24,7 @@
 #include <QObject>
 
 #include <string>
+#include <cmn/DcLog.h>
 
 #include "DcMidiData.h"
 
@@ -63,6 +64,15 @@ public:
     */ 
     QString getPortName() const { return _curPortName; }
 
+    virtual void setLoglevel( int val ) 
+    { 
+        _loglevel = val; 
+    }
+    virtual int getLoglevel() const 
+    { 
+        return _loglevel; 
+    }
+
 protected:
     virtual void stopIo() {}
     virtual void setupAfterOpen(quint32 flags=0) {Q_UNUSED(flags);};
@@ -82,6 +92,10 @@ protected:
     void setError(const char* msg1,QString msg2,const char* msg3);
 
     void clearLastStatus();
+    
+    
+
+
 
 private:   
     QString _lastError;
@@ -91,7 +105,9 @@ private:
     // What the caller wants to use
     QString _curPortName;
     
-    
+    // Control what gets logged: 0 is off
+    int _loglevel;
+
     // What is currently open
     int _curOpenPortIdx;
 };

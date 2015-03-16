@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>771</width>
+    <width>774</width>
     <height>865</height>
    </rect>
   </property>
@@ -366,6 +366,9 @@
                 <height>100</height>
                </size>
               </property>
+              <property name="mouseTracking">
+               <bool>true</bool>
+              </property>
               <property name="acceptDrops">
                <bool>true</bool>
               </property>
@@ -431,8 +434,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>771</width>
-     <height>21</height>
+     <width>774</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -464,6 +467,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionShow_Log"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -491,6 +495,7 @@
     <bool>false</bool>
    </attribute>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
@@ -571,6 +576,11 @@
   <action name="actionShow_Update_Pandel">
    <property name="text">
     <string>Software Update</string>
+   </property>
+  </action>
+  <action name="actionShow_Log">
+   <property name="text">
+    <string>Show Log</string>
    </property>
   </action>
  </widget>

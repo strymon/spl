@@ -45,6 +45,7 @@ struct DcDeviceDetails : public DcMidiDevIdent
         PresetNameLen = 0;
         PresetNameOffset = 0;
         DeviceIconResPath.clear();
+        CrippledIo = false;
     }
 
     bool isEmpty()
@@ -60,6 +61,9 @@ struct DcDeviceDetails : public DcMidiDevIdent
             DcMidiDevIdent::Product.toString() + 
             DcMidiDevIdent::Manufacture.toString());
     }
+    
+    bool isCrippled() const { return CrippledIo; }
+
     quint8  PresetNumberOffset;
     quint16 PresetSize;
     quint16 PresetCount;
@@ -83,6 +87,7 @@ struct DcDeviceDetails : public DcMidiDevIdent
 
     QRegExp PresetRd_NAK;
     QRegExp PresetRd_ACK;
+    bool     CrippledIo;
 
 
 };

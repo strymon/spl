@@ -662,17 +662,20 @@ void DcConsoleForm::cmd_help( DcConArgs args )
     {
         txtStrm.setFieldWidth(20);
         txtStrm.setFieldAlignment(QTextStream::AlignLeft);
-        txtStrm << "Command Name";
+        txtStrm << "Command ";
         txtStrm << " | Help Text";
         *this << s << "\n";
         s.clear();
         *this << "-------------------- | ----------------------------\n";
-        
+
         // Print the user command help
         QHashIterator<QString, DcConItem> i(_cmdHash);
         while (i.hasNext()) 
         {
             i.next();
+            if(args.first().isValid() && !i.key().contains(QRegExp(args.first(".").toString())))
+                continue;
+
             txtStrm.setPadChar('.');
             txtStrm << i.key().trimmed();
             txtStrm.setPadChar(' ');
@@ -684,18 +687,20 @@ void DcConsoleForm::cmd_help( DcConArgs args )
     else
     {
        s.clear();
-        txtStrm <<  "<table border='0' cellspacing='0' cellpadding='0' bgcolor='silver' >";
-        txtStrm << "<tr>";
-        txtStrm << "<td><b>Command Name   </b></td>";
-        txtStrm << "<td><b>Help Text</b></td>";
+        txtStrm <<  "<table border='0' cellspacing='0' cellpadding='0' bgcolor='#F9F9F9' >";
+        txtStrm << "<tr bgcolor='#e0e0e0'>";
+        txtStrm << "<td><b>Command</b></td>";
+        txtStrm << "<td><b>Help String</b></td>";
         txtStrm << "</tr>";
-        
+
         QHashIterator<QString, DcConItem> i(_cmdHash);
         while (i.hasNext()) 
         {
             i.next();
+            if(args.first().isValid() && !i.key().contains(QRegExp(args.first(".").toString())))
+                continue;
             txtStrm << "<tr><td>" << i.key().trimmed() << "</td>";
-            txtStrm << "<td>" << i.value().helpString << "</td></tr>";
+            txtStrm << "<td>" << i.value().helpString.toHtmlEscaped() << "</td></tr>";
         }
         txtStrm << "</table>\n";
         *this << s;
@@ -1056,15 +1061,27 @@ void DcConsoleForm::cmd_append( DcConArgs args )
     if(!_appendOk)
         return;
     
+
     
     if(!checkArgCnt(args,1))
     {
     	return;
     }
+
 	QString val = args.at(1).toString();
     // setNoClrOnReturnOnce(true);
     ui->lineEdit->setText(_curLineEditText + " " + val);
     
+}
+
+void DcConsoleForm::append(const QString& str, int bytecnt)
+{
+    if(!_appendOk)
+        return;
+    
+
+    ui->lineEdit->setText(_curLineEditText + " " + str);
+    incCounterDisplay(bytecnt);
 }
 
 
@@ -1109,7 +1126,7 @@ void DcConsoleForm::cmd_conHtml( DcConArgs args )
         else
         {
             _con_html = false;
-            *this << "Consolue is using plain text\n";
+            *this << "Console is using plain text\n";
         }
         clear();
     }
@@ -1129,6 +1146,7 @@ void DcConsoleForm::requestRefresh()
     // -------------------------------------------
     // FILTER OUTPUT
 
+/*
     // Messages can be filtered from the display.
     if(stream->buffer.contains("F8\n"))
     {
@@ -1143,6 +1161,7 @@ void DcConsoleForm::requestRefresh()
         stream->buffer.clear();
         return;
     }
+*/
 
     // -----------------------------------------
     // TRANSFORM OUTPUT
@@ -1152,7 +1171,7 @@ void DcConsoleForm::requestRefresh()
         // html tag of some kind.
         if( ! buf.contains(QRegExp("(<.+|/>)")))
         {
-            buf.prepend("<br>");
+            buf.replace('\n',"<br>");
         }
         
         // Always replace the newlines
@@ -1192,7 +1211,7 @@ void DcConsoleForm::requestRefresh()
 void DcConsoleForm::cmd_exit(DcConArgs args)
 {
     Q_UNUSED(args);
-    QApplication::quit();
+    QApplication::closeAllWindows();
 }
 
 

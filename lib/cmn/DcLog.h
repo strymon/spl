@@ -54,9 +54,17 @@ public:
     virtual ~DcLog();
 
     static void muteQDebug();
+
+    QString getLogPath() const { return _str;}
+
+    QString getLogPath(int ord) const
+    {
+        return setFileOrdinal(_str,ord);
+    }
+
 private:
 
-    QString setFileOrdinal(const QString& fileName, int ord);
+    QString setFileOrdinal(const QString& fileName, int ord) const;
     QString removeFileOrdinal( const QString& fileName);
     void backUp(const QString& filePath,const int maxBackupCount);
     QString makeNewName( QString fileName );

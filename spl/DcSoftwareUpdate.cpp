@@ -177,7 +177,11 @@ bool DcSoftwareUpdate::prepForUpdateToLatest( DcDeviceDetails& devDetails,DcUpda
         return false;
     }
 
-    if(_swPackageIndex.findNewer(devDetails.getShortId(),devDetails.FwVersion,true,newPackageDesc))
+    QString fwver = devDetails.FwVersion;
+
+    fwver = "0.0.0.1";
+
+    if(_swPackageIndex.findNewer(devDetails.getShortId(),fwver,true,newPackageDesc))
     {
         if(!newPackageDesc.isEmpty())
         {

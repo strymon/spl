@@ -153,6 +153,16 @@ public:
         return false;
     }
 
+    inline bool thirdTruthy()
+    {
+        if(argCount() >= 3)
+        {
+            QString a = third().toString().toLower().trimmed();
+            return a == "1" || a == "on" || a == "yes" || a == "true";
+        }
+        return false;
+    }
+
     /*!
       Returns a QString version of the meta-data value for the given key
       For example, to get a command doc string, use 'doc'

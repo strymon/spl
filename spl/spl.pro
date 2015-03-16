@@ -1,13 +1,13 @@
 QT       += core gui network 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+DEFINES += BAD_MIDI_WORKAROUND
 TARGET = spl
 
 TEMPLATE = app
 
 include("$$top_srcdir/defaults.pri")
-CONFIG += depend_includepath
+CONFIG += depend_includepath c++11
 
 INCLUDEPATH += $$top_srcdir/spl
 
@@ -39,7 +39,8 @@ SOURCES += main.cpp\
         DcUpdateAvailableDialog.cpp \
         DcUpdateDialogMgr.cpp \
         DcImgLabel.cpp \
-    DcDropLabel.cpp
+        DcDropLabel.cpp \
+        DcLogDialog.cpp
 
 
 HEADERS  += DcPresetLib.h \
@@ -59,11 +60,13 @@ HEADERS  += DcPresetLib.h \
             DcUpdateAvailableDialog.h \
             DcUpdateDialogMgr.h \
             DcImgLabel.h \
-    DcDropLabel.h
+            DcDropLabel.h \
+            DcLogDialog.h
 
 FORMS += DcPresetLib.ui IoProgressDialog.ui MoveDialog.ui RenameDialog.ui DcplAbout.ui \
     DcConsoleForm.ui MidiPortSelect.ui \
-    DcUpdateAvailableDialog.ui
+    DcUpdateAvailableDialog.ui \
+    DcLogDialog.ui
 
 #include the linkage setup
 include("$$LIB_DIR/DcMidi/DcMidi.pri")

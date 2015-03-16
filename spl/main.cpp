@@ -22,9 +22,7 @@
 #include "DcConArgs.h"
 
 
-static const char* kDcVersionString = "0.9.4.3";
-
-
+static const char* kDcVersionString = "0.9.4.42";
 
 
 void muteMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
