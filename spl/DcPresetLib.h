@@ -60,13 +60,9 @@ public:
 //    void loadConsolePlugins();
 //    QDir locatePluginsPath();
 
-
-
-    void pushUsersLog(const QString note = "");
-
 public slots:
-    void conCmd_sharelog(DcConArgs args);
-     void conCmd_PrintEnvi( DcConArgs args );
+
+
 signals:
 
 // State Machine Signals
@@ -192,6 +188,7 @@ private slots:
     void conCmd_SplitPresetBundle( DcConArgs args );
 
     void conCmd_enableFastFetch(DcConArgs args);
+    void conCmd_PrintEnvi( DcConArgs args );
 
     //void conCmd_devTestExec( DcConArgs args );
     //void launchDeviceTester( DcConArgs &args );
