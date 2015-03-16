@@ -84,7 +84,7 @@
 #include "cmn/DcLog.h"
 #include <QDesktopWidget>
 
-#include <qs3/qs3.h>
+//#include <qs3/qs3.h>
 #include <DcLogDialog.h>
 
 // Strymon Pedal Specific
@@ -3870,11 +3870,6 @@ void DcPresetLib::conCmd_showlog( DcConArgs args )
     _con->execCmd("exec logfile");
 }
 
-void DcPresetLib::conCmd_sharelog( DcConArgs args )
-{
-  pushUsersLog(args.first().toString());
-}
-
 //-------------------------------------------------------------------------
 void DcPresetLib::clearWorklist()
 {
@@ -4040,82 +4035,6 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
     ui.devImgLabel->setDisabled(false);
 }
 
- void DcPresetLib::pushUsersLog(const QString note /*=""*/)
- {
-     const QString s3Host = "s3.amazonaws.com";
-     const QString s3Proxy = "";
-     QS3::S3 s3(s3Host, s3Proxy);
-     // The S3 keys will get you access to the strymon-inbox, it will allow object writes only.
-     QScopedPointer<QS3::Bucket> bucket(s3.bucket("strymon-inbox", "AKIAJZFPMQ3GFR57BS4A", "ecYiGu3RD4jPOyrEMHHfPHw4W9nKcPM3CfcHuQwX"));
-
-      QByteArray logdata;
-
-     if(!note.isEmpty())
-     {
-         logdata = "User Note: ";
-         logdata += note;
-         logdata += "\n";
-     }
-
-
-     QString logpath = _log->getLogPath();
-
-
-     {
-        QFile f( logpath );
-        f.open( QIODevice::ReadOnly | QIODevice::Text );
-        if( f.isOpen() )
-        {
-             logdata += f.readAll();
-        }
-     }
-
-     logpath = _log->getLogPath(0);
-     {
-         QFile f( logpath );
-         if(f.exists())
-         {
-             f.open( QIODevice::ReadOnly | QIODevice::Text );
-             if( f.isOpen() )
-             {
-                 logdata += f.readAll();
-             }
-         }
-     }
-
-     QString logName = "spl.log.";
-     QString username = "unknown";
-     QStringList environment = QProcess::systemEnvironment();
-     int index = environment.indexOf(QRegExp("USER*"));
-     if (index != -1)
-     {
-        QStringList stringList = environment.at(index).split('=');
-        if (stringList.size() == 2)
-        {
-            username = stringList.at(1).toUtf8();
-         }
-     }
-
-     logName += username;
-     QByteArray compressedData = qCompress(logdata);
-     QByteArray uncompresseddata = qUncompress(compressedData);
-     if(uncompresseddata == logdata)
-     {
-         *_con << "same\n";
-     }
-
-     bucket->upload("test_01.zip", compressedData);
-
-     _iodlg->reset();
-     _iodlg->show();
-     dlgMsg("Sending Log to Strymon");
-     // wait finish
-     QEventLoop loop;
-     connect(bucket.data(), SIGNAL(finished()), &loop, SLOT(quit()));
-     loop.exec();
-     _iodlg->hide();
-
- }
 
 void DcPresetLib::on_actionShow_Log_triggered()
 {
