@@ -453,6 +453,7 @@ void DcConsoleForm::flush()
 
 bool DcConsoleForm::addCmd(QString name, const QObject *receiver, const char *member, QString helpString)
 {
+
     bool rtval = false;
     if (receiver && member) 
     {
@@ -527,10 +528,63 @@ QStringList DcConsoleForm::tokenize(QString& sexp)
 bool DcConsoleForm::executeCmdStr(const QString cmdLine, bool direct /*=false*/)
 {
     bool rtval = true;
-    DcConArgs args(cmdLine);
+
+    QString cmdLineMod = cmdLine;
+    if(!_prefaceMode.isEmpty())
+    {
+        cmdLineMod.replace("\"","'");
+    }
+
+    DcConArgs args(cmdLineMod);
     // Expand any symbols defined with 'def'
     
-    
+    if(args.cmd() == "!!!")
+    {
+       QString a;
+
+      if(args.oneArg())
+         a= args.first().toString();
+
+       args.shift();
+       if(a.isEmpty())
+       {
+           _prefaceMode.clear();
+       }
+       else
+       {
+           _prefaceMode = a;
+           args.shift();
+
+       }
+   }
+    if(args.cmd().isEmpty())
+        return true;
+
+
+    QStringList passThruCmds;
+    passThruCmds << "append";
+    bool dotCmd=false;
+    if(args.cmd().length()>0)
+    {
+        if(args.cmd().at(0) == '.')
+        {
+          //    args.setCmdName(args.cmd().mid(1));
+           args[0] = args.cmd().mid(1);
+            dotCmd = true;
+        }
+        else if(passThruCmds.contains(args.cmd()))
+        {
+            dotCmd = true;
+        }
+    }
+
+
+    if(!dotCmd && !_prefaceMode.isEmpty())
+    {
+       args.prepForEcmaScript();
+        args.push(_prefaceMode);
+    }
+
     if(args.cmd() == "doc")
     {
         args.setCmdName(args.first().toString());

@@ -1,6 +1,6 @@
 QT       += core gui network 
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets qml
 DEFINES += BAD_MIDI_WORKAROUND
 TARGET = spl
 

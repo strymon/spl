@@ -96,6 +96,7 @@ public:
     */ 
     void setBaseDir( QString& basePath );
 
+
     // Register a command handler
     
     // addCmd - binds the name to the reciver/SLOT pair and associates a help string
@@ -267,6 +268,7 @@ private:
     QStringList tokenize(QString& sexp);
     DcFnSymDef parseFn(QString sexp);
     
+    QString _prefaceMode;
 
 };
 

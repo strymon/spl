@@ -20,6 +20,7 @@
 
 #include <QtTest/QTest>
 
+#include <QJSEngine>
 
 #include "DcMidi/DcMidiData.h"
 #include "DcMidiDevDefs.h"
@@ -207,7 +208,28 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     // loadConsolePlugins();
      
      _crippledMode = false;
+    _d = new Dial(this);
 
+//    auto logSlot = [=](QString value)
+//     {
+//        *_con << value << "\n";
+//     };
+
+    connect(_d,&Dial::logMsgChanged,[=](QString value)
+     {
+        *_con << value << "\n";
+     });
+
+    connect(_d,&Dial::cls,[=]()
+     {
+        _con->execCmd(".cls");
+     });
+
+     myEngine.globalObject().setProperty("app_path", QApplication::applicationFilePath());
+     myEngine.globalObject().setProperty("dial", myEngine.newQObject(_d));
+
+     QJSValue iod = myEngine.newQObject(_iodlg);
+     myEngine.globalObject().setProperty("iodlg", iod);
 
 
 }
@@ -2806,14 +2828,166 @@ void DcPresetLib::setupConsole()
     _con->addCmd("exportfile",this,SLOT(conCmd_SplitPresetBundle(DcConArgs)),"<source preset file> [<destination path>] - export each preset found in the provided file." );
 
     _con->addCmd("printenv",this,SLOT(conCmd_PrintEnvi(DcConArgs))," print the system environment");
-
     _con->setBaseDir(_dataPath);
-    
+
+    /// CONSOLECMD _con->addCmd("$name$",this,SLOT(conCmd_$name$(DcConArgs))," doc string ");
+
+    _con->addCmd("tsc",this,SLOT(conCmd_tsc(DcConArgs))," doc string ");
+    _con->addCmd("jsload",this,SLOT(conCmd_jsload(DcConArgs))," doc string ");
+
     // Call the defld command
     _con->execCmd("defld default_defs.bin");
 
+/// CONSOLEFUNC
+}
+/// void DcPresetLib::conCmd_$name$( DcConArgs args )
+/// {
+///     if(args.noArgs())
+///     {
+///         *_con << "no args";
+///     }
+///     else
+///     {
+///        *_con << args.toString();
+///     }
+/// }
+///
+///
+
+void DcPresetLib::conCmd_jsload(DcConArgs args)
+{
+
+    if(args.first().toString().isEmpty() || args.first().toString() == "0")
+    {
+        QString scriptPath = QDir::toNativeSeparators(_dataPath + "js/");
+        QDir dir(scriptPath);
+        dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+// dir.setSorting(QDir::Size | QDir::Reversed);
+        *_con << "loading scripts\n";
+        QFileInfoList list = dir.entryInfoList();
+
+        for (int i = 0; i < list.size(); ++i)
+        {
+            QFileInfo fileInfo = list.at(i);
+            *_con << "  " << fileInfo.filePath();
+            QFile scriptFile(fileInfo.filePath());
+            if (!scriptFile.open(QIODevice::ReadOnly))
+            {
+                *_con << " - error\n";
+            }
+            else
+            {
+                QTextStream stream(&scriptFile);
+                QString contents = stream.readAll();
+                scriptFile.close();
+                myEngine.evaluate(contents, fileInfo.filePath());
+                *_con << " - ok\n";
+            }
+        }
+
+    }
+    else
+    {
+        QString fileName = args.first().toString();
+        *_con << "file: " << fileName <<
+                 "\n";
+        QFile scriptFile(fileName);
+        if (!scriptFile.open(QIODevice::ReadOnly))
+        {    *_con << "load error\n";
+            return;
+        }
+
+        QTextStream stream(&scriptFile);
+        QString contents = stream.readAll();
+        scriptFile.close();
+        myEngine.evaluate(contents, fileName);
+        *_con << "ok\n";
+    }
 }
 
+void DcPresetLib::conCmd_tsc( DcConArgs args )
+{
+
+    //QPushButton *button = new QPushButton;
+
+//    myEngine.evaluate("button.checkable = true");
+
+//    qDebug() << scriptButton.property("checkable").toBool();
+//    scriptButton.property("show").call(); // call the show() slot
+
+    QJSValue v =  myEngine.evaluate(args.argsAsStringList().join(' '));
+    QString vs = v.toString();
+
+    if(vs != "undefined")
+        *_con << v.toString() << "\n";
+
+//    QProcess* builder = new QProcess(this);
+//    QStringList env = QProcess::systemEnvironment();
+
+
+//    //env << "TMPDIR=C:\\MyApp\\temp"; // Add an environment variable
+//    QByteArray ba = qgetenv("PATH");
+//    QByteArray p = ba + QString(":/usr/local/bin").toUtf8();
+//    QString pp = p;
+
+//    env << "PATH="+pp;
+//    builder->setEnvironment(env);
+//    builder->setProcessChannelMode(QProcess::MergedChannels);
+
+//    //QProcess::startDetached("open", args.argsAsStringList());
+
+//    //builder->start("/usr/local/bin/tsc", QStringList() << "");
+
+//    // *_con << "envi " << builder->processEnvironment().toStringList().join("\n");
+//    *_con << "\n";
+
+//    builder->
+
+//            start("node", QStringList() << "--help");
+//    if(!builder->waitForStarted(3000))
+//    {
+//        return;
+//    }
+
+//    if (!builder->waitForFinished())
+//       {
+
+//        *_con << "fail: " << builder->errorString() << "\n";
+//    }
+//    else
+//    {
+//        *_con << "ok: " << builder->readAll().toStdString().c_str() << "\n";
+//    }
+
+
+
+
+//    QProcess gzip;
+//    gzip.start("/usr/local/bin/tsc", QStringList() << "--help");
+//    if (!gzip.waitForStarted())
+//        return /*false*/;
+
+//    gzip.write("Qt rocks!");
+//    gzip.closeWriteChannel();
+
+//    if (!gzip.waitForFinished())
+//        return /*false*/;
+
+//    QByteArray result = gzip.readAll();
+
+//    *_con << result.toStdString().c_str() << "\n";
+//    if(args.noArgs())
+//    {
+//        *_con << "no args\n";
+
+//    }
+//    else
+//    {
+//        *_con << args.toString();
+//        *_con << "\n";
+//    }
+
+}
 
 void DcPresetLib::conCmd_PrintEnvi( DcConArgs args )
 {
@@ -2823,10 +2997,12 @@ void DcPresetLib::conCmd_PrintEnvi( DcConArgs args )
     }
     else
     {
-    	QStringList environment = QProcess::systemEnvironment();
+        QStringList environment = QProcess::systemEnvironment();
         *_con << environment.join("\n");
     }
 }
+
+
 
 //-------------------------------------------------------------------------
 // display state machine history
@@ -4122,3 +4298,15 @@ void DcPresetLib::on_actionShow_Log_triggered()
     DcLogDialog* ld = new DcLogDialog(0,_log);
     ld->show();
 }
+
+
+void Dial::log(const QString &msg)
+{
+     emit logMsgChanged(msg);
+}
+
+void Dial::docls()
+{
+     emit cls();
+}
+

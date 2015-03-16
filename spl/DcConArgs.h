@@ -198,6 +198,9 @@ public:
     inline bool is( const char* c ) { return cmd() == c;}
     inline bool is( QString& qs ) { return cmd() == qs;}
    
+    void shift() {if(_args.count()) _args.pop_front();}
+    void push(const QVariant & v) {_args.push_front(v);}
+    void prepForEcmaScript();
 
 private:
     QList<QVariant>         _args;

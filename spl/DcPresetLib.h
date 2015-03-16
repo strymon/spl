@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <QStateMachine>
 #include <QDir>
+#include <QJSEngine>
 
 
 #include "DcMidi/DcMidiData.h"
@@ -47,6 +48,36 @@
 class MidiSettings;
 
 
+//#include <QQuickPaintedItem>
+//#include <QPainter>
+//#include <QLinearGradient>
+
+class Dial : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool bottom MEMBER m_bottom)
+    Q_PROPERTY(QColor color MEMBER m_color NOTIFY colorChanged)
+    Q_PROPERTY(QString log MEMBER m_logmsg NOTIFY logMsgChanged)
+
+public:
+    Dial(QObject *parent=0) : QObject(parent)
+    {}
+    ~Dial(){};
+    //void paint(QPainter *painter);
+    Q_INVOKABLE void log(const QString& msg);
+    Q_INVOKABLE void docls();
+
+signals:
+    void colorChanged(QColor arg);
+    void logMsgChanged(QString arg);
+    void cls();
+
+private:
+    bool m_bottom;
+    QColor m_color;
+    QString m_logmsg;
+};
+
 class DcPresetLib : public QMainWindow
 {
     Q_OBJECT
@@ -61,12 +92,22 @@ public:
 //    QDir locatePluginsPath();
 
 
+    QJSEngine myEngine;
+    Dial* _d;
 
     void pushUsersLog(const QString note = "");
 
 public slots:
     void conCmd_sharelog(DcConArgs args);
      void conCmd_PrintEnvi( DcConArgs args );
+     /// CONSOLESLOT
+     /// conCmd_$name$(DcConArgs args);
+     void conCmd_tsc(DcConArgs);
+     void conCmd_jsload(DcConArgs);
+
+
+
+
 signals:
 
 // State Machine Signals

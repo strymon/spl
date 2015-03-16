@@ -125,6 +125,16 @@ QString DcConArgs::toStringNoDelim()
     return st.trimmed();
 }
 
+void DcConArgs::prepForEcmaScript()
+{
+    QString st;
+    int len = count();
+    for( int i = 0; i < len; i++ )
+    {
+         _args[i] = _args.at( i ).toString().replace("\"","'");
+    }
+}
+
 QStringList DcConArgs::argsAsStringList()
 {
     QStringList rtval;
