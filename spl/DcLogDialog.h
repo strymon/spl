@@ -17,8 +17,6 @@ public:
     explicit DcLogDialog(QWidget *parent = 0,DcLog* lg =0);
     ~DcLogDialog();
 
-    void pushUsersLog(const QString textToSend, const QString note);
-
     QString GetEnviValue( const QString& key );
 
     QByteArray LoadLog(const DcLog &log,bool lastlogtoo,int limit=999999999);

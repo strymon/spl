@@ -39,8 +39,8 @@ SOURCES += main.cpp\
         DcUpdateAvailableDialog.cpp \
         DcUpdateDialogMgr.cpp \
         DcImgLabel.cpp \
-    DcDropLabel.cpp \
-    DcLogDialog.cpp
+        DcDropLabel.cpp \
+        DcLogDialog.cpp
 
 
 HEADERS  += DcPresetLib.h \
@@ -60,8 +60,8 @@ HEADERS  += DcPresetLib.h \
             DcUpdateAvailableDialog.h \
             DcUpdateDialogMgr.h \
             DcImgLabel.h \
-    DcDropLabel.h \
-    DcLogDialog.h
+            DcDropLabel.h \
+            DcLogDialog.h
 
 FORMS += DcPresetLib.ui IoProgressDialog.ui MoveDialog.ui RenameDialog.ui DcplAbout.ui \
     DcConsoleForm.ui MidiPortSelect.ui \
@@ -70,7 +70,6 @@ FORMS += DcPresetLib.ui IoProgressDialog.ui MoveDialog.ui RenameDialog.ui DcplAb
 
 #include the linkage setup
 include("$$LIB_DIR/DcMidi/DcMidi.pri")
-include("$$LIB_DIR/s3-qt/s3-qt.pri")
 
 
 RESOURCES += dcpl.qrc

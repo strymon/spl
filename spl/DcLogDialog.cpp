@@ -5,7 +5,7 @@
 #include "cmn/DcLog.h"
 #include "IoProgressDialog.h"
 #include "cmn/DcQUtils.h"
-#include <qs3/qs3.h>
+
 #include <QScrollBar>
 #include <QHostInfo>
 #include <QClipboard>
@@ -21,8 +21,6 @@ DcLogDialog::DcLogDialog(QWidget *parent, DcLog *lg) :
 
     if(_log)
     {
-       // QString d = LoadLog(*_log);
-        //ui->textBrowser->setText( d );
         startTimer(1);
     }
     ui->controlFrame->setVisible(false);
@@ -128,75 +126,6 @@ QByteArray DcLogDialog::LoadLog(const DcLog &log,bool loglasttoo,int limit)
     return logdata.right(len);
 }
 
-void DcLogDialog::pushUsersLog(const QString textToSend, const QString note /*=""*/)
-
-{
-    IoProgressDialog* dlg=new IoProgressDialog(this);
-    dlg->setModal(true);
-
-    const QString s3Host = "s3.amazonaws.com";
-    const QString s3Proxy = "";
-
-    QS3::S3 s3(s3Host, s3Proxy);
-
-    
-    
-    QScopedPointer<QS3::Bucket> bucket(s3.bucket("strymon-inbox", "a-key", "a-big-secret-number"));
-
-    QByteArray logdata;
-
-    logdata += textToSend.toLatin1();
-
-    if(!note.isEmpty())
-    {
-        logdata += "\n\nUser Note: ";
-        logdata += note;
-        logdata += "\n";
-    }
-
-    
-     QString logName = windowTitle() + "_" + DcQUtils::getTimeStamp() + "_spl.log";
-    
-
-    if(_useCompression)
-        logdata = qCompress(logdata);
-
-// Test example
-//    QByteArray uncompresseddata = qUncompress(compressedData);
-//    if(uncompresseddata == logdata)
-//    {
-//        *_con << "same\n";
-//    }
-
-    dlg->reset();
-    dlg->setMessage("Sending to Strymon Support");
-    dlg->show();
-    QApplication::processEvents();
-
-
-    bucket->upload(logName,logdata);
-
-    bool done = false;
-    connect(bucket.data(), &QS3::Bucket::finished, [&] ()
-    {
-        done = true;
-    });
-
-    dlg->setMax(100);
-
-    while(!done && !dlg->cancled())
-    {
-        dlg->show();
-        QApplication::processEvents();
-        dlg->inc();
-    }
-    
-    ui->pushButton->setEnabled(dlg->cancled());
-
-    dlg->hide();
-    dlg->deleteLater();
-
-}
 
 QString DcLogDialog::GetEnviValue( const QString& key )
 {
