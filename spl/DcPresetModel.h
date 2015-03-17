@@ -15,13 +15,7 @@ public:
     bool isValid() const { return true; }
     virtual QString toString() const;
 
-signals:
-
-public slots:
-
-protected:
-
-    class DcPresetDataFilters
+    class DataFilters
     {
     public:
         static DcMidiData Location(const DcMidiData& md);
@@ -33,10 +27,14 @@ protected:
         static DcMidiData Checkbyte(const DcMidiData& md);
         static DcMidiData Name(const DcMidiData& md);
     };
+signals:
 
+public slots:
 
-private:
+protected:
     DcMidiData _md;
+private:
+
 
 };
 

@@ -22,20 +22,25 @@ DcPresetModel::~DcPresetModel()
 
 QString DcPresetModel::toString() const
 {
-    QString rtval = QString("<h3>%1</h3><hr>").arg((QString)DcPresetModel::DcPresetDataFilters::Name(_md).toByteArray());
-    rtval += "ID Hdr:" + DcPresetModel::DcPresetDataFilters::Identify(_md).toString(' ') + "<br>";
-    rtval += "Product: " + DcPresetModel::DcPresetDataFilters::ProductId(_md).toString(' ') + "<br>";
-    rtval += "Opcode: " + DcPresetModel::DcPresetDataFilters::Opcode(_md).toString(' ') + "<br>";
-    rtval += "Location: " + DcPresetModel::DcPresetDataFilters::Location(_md).toString(' ') + "<br>";
-    rtval += "Name: " + (QString)DcPresetModel::DcPresetDataFilters::Name(_md).toByteArray() + "<br>";
-    rtval += "Chk Byte: " + DcPresetModel::DcPresetDataFilters::Checkbyte(_md).toString(' ') + "<br>";
+    QString rtval = QString("<h3>%1</h3><hr>").arg((QString)DcPresetModel::DataFilters::Name(_md).toByteArray());
+    rtval += "ID Hdr:" + DcPresetModel::DataFilters::Identify(_md).toString(' ') + "<br>";
+    rtval += "Product: " + DcPresetModel::DataFilters::ProductId(_md).toString(' ') + "<br>";
+    rtval += "Opcode: " + DcPresetModel::DataFilters::Opcode(_md).toString(' ') + "<br>";
+    rtval += "Location: " + DcPresetModel::DataFilters::Location(_md).toString(' ') + "<br>";
+    rtval += "Name: " + (QString)DcPresetModel::DataFilters::Name(_md).toByteArray() + "<br>";
+    rtval += "Chk Byte: " + DcPresetModel::DataFilters::Checkbyte(_md).toString(' ') + "<br>";
     rtval += "<br>";
-    rtval += _md.toString();
+
+    int starto = 84;
+    int endo = 18;
+    int sz = _md.length();
+    DcMidiData md = _md.mid(0,starto) + _md.mid(sz-endo,endo);
+    rtval += md.toString();
     rtval += "</p>";
     return rtval;
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::Data(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::Data(const DcMidiData &md)
 {
     /*
      let u8  := unsigned 8 bit number
@@ -56,7 +61,7 @@ DcMidiData DcPresetModel::DcPresetDataFilters::Data(const DcMidiData &md)
     return DcMidiData(md.mid(kPresetDataOffset,kPresetDataLength));
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::AltData(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::AltData(const DcMidiData &md)
 {
     DcMidiData rtval = md.mid(kPresetDataOffset,83);
     int len = kPresetDataLength-(538+83) - 2;
@@ -64,32 +69,32 @@ DcMidiData DcPresetModel::DcPresetDataFilters::AltData(const DcMidiData &md)
     return rtval;
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::Location(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::Location(const DcMidiData &md)
 {
     return DcMidiData(md.mid(kPresetLocationOffset,2));
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::ProductId(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::ProductId(const DcMidiData &md)
 {
     return DcMidiData(md.mid(kPresetProductIdOffset,1));
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::Identify(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::Identify(const DcMidiData &md)
 {
     return DcMidiData(md.mid(1,5));
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::Opcode(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::Opcode(const DcMidiData &md)
 {
     return DcMidiData(md.mid(kPresetOpcodeOffset,1));
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::Checkbyte(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::Checkbyte(const DcMidiData &md)
 {
     return DcMidiData(md.mid(kPreseChecksumOffset,1));
 }
 
-DcMidiData DcPresetModel::DcPresetDataFilters::Name(const DcMidiData &md)
+DcMidiData DcPresetModel::DataFilters::Name(const DcMidiData &md)
 {
     return DcMidiData(md.mid(kPresetNameOffset,kPresetNameLen));
 }

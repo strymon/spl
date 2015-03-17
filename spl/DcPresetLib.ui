@@ -266,7 +266,7 @@
            <item>
             <widget class="QPushButton" name="openButton">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Open</string>
@@ -522,7 +522,10 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QDockWidget" name="dockWidgetView">
+   <property name="floating">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>View</string>
    </property>
@@ -539,21 +542,11 @@
          <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="lineWrapMode">
         <enum>QTextEdit::FixedColumnWidth</enum>
        </property>
        <property name="lineWrapColumnOrWidth">
         <number>80</number>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Courier New'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New,monospace';&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -699,8 +692,8 @@ p, li { white-space: pre-wrap; }
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>631</x>
-     <y>190</y>
+     <x>264</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -716,7 +709,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>49</x>
-     <y>67</y>
+     <y>367</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -731,8 +724,8 @@ p, li { white-space: pre-wrap; }
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>631</x>
-     <y>161</y>
+     <x>264</x>
+     <y>539</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -747,8 +740,8 @@ p, li { white-space: pre-wrap; }
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>482</x>
-     <y>57</y>
+     <x>478</x>
+     <y>278</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -763,8 +756,8 @@ p, li { white-space: pre-wrap; }
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>401</x>
-     <y>57</y>
+     <x>419</x>
+     <y>151</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -779,8 +772,8 @@ p, li { white-space: pre-wrap; }
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>665</x>
-     <y>103</y>
+     <x>264</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>
@@ -795,8 +788,8 @@ p, li { white-space: pre-wrap; }
    <slot>trigger()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>665</x>
-     <y>132</y>
+     <x>264</x>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

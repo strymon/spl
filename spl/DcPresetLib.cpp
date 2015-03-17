@@ -69,6 +69,7 @@
 
 
 
+#include "DcBigSkyPresetModel.h"
 #include "DcConsoleForm.h"
 #include "DcPresetModel.h"
 #include "DcUpdateDialogMgr.h"
@@ -983,6 +984,7 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
     updateDeviceDetails( data,_devDetails );
 
     _devDetails.CrippledIo = _crippledMode;
+
     updateStatusbar();
 
     QString devImgName;
@@ -1018,16 +1020,6 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
     
     ui.devImgLabel->setNormalImgName( _devDetails.DeviceIconResPath );
 
-//     if( _devInfo.isEmpty())
-//     {
-//         ui.devImgLabel->setPixmap( devImgName );
-//     }
-//     else
-//     {
-//         _devPix = devImgName;
-//         _devInfo = devNameVer;
-//     }
-//     
     ui.devInfoLabel->setText( devNameVer );
     ui.devImgLabel->setAcceptDrops( true );
 
@@ -1181,6 +1173,8 @@ void DcPresetLib::setupStateMachineHandler()
     presetEdit->assignProperty(ui.saveButton, "enabled", true);
     presetEdit->assignProperty(ui.actionOpen, "enabled", true);
     presetEdit->assignProperty(ui.actionSave, "enabled", true);
+
+    userCanFetch->assignProperty(ui.openButton, "enabled", true);
 
     notInSyncState->assignProperty(ui.syncButton, "enabled", true);
     notInSyncState->assignProperty(ui.actionSync, "enabled", true);
@@ -1446,12 +1440,21 @@ void DcPresetLib::on_workList_itemSelectionChanged()
     {
         // Grab the preset data and update the bank/preset to PresetCount (that will place it in the edit buffer)
         DcMidiData md = _workListData.at(cur_idx);
-        DcPresetModel pm(md);
-        if(pm.isValid())
+        DcPresetModel* pm = 0;
+        if(DcPresetModel::DataFilters::ProductId(md) == DcMidiData("03"))
         {
-            ui.presetViewText->setText(pm.toString());
+            pm = new DcBigSkyPresetModel(md,this);
+        }
+        else
+        {
+            pm = new DcPresetModel(md,this);
         }
 
+        if(pm && pm->isValid())
+        {
+            ui.presetViewText->setText(pm->toString());
+            pm->deleteLater();
+        }
     }
 }
 
@@ -1981,6 +1984,12 @@ void DcPresetLib::on_actionOpen_triggered()
     QString lastOpened = settings.value("lastPresetBundleOpened",defaultPresetFileName).toString();
     QString fileName = execOpenDialog(lastOpened);
 
+     if(_devDetails.isEmpty())
+     {
+         _devDetails.fromIdentData(DcMidiData("F0 00 01 55 7E 7F 06 02 00 12 00 01 30 30 30 30 F7"));
+         setFamilyDetails(_devDetails);
+     }
+
     if(!fileName.isEmpty())
     {
         
@@ -2037,7 +2046,7 @@ bool DcPresetLib::loadPresetBinary(const QString &fileName,QList<DcMidiData>& da
     // Load one preset in, see if it matches the current Manufacture
     QByteArray ba(_devDetails.PresetSize,'\0');
 
-    while(ba.length() == in.readRawData(ba.data(),ba.length()))
+    while(!ba.isEmpty() && ba.length() == in.readRawData(ba.data(),ba.length()))
     {
         DcMidiData md(ba);
 
@@ -2059,8 +2068,9 @@ bool DcPresetLib::loadPresetBinary(const QString &fileName,QList<DcMidiData>& da
     }
 
     file.close();
-
+    ui.workList->setEnabled(true);
     return true; 
+
 }
 
 //-------------------------------------------------------------------------
@@ -3577,6 +3587,11 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
     }
     else
     {
+        details.Name                      = "Unicorn";
+        details.PresetsPerBank          = 2;
+        details.PresetCount             = 50;
+        fastfetch_feature_thresh        = 123;
+
         rtval = false;
     }
     

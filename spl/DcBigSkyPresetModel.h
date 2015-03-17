@@ -18,6 +18,10 @@ signals:
 
 public slots:
 
+
+    // DcPresetModel interface
+public:
+    QString toString() const;
 };
 
 #endif // DCBIGSKYPRESETMODEL_H
