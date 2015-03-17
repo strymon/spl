@@ -32,7 +32,9 @@ QString DcBigSkyPresetModel::toString() const
     machine.append(QString("&nbsp;").repeated(11-machine.length()));
 
     QString rtval; /*=DcPresetModel::toString() +*/
-    rtval += QLatin1String("<hr><table border=\"0\" cellpadding=\"0\" cellspacing=\"3\">") +
+    rtval += QString("<h3>%1</h3><hr>").arg((QString)DcPresetModel::DataFilters::Name(_md).toByteArray());
+
+    rtval += QLatin1String("<table border=\"0\" cellpadding=\"0\" cellspacing=\"3\">") +
             QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("NAME:").arg((QString)DcPresetModel::DataFilters::Name(_md).toByteArray()) +
             "<tr><td>MACHINE:</td> <td>"+machine+"</td></tr>" +
             MIDIB(9) +

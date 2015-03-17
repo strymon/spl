@@ -23,14 +23,17 @@ DcPresetModel::~DcPresetModel()
 QString DcPresetModel::toString() const
 {
     QString rtval = QString("<h3>%1</h3><hr>").arg((QString)DcPresetModel::DataFilters::Name(_md).toByteArray());
-    rtval += "ID Hdr:" + DcPresetModel::DataFilters::Identify(_md).toString(' ') + "<br>";
-    rtval += "Product: " + DcPresetModel::DataFilters::ProductId(_md).toString(' ') + "<br>";
-    rtval += "Opcode: " + DcPresetModel::DataFilters::Opcode(_md).toString(' ') + "<br>";
-    rtval += "Location: " + DcPresetModel::DataFilters::Location(_md).toString(' ') + "<br>";
-    rtval += "Name: " + (QString)DcPresetModel::DataFilters::Name(_md).toByteArray() + "<br>";
-    rtval += "Chk Byte: " + DcPresetModel::DataFilters::Checkbyte(_md).toString(' ') + "<br>";
-    rtval += "<br>";
 
+    rtval += QLatin1String("<table border=\"0\" cellpadding=\"0\" cellspacing=\"3\">") +
+            QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("ID HDR:").arg(DcMidiData(DcPresetModel::DataFilters::Identify(_md)).toString()) +
+            QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("PRODUCT:").arg(DcMidiData(DcPresetModel::DataFilters::ProductId(_md)).toString()) +
+            QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("OPCODE:").arg(DcMidiData(DcPresetModel::DataFilters::Opcode(_md)).toString()) +
+            QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("LOCATION:").arg(DcMidiData(DcPresetModel::DataFilters::Location(_md)).toString()) +
+            QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("NAME:").arg((QString)DcPresetModel::DataFilters::Name(_md).toByteArray()) +
+            QString("<tr><td align=\"right\">%1</td><td>%2</td></tr>").arg("Check Byte:").arg( DcMidiData(DcPresetModel::DataFilters::Checkbyte(_md)).toString()) +
+            QString("</table>");
+
+    rtval += "<hr>";
     int starto = 84;
     int endo = 18;
     int sz = _md.length();
