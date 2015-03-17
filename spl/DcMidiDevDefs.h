@@ -152,8 +152,11 @@ static const int kPresetNameOffset = 632;
 static const int kPresetNameLen    = 16;
 static const int kPreseLength      = 650;
 static const int kPresetDataOffset  = 9;
+static const int kPresetProductIdOffset = 5;
+static const int kPresetOpcodeOffset = 6;
+static const int kPresetLocationOffset = 7;
 static const int kPresetDataLength  =  650-9-2;
 static const int kPresetChecksumOffset =  648;
-static const int kPreseChecksumOffset      = kPreseLength - 1;
+static const int kPreseChecksumOffset = kPreseLength-2;
 
 

@@ -40,7 +40,9 @@ SOURCES += main.cpp\
         DcUpdateDialogMgr.cpp \
         DcImgLabel.cpp \
         DcDropLabel.cpp \
-        DcLogDialog.cpp
+        DcLogDialog.cpp \
+    DcPresetModel.cpp \
+    DcBigSkyPresetModel.cpp
 
 
 HEADERS  += DcPresetLib.h \
@@ -61,7 +63,9 @@ HEADERS  += DcPresetLib.h \
             DcUpdateDialogMgr.h \
             DcImgLabel.h \
             DcDropLabel.h \
-            DcLogDialog.h
+            DcLogDialog.h \
+    DcPresetModel.h \
+    DcBigSkyPresetModel.h
 
 FORMS += DcPresetLib.ui IoProgressDialog.ui MoveDialog.ui RenameDialog.ui DcplAbout.ui \
     DcConsoleForm.ui MidiPortSelect.ui \

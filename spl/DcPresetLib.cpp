@@ -70,6 +70,7 @@
 
 
 #include "DcConsoleForm.h"
+#include "DcPresetModel.h"
 #include "DcUpdateDialogMgr.h"
 
 #include <QDebug>
@@ -1439,6 +1440,19 @@ void DcPresetLib::presetEdit_entered()
 void DcPresetLib::on_workList_itemSelectionChanged()
 {
     updateWorklistButtonAndAcationState();
+
+    int cur_idx = ui.workList->currentRow();
+    if(cur_idx > -1)
+    {
+        // Grab the preset data and update the bank/preset to PresetCount (that will place it in the edit buffer)
+        DcMidiData md = _workListData.at(cur_idx);
+        DcPresetModel pm(md);
+        if(pm.isValid())
+        {
+            ui.presetViewText->setText(pm.toString());
+        }
+
+    }
 }
 
 //-------------------------------------------------------------------------
