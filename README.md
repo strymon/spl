@@ -4,6 +4,7 @@
 
 | version | date | osx | win |
 |---------|------|-----|-----|
+| pre-release | 03/31/2015 | [0.9.4.44]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.44.dmg ) | [0.9.4.44]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.44.exe ) |
 | current release | 02/16/2015 | [0.9.4.3]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.dmg ) | [0.9.4.3]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.exe ) |
 | previous | 11/01/2013 | [0.9.3.9]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.8.dmg ) | [0.9.3.9]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.3.9.exe ) |
 
@@ -20,6 +21,14 @@ Date: 02/16/2015 <br>
 
 OSX: [strymon_lib_setup_0.9.4.3.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.dmg ) <br>
 Windows: [strymon_lib_setup_0.9.4.3.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.3.exe ) <br>
+
+#### Pre-release
+Version: 0.9.4.44 <br>
+Date: 03/31/2015 <br>
+This is an attempt to work with the inexpensive plug-and-play MIDI interfaces.
+
+OSX: [strymon_lib_setup_0.9.4.44.dmg]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.44.dmg ) <br>
+Windows: [strymon_lib_setup_0.9.4.44.exe]( https://s3-us-west-1.amazonaws.com/strymon/strymon_lib_setup_0.9.4.44.exe ) <br>
 
 ### Supported Platforms
 <b>OSX</b>10.7, 10.8 10.9 10.10 <br>
