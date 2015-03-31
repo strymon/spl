@@ -179,7 +179,11 @@ bool DcSoftwareUpdate::prepForUpdateToLatest( DcDeviceDetails& devDetails,DcUpda
 
     QString fwver = devDetails.FwVersion;
 
-    fwver = "0.0.0.1";
+    // Force an update option if shift is held down
+    if( QApplication::keyboardModifiers()&Qt::SHIFT )
+    {
+        fwver = "0.0.0.1";
+    }
 
     if(_swPackageIndex.findNewer(devDetails.getShortId(),fwver,true,newPackageDesc))
     {
