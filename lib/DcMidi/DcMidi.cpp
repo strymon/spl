@@ -118,8 +118,12 @@ void DcMidi::buildPortNameList(RtMidi* pRtMidi)
             portName = filterPortName(portName);
 #endif
         
-            portName = portName.remove(QString::number(idx)).trimmed();
-            _portNameIndexHash.insert(portName,idx);
+            QString idxStr = QString::number(idx);
+            if (portName.endsWith(idxStr))
+            {
+                portName.chop(idxStr.length());
+            }
+            _portNameIndexHash.insert(portName.trimmed(), idx);
     }
 }
 
