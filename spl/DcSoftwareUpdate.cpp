@@ -24,6 +24,7 @@
 #include <QRegExp>
 #include "cmn/DcLog.h"
 #include <QApplication>
+#include <QDataStream>
 
 const char* DcSoftwareUpdate::kRedirectFileUrl = "http://www.strymon.net/upd_spl.bin";
 
