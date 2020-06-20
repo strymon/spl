@@ -84,7 +84,7 @@ macx {
 
 # Include DcMidi
 win32:LIBS += -L$$LIB_OUT/DcMidi/$$DESTDIR/ -ldcmidi
-else:unix:LIBS += -L$$LIB_OUT/DcMidi/$$DESTDIR/ -ldcmidi
+else:unix:LIBS += -L$$LIB_OUT/DcMidi/$$DESTDIR/ -ldcmidi -ljack -lasound
 
 win32:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/dcmidi.lib
 else:macx:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/libdcmidi.a

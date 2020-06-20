@@ -33,6 +33,8 @@ win32 {
     DEFINES +=__WINDOWS_MM__
 }else:macx {
     DEFINES += __MACOSX_CORE__
+}else:unix {
+    DEFINES += __UNIX_JACK__ __LINUX_ALSA__
 }
 
 
