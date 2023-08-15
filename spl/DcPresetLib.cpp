@@ -69,7 +69,7 @@
 
 
 
-#include "DcConsoleForm.h"
+#include "dcconsoleform.h"
 #include "DcUpdateDialogMgr.h"
 
 #include <QDebug>
@@ -113,14 +113,14 @@ DcPresetLib::DcPresetLib(QWidget *parent)
     ui.actionMove->setEnabled(false);
     ui.actionRename->setEnabled(false);
     ui.actionLoad_One->setEnabled(false);
-    
+
     _midiOutDecimalMode = new DcConBool(this);
     _lastErrorMsg.setString(&_lastErrorMsgStr);
 
     _supportedDevicesSet.insert(DcMidiDevDefs::kTimeLineIdent);
     _supportedDevicesSet.insert(DcMidiDevDefs::kMobiusIdent);
     _supportedDevicesSet.insert(DcMidiDevDefs::kBigSkyIdent);
-    
+
     _midiSettings = new MidiSettings(this);
     _midiSettings->addSupportedIdentities(_supportedDevicesSet);
 
@@ -129,7 +129,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
     _maxPresetCount = 0;
     _presetOffset = 0;
-    
+
     _fileDownloader = 0;
 
     installEventFilter(this);
@@ -147,13 +147,13 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
 
     //QObject::connect(ui.devImgLabel,SIGNAL(clicked()),this,SLOT(on_devImgClicked()));
-    
+
     connect( ui.devImgLabel,&DcImgLabel::clicked, [&]() {
-        
+
         QString inp = _midiSettings->getInPortName();
         QString outp = _midiSettings->getOutPortName();
-        if( inp.isEmpty() || outp.isEmpty() || 
-            !_midiIn.getPortNames().contains( inp ) 
+        if( inp.isEmpty() || outp.isEmpty() ||
+            !_midiIn.getPortNames().contains( inp )
             || !_midiOut.getPortNames().contains(outp) )
         {
             QMetaObject::invokeMethod( ui.actionMIDI_Ports,"triggered",Qt::QueuedConnection );
@@ -163,7 +163,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
             _machine.postEvent( new VerifyDeviceConnection() );
         }
 
-        
+
     } );
 
     connect( ui.devImgLabel,&DcImgLabel::on_enter,[&]() {
@@ -174,16 +174,16 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
     QObject::connect(ui.devImgLabel,SIGNAL( fileDropped( const QString& ) ),this,SLOT( on_fileDropped( const QString& ) ),Qt::QueuedConnection);
     setupConsole();
-    
+
     ui.fetchButton->setFocus();
-    
+
     readSettings();
 
     // Verify we didn't fly off the screen if a multi-monitor system changed
     QDesktopWidget* dw = QApplication::desktop();
     QRect rec = dw->availableGeometry(this);
     QPoint appLoc = this->pos();
-    
+
     if(!rec.contains(appLoc))
     {
         // The app is in the weeds, bring it back to the primary display
@@ -194,7 +194,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
         int mh = size.height();
         int cw = (w/2) - (mw/2);
         int ch = (h/2) - (mh/2);
-        
+
         move(cw,ch);
     }
 
@@ -205,7 +205,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
      // _portScanTrigger = new DcMidiTrigger(DcMidiDevDefs::kIdentReply,this,SLOT(portScanTrigger(void*)));
     // loadConsolePlugins();
-     
+
      _crippledMode = false;
 
 
@@ -214,7 +214,7 @@ DcPresetLib::DcPresetLib(QWidget *parent)
 
 void DcPresetLib::on_devImgClicked()
 {
-       
+
 }
 
 //-------------------------------------------------------------------------
@@ -259,7 +259,7 @@ void DcPresetLib::closeEvent( QCloseEvent *e )
          _con->execCmd("defsv default_defs.bin");
     }
 
-   
+
 }
 //-------------------------------------------------------------------------
 void DcPresetLib::midiPortSelect_enter()
@@ -273,13 +273,13 @@ void DcPresetLib::setupFilePaths()
 {
     QSettings settings;
     QString defaultPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/spl/";
-    
+
     _dataPath = settings.value("data/location",defaultPath).toString();
     QString baseBackupPath = settings.value("backup/location",defaultPath).toString();
-    
+
     _updatesPath = QDir::toNativeSeparators(_dataPath + "updates/");
     QDir().mkpath(_updatesPath);
-    
+
     QDir().mkpath(QDir::toNativeSeparators(_dataPath + "downloads/"));
 
     _backupEnabled = settings.value("backup/enabled",true).toBool();
@@ -306,11 +306,11 @@ void DcPresetLib::writeSettings()
     settings.setValue( "geometry",saveGeometry() );
     settings.setValue( "windowState",saveState() );
     settings.endGroup();
-    
+
     settings.beginGroup("console");
     settings.setValue("show",ui.actionShow_Console->isChecked());
     settings.endGroup();
-    
+
     settings.setValue("fastfetch",gUseAltPresetSize);
 
 }
@@ -319,7 +319,7 @@ void DcPresetLib::writeSettings()
 void DcPresetLib::readSettings()
 {
     QSettings settings;
-    
+
     int sver = DcQUtils::verStrToDec( settings.value( "app_ver","" ).toString() );
     int aver = DcQUtils::verStrToDec( QApplication::applicationVersion() );
 
@@ -390,14 +390,14 @@ void DcPresetLib::detectDevice_entered()
     QString out_port = _midiSettings->getOutPortName();
 
     DCLOG() << "Detecting devices on ports: " << in_port << "," << out_port;
-    
+
     _devDetails.clear();
     conResetReadOnlySymbolDefines();
 
     // Turn on io logging
     int ll = _midiIn.getLoglevel();
     bool chkResults = checkTestAndConfigureMidiPorts( in_port,out_port );
-    
+
     if( chkResults && !_devDetails.isCrippled() )
     {
         DCLOG() << "Passed first device check, recheck to make sure";
@@ -410,7 +410,7 @@ void DcPresetLib::detectDevice_entered()
 
     if( chkResults  )
     {
-        
+
         emit deviceReady();
     }
     else
@@ -467,7 +467,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
         statusBar()->setStyleSheet( "" );
         QApplication::processEvents();
         DcMidiDevIdent id;
-        
+
         do
         {
 
@@ -501,7 +501,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
             _midiOut.setSafeModeDefaults( 32,50000 );
 
             _ioTestResults.log("set: " + out_port + " full speed");
-            
+
             _ioTestResults.log( "try: verify midi interface and device" );
             if( verifyMidiInterfaceAndDevice( dgd, id,_ioTestResults ) )
             {
@@ -518,7 +518,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
             }
 
             dlgMsg( "trying to detect a device" );
-            
+
             _maxMsgSize = 32;
             _delayPerMsgChunk = 50000;
             _midiOut.setMaxPacketSize( _maxMsgSize );
@@ -552,7 +552,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                 QApplication::processEvents();
                 _ioTestResults.setCrippled( true );
                 _crippledMode = true;
-                
+
                 _devDetails.fromIdentData( _ioTestResults.getIdData() );
 
                 _iodlg->setMessage( "Preparing to work with a incompatible MIDI interface..." );
@@ -562,27 +562,27 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                 DcMidiData md;
                 DCLOG() << "Check for MIDI thru enabled";
                 QApplication::processEvents();
-                
+
                 {
                     DcAutoTrigger autotc( "",&_midiIn );
                     int trycnt = 5;
                     // Wait for any strangler MIDI messages from crappy interfaces
                     QThread::msleep( 250 );
-                    
+
                     autotc.clear();
 
                     _midiOut.dataOut( "F0 F7" );
                     _midiOut.dataOut( "F0 F7" );
-                    
+
                     trycnt = 5;
                     while( trycnt-- > 0 && autotc.getCount() < 2 )
                     {
                         QThread::msleep( 100 );
                     }
-                
+
                 }
                 bool yesThruIsOn = sendAndWait( md,"F0 F7","F0 F7",1000 );
-                
+
                 if(!yesThruIsOn)
                 {
                     // Hmmm, wait and try again
@@ -590,7 +590,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                     QApplication::processEvents();
                     yesThruIsOn = sendAndWait( md,"F0 F7","F0 F7",1000 );
                 }
-                
+
                 if( _iodlg->cancled() )
                 {
                     _devDetails.clear();
@@ -608,14 +608,14 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
                     {
                         QApplication::processEvents();
                         DCLOG() << "MIDI thru was detected";
-                        
+
                         _iodlg->inc();
                         _iodlg->setMessage( "To continue,<br><big>Manually set the <i>" + _devDetails.getProductName() + "'s</i> global <b>MIDITH</b> parameter <b>OFF.</b></big><hr><small>This will disable the MIDI thru feature off your pedal and is only required<br>because your MIDI interface is incompatible.<br>MIDI thru may be enabled when not using this MIDI interface.<br><br>Click <a href='http://www.strymon.net/support/update/'>here</a> for more information.</small><br>" );
                         _iodlg->setLableImage( ":/images/res/global_midi_thru_off.png" );
                         _iodlg->hideProgress( true );
                         _iodlg->setNoCancel( false );
                         _iodlg->useOkButton( false );
-                        
+
                         qreal wo = _iodlg->windowOpacity();
                         while( !_iodlg->cancled() )
                         {
@@ -651,7 +651,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
             _ioTestResults.log( "error: nothing found on this midi bus" );
             _ioTestResults.setValid( true );
             _iodlg->hide();
-            
+
             // Setup a midi auto trigger in case a device arrives
             _midiIn.addTrigger( *_idResponceTrigger );
             return false;
@@ -659,7 +659,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
         } while( false );
 
         _iodlg->inc();
-        
+
         _ioTestResults.setValid( true );
         if( _ioTestResults.wasCanceled() )
         {
@@ -679,7 +679,7 @@ bool DcPresetLib::checkTestAndConfigureMidiPorts( QString in_port,QString out_po
         }
         else
         {
-            
+
             if( _ioTestResults.isStrymon() )
             {
                 _devDetails.fromIdentData( _ioTestResults.getIdData());
@@ -722,7 +722,7 @@ bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevI
     DcMidiData md;
     bool result = false;
     id.clear();
-    do 
+    do
     {
         if( _iodlg->cancled() )
         {
@@ -749,7 +749,7 @@ bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevI
 
                     tinfo.setIdData( md );
                     tinfo.setValid(true);
-                    
+
                     if( id.getManufactureName() == "Strymon" )
                     {
                         tinfo.log( "ok: found Strymon device: " + md.toString( ' ' ) );
@@ -789,7 +789,7 @@ bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevI
                 if( sendAndWait( md,"F0 7E 7F 06 01 F7","F0 7E .. 06 02",1000 ) )
                 {
                     tinfo.log( "ok: received response " + md.toString(' ') );
-                    
+
                     DeviceGuessData bigSkyGuess( "BigSky","00 01 55","12","03" );
                     if( guessAndCheckDevice( bigSkyGuess,tinfo ) )
                     {
@@ -833,7 +833,7 @@ bool DcPresetLib::verifyMidiInterfaceAndDevice( DeviceGuessData& dgd, DcMidiDevI
         }
 
     } while( false);
-    
+
     return result;
 }
 
@@ -879,7 +879,7 @@ bool DcPresetLib::guessAndCheckDevice(DeviceGuessData& dgd, IoTestResultInfo &ti
             tinfo.log( "error: no response" );
         }
     }
-    
+
     return result;
 }
 
@@ -924,7 +924,7 @@ bool DcPresetLib::hasDevSupport( const DcMidiData &data )
 //-------------------------------------------------------------------------
 // This singleShot slot is used to detect a timeout during the detectDevice
 // state.  It will always run, but the timeout is avoided if the recvIdData
-// runs first. 
+// runs first.
 void DcPresetLib::devIdWatchDogHandler()
 {
     _watchdog_timer.stop();
@@ -941,39 +941,39 @@ void DcPresetLib::recvIdData( const DcMidiData &data )
 
     // Parse the Identify response
     _devDetails.fromIdentData(data);
-    
+
     // Now, see if the program supports this device
     if(!hasDevSupport(data))
     {
-        // Bailing out here will let other devices on the same port have a chance to 
-        // report there identity.  If a supported device is never found, the watchdog_timer 
+        // Bailing out here will let other devices on the same port have a chance to
+        // report there identity.  If a supported device is never found, the watchdog_timer
         // timeouts (devIdWatchDog is called)
 
         // Note, as soon as a supported device is found the method continues and
-        // will ignore any other device responding to the identity request.  
-        
+        // will ignore any other device responding to the identity request.
+
         // This prevents (breaks) multi-device support on the same MIDI port.
         return;
     }
-    
-    
+
+
     // Shutdown the watchdog timer and disconnect this handler from the MIDI IN port
     _watchdog_timer.stop();
     QObject::disconnect(&_midiIn, &DcMidiIn::dataIn, this, &DcPresetLib::recvIdData);
-    
+
     // TODO: Put all the device details in a persistent Map of some kind allowing
     // for new devices to be supported.
 
     // TODO: _devDetails is just a quick structure to organize the device specific goo
     // to make the preset librarian work.  A structure is mostly overkill for this and perhaps this data
     // should remain as 'data' and therefor get stored as name/values in a map.
-    // Examples of poor generalization:  Protocol details, such as "preset data byte offset" 
-    // may only make since for a few products.  A method to hide these details, or to not need 
-    // these details would be more useful.  The program needs to know how to "grab" preset data 
+    // Examples of poor generalization:  Protocol details, such as "preset data byte offset"
+    // may only make since for a few products.  A method to hide these details, or to not need
+    // these details would be more useful.  The program needs to know how to "grab" preset data
     // and work with it.  What's the best way to do this?
 
     SetupAppWithDevice( data );
-    
+
     emit deviceReady();
 }
 
@@ -1014,7 +1014,7 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
     {
         devNameVer += " v" + _devDetails.FwVersion.mid( 2 );
     }
-    
+
     ui.devImgLabel->setNormalImgName( _devDetails.DeviceIconResPath );
 
 //     if( _devInfo.isEmpty())
@@ -1026,7 +1026,7 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
 //         _devPix = devImgName;
 //         _devInfo = devNameVer;
 //     }
-//     
+//
     ui.devInfoLabel->setText( devNameVer );
     ui.devImgLabel->setAcceptDrops( true );
 
@@ -1052,7 +1052,7 @@ void DcPresetLib::SetupAppWithDevice( const DcMidiData &data )
     _con->addRoSymDef( "dev.pid",_devDetails.getProductByte() );
     _con->addRoSymDef( "dev.fid",_devDetails.getFamilyByte() );
 
- 
+
 }
 
 void DcPresetLib::updateStatusbar()
@@ -1092,7 +1092,7 @@ void DcPresetLib::userCanFetch_entered()
                 on_actionSave_triggered();
             }
         }
-        
+
         _dirtyItemsIndex.clear();
         ui.workList->clear();
         ui.deviceList->clear();
@@ -1114,7 +1114,7 @@ void DcPresetLib::setupStateMachineHandler()
     DcState::SetTraceStringList(&_stateTrace);
     _machine.setGlobalRestorePolicy(QStateMachine::RestoreProperties);
     DcState *detectDevice       = new DcState(QString("detectDevice"));
-    
+
     DcState *errorRecovery      = new DcState(QString("errorRecovery"));
 //    DcState *cancelXfer         = new DcState(QString("cancelXfer"));
 
@@ -1148,7 +1148,7 @@ void DcPresetLib::setupStateMachineHandler()
     procDataIn->setInitialState(procDataIn_sendNext);
 
     _machine.addState(detectDevice);
-    
+
     _machine.addState(errorRecovery);
 
     _machine.addState(userCanFetch);
@@ -1171,7 +1171,7 @@ void DcPresetLib::setupStateMachineHandler()
     detectDevice->addTransition(this,SIGNAL(deviceReady()),     userCanFetch);
     detectDevice->addTransition(this,SIGNAL(deviceNotFound()),  noDevice);
     detectDevice->addTransition(ui.actionMIDI_Ports,SIGNAL(triggered()),midiPortSelect);
-    
+
     // Preset Edit UI properties
     presetEdit->assignProperty(ui.fetchButton, "enabled", true);
     presetEdit->assignProperty(ui.workList, "enabled", true);
@@ -1192,7 +1192,7 @@ void DcPresetLib::setupStateMachineHandler()
     // noDevice
     QObject::connect(noDevice, SIGNAL(entered()), this, SLOT(noDevice_entered()));
     noDevice->addTransition(ui.actionMIDI_Ports,SIGNAL(triggered()),midiPortSelect);
-    
+
     DcCustomTransition *nodt = new DcCustomTransition(DetectDevice::TYPE,noDevice);
     nodt->setTargetState(detectDevice);
     noDevice->addTransition(nodt);
@@ -1203,7 +1203,7 @@ void DcPresetLib::setupStateMachineHandler()
     noDevice->addTransition(nodt);
 
 
-    
+
     // midiPortSelect
     QObject::connect(midiPortSelect, SIGNAL(entered()), this, SLOT(midiPortSelect_enter()));
 
@@ -1214,12 +1214,12 @@ void DcPresetLib::setupStateMachineHandler()
     QObject::connect(userCanFetch, SIGNAL(entered()), this, SLOT(userCanFetch_entered()));
     userCanFetch->addTransition(ui.actionMIDI_Ports,SIGNAL(triggered()),midiPortSelect);
     userCanFetch->addTransition(ui.actionFetch,SIGNAL(triggered()),setupReadPresetsState);
-    
+
     DcCustomTransition *dcct = new DcCustomTransition(VerifyDeviceConnection::TYPE,userCanFetch);
     dcct->setTargetState(detectDevice);
     userCanFetch->addTransition(dcct);
 
-    
+
     DcCustomTransition *ucfct = new DcCustomTransition(DetectDevice::TYPE,noDevice);
     ucfct->setTargetState(detectDevice);
     userCanFetch->addTransition(ucfct);
@@ -1227,21 +1227,21 @@ void DcPresetLib::setupStateMachineHandler()
 
 
 
-    
+
     DcCustomTransition* ucf = new DcCustomTransition(FetchDataExistsEvent::TYPE,readPresetsCompleteState);
     ucf->setTargetState(presetEdit);
     userCanFetch->addTransition(ucf);
-    
+
     // Setup the dataIn system
     DcState* xferInState = _xferInMachine.setupStateMachine(&_machine,&_midiOut,readPresetsCompleteState,detectDevice,detectDevice);
-    
+
     // Setup the dataOut system
     DcState* xferOutState = _xferOutMachine.setupStateMachine(&_machine,&_midiOut,writePresetsCompleteState,errorRecovery,errorRecovery);
-    
+
     // State readPreset will call setupReadPresetXfer and transition to the xferMachine
     QObject::connect(setupReadPresetsState, SIGNAL(entered()), this, SLOT(setupReadPresetXfer_entered())); // IN
     setupReadPresetsState->addTransition(this,SIGNAL(readPresets_setupDone_signal()),xferInState); // OUT - procDataIn
-    setupReadPresetsState->addTransition( this,SIGNAL( readPresets_abort_signal() ),presetEdit ); 
+    setupReadPresetsState->addTransition( this,SIGNAL( readPresets_abort_signal() ),presetEdit );
 
     setupReadPresetsState->addTransition( this,SIGNAL( midiDeviceCrippled_about_signal() ),userCanFetch );
 
@@ -1254,13 +1254,13 @@ void DcPresetLib::setupStateMachineHandler()
     wpt = new DcCustomTransition(WriteCompleteSuccessEvent::TYPE,writePresetsCompleteState);
     wpt->setTargetState(presetEdit);
     writePresetsCompleteState->addTransition(wpt);
-    
+
     // Preset Transfer Complete, setup preset edit state
     QObject::connect(presetEdit, SIGNAL(entered()), this, SLOT(presetEdit_entered()));
 
     presetEdit->addTransition(ui.actionMIDI_Ports,SIGNAL(triggered()),midiPortSelect);
     presetEdit->addTransition(ui.fetchButton,SIGNAL(clicked()),setupReadPresetsState);
-    
+
     wpt = new DcCustomTransition(VerifyDeviceConnection::TYPE,presetEdit);
     wpt->setTargetState(detectDevice);
     presetEdit->addTransition(wpt);
@@ -1272,7 +1272,7 @@ void DcPresetLib::setupStateMachineHandler()
     dct = new DcCustomTransition(WorkListIsDifferentThanDeviceListEvent::TYPE,inSyncState);
     dct->setTargetState(notInSyncState);
     inSyncState->addTransition(dct);
-    
+
     dct = new DcCustomTransition(WorkListIsSameAsDeviceListEvent::TYPE,notInSyncState);
     dct->setTargetState(inSyncState);
     notInSyncState->addTransition(dct);
@@ -1280,7 +1280,7 @@ void DcPresetLib::setupStateMachineHandler()
     notInSyncState->addTransition(ui.actionSync,SIGNAL(triggered()),setupWritePresetsState);
     notInSyncState->assignProperty(ui.syncButton,"enabled",true);
     notInSyncState->assignProperty(ui.actionSync,"enabled",true);
-    
+
     QObject::connect(setupWritePresetsState, SIGNAL(entered()), this, SLOT(setupWritePresetXfer_entered())); // IN
     setupWritePresetsState->addTransition(this,SIGNAL(writePresets_setupDone_signal()),xferOutState); // OUT - procDataIn
 
@@ -1307,13 +1307,13 @@ void DcPresetLib::noDevice_entered()
     {
         *_con << "Unsupported Device: " << _devDetails.toString() << "\n";
     }
-    
+
     // Have the system watch for identity data:
 
     // Setup a trigger on midi in, if identity is detected, signal the slot.
-    // See the instantiation of _idResponceTrigger for the slot details. 
+    // See the instantiation of _idResponceTrigger for the slot details.
     _midiIn.addTrigger(*_idResponceTrigger);
-} 
+}
 
 //-------------------------------------------------------------------------
 void DcPresetLib::setupReadPresetXfer_entered()
@@ -1347,11 +1347,11 @@ void DcPresetLib::setupReadPresetXfer_entered()
     _workListDataDeviceUid = 0;
 
     _xferInMachine.reset(false);
-    
+
     // Get the number of presets that will be transfered from the device
     int presetCount     = _maxPresetCount;
     int presetOffset    = _presetOffset;
-    
+
     // Build a list of commands, the state machine will process each one in turn
     DcMidiData cmd;
     for (int presetId = presetOffset; presetId < presetCount+presetOffset; presetId++)
@@ -1359,7 +1359,7 @@ void DcPresetLib::setupReadPresetXfer_entered()
         cmd.setData(_devDetails.PresetReadTemplate,presetId);
         _xferInMachine.append(cmd);
     }
-    
+
     // Setup to receive preset data
     clearMidiInConnections();
     QObject::connect(&_midiIn, &DcMidiIn::dataIn, &_xferInMachine, &DcXferMachine::replySlotForDataIn);
@@ -1410,10 +1410,10 @@ void DcPresetLib::setupWritePresetXfer_entered()
     QObject::disconnect(&_midiIn, &DcMidiIn::dataIn, &_xferOutMachine, &DcXferMachine::replySlotForDataOut);
 
     QObject::connect(&_midiIn, &DcMidiIn::dataIn, &_xferOutMachine, &DcXferMachine::replySlotForDataOut);
-    
+
     _xferOutMachine.setProgressDialog(_iodlg);
     _xferOutMachine.go(&_devDetails);
-    
+
     DCLOG() << "Writing presets: safemode = " + QString(_midiOut.isSafeMode() ? "ENABLED" : "DISABLED");
 
     // Signal the state machine to begin
@@ -1430,7 +1430,7 @@ void DcPresetLib::presetEdit_entered()
    // updateWorkListFromDeviceList();
 
     Q_ASSERT(_deviceListData.length());
-    
+
     checkSyncState();
     _machine.postEvent(new InPresetEditEvent());
 }
@@ -1444,8 +1444,8 @@ void DcPresetLib::on_workList_itemSelectionChanged()
 //-------------------------------------------------------------------------
 void DcPresetLib::on_actionMove_triggered()
 {
-    // To start out a move, a preset must be selected.  This shall be 
-    // known as preset 'A.'  It is this moved to, or swapped with another 
+    // To start out a move, a preset must be selected.  This shall be
+    // known as preset 'A.'  It is this moved to, or swapped with another
     // preset location, called preset 'B'.
 
     int presetA_row = ui.workList->currentRow();
@@ -1466,7 +1466,7 @@ void DcPresetLib::on_actionMove_triggered()
         m->setModal(true);
         m->setDestinations(presetListToBankPatchName(_workListData));
         m->setTargetPreset(ui.workList->item(presetA_row)->text());
-        
+
         if(QDialog::Accepted ==  m->exec())
         {
             // Get the Row, Data and ID of preset B
@@ -1494,11 +1494,11 @@ void DcPresetLib::on_actionMove_triggered()
             else
             {
                 // Replace preset B with preset A
-                presetA.set14bit(_devDetails.PresetNumberOffset,presetB_id); 
+                presetA.set14bit(_devDetails.PresetNumberOffset,presetB_id);
                 _workListData.replace(presetB_row,presetA);
                 _dirtyItemsIndex.append(presetB_row);
             }
-            
+
             checkSyncState();
             _machine.postEvent(new WorkListDirtyEvent());
         }
@@ -1544,7 +1544,7 @@ void DcPresetLib::on_actionRename_triggered()
                 md.replace(_devDetails.PresetNameOffset,_devDetails.PresetNameLen,ba);
 
                 updatePresetChecksum(md);
-            
+
 
                 _workListData.replace(row,md);
 
@@ -1568,7 +1568,7 @@ void DcPresetLib::renameItemInWorklist(int row,const QString& newName)
     {
         DcMidiData md = _workListData.at(row);
         QString origName = md.mid(_devDetails.PresetNameOffset,_devDetails.PresetNameLen);
-        
+
         QByteArray ba = newName.toUpper().toUtf8();
 
         ba = ba.leftJustified(_devDetails.PresetNameLen,' ');
@@ -1680,15 +1680,15 @@ void DcPresetLib::drawWorklist()
     // Update the names in the work list
     QStringList names = presetListToBankPatchName(_workListData);
 
-    // Update the name list 
+    // Update the name list
     ui.workList->clear();
     ui.workList->addItems(names);
-    
+
     // Redraw the modified items
     for (int i = 0; i < _dirtyItemsIndex.size(); ++i)
     {
         int ridx = _dirtyItemsIndex.at(i);
-        
+
         // Indicate the list is modified
         QFont font = ui.workList->item(ridx)->font();
         font.setItalic(true);
@@ -1727,7 +1727,7 @@ void DcPresetLib::readPresetsComplete_entered()
 
     _deviceListData = _xferInMachine.getDataList();
     updateWorkListFromDeviceList();
-    
+
     // Keep track of what device this data was for
     _workListDataDeviceUid = _devDetails.getUid();
 
@@ -1790,7 +1790,7 @@ bool DcPresetLib::isBankPresetString( QString s )
 QStringList DcPresetLib::presetListToBankPatchName(QList<DcMidiData>& listData)
 {
     QStringList names;
-    for (int i = 0; i < listData.size(); ++i) 
+    for (int i = 0; i < listData.size(); ++i)
     {
         DcMidiData presetData = listData.at(i);
 
@@ -1825,7 +1825,7 @@ void DcPresetLib::on_actionLoad_One_triggered()
     QString defaultPresetFileName = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     QString lastOpened = settings.value("lastSinglePreset",defaultPresetFileName).toString();
 
-    // Is anything selected, if not, that's a programming error as this action should be 
+    // Is anything selected, if not, that's a programming error as this action should be
     // disabled until a selection
     int cur_idx = ui.workList->currentRow();
     if(cur_idx < 0)
@@ -1916,7 +1916,7 @@ void DcPresetLib::on_actionSave_One_triggered()
         qWarning() << "nothing selected";
         return;
     }
-    
+
     DcMidiData md = _workListData.at(curIdx);
     QString name = presetToName(md) + QString(".") + _devDetails.Name.toLower() + QString(".syx");
     name = name.replace(" ","_");
@@ -1926,7 +1926,7 @@ void DcPresetLib::on_actionSave_One_triggered()
     // Save the full working buffer
     QString fileName = QFileDialog::getSaveFileName(this,
         tr("Save One Presets"), name, tr("Preset File (*.syx)"));
-    
+
 
     if(!fileName.isEmpty())
     {
@@ -1969,7 +1969,7 @@ void DcPresetLib::on_actionOpen_triggered()
 
     if(!fileName.isEmpty())
     {
-        
+
         QList<DcMidiData> newPresetList;
         if(!loadPresetBinary(fileName,newPresetList))
         {
@@ -1977,13 +1977,13 @@ void DcPresetLib::on_actionOpen_triggered()
         }
         else
         {
-/*           
+/*
 
         if(newPresetList.length() < _maxPresetCount)
            {
                _lastErrorMsgStr.clear();
                _lastErrorMsg <<  "Operation will be aborted.\nThe preset file does not contain the correct number of presets.";
-                
+
                 dispErrorMsgBox();
                 return;
            }
@@ -2000,18 +2000,18 @@ void DcPresetLib::on_actionOpen_triggered()
 
 //-------------------------------------------------------------------------
 bool DcPresetLib::loadPresetBinary(const QString &fileName,QList<DcMidiData>& dataList)
-{ 
+{
     _lastErrorMsgStr.clear();
 
-    QFile file(fileName); 
+    QFile file(fileName);
 
-    if (!file.open(QIODevice::ReadOnly)) 
-    { 
+    if (!file.open(QIODevice::ReadOnly))
+    {
         _lastErrorMsg << "Unable to open the file:\n" << fileName;
-        return false; 
-    } 
-    
-    QDataStream in(&file); 
+        return false;
+    }
+
+    QDataStream in(&file);
 
     // Check the file size, is it at least one preset in length
     if(file.size() < _devDetails.PresetSize*_devDetails.PresetCount)
@@ -2046,7 +2046,7 @@ bool DcPresetLib::loadPresetBinary(const QString &fileName,QList<DcMidiData>& da
 
     file.close();
 
-    return true; 
+    return true;
 }
 
 //-------------------------------------------------------------------------
@@ -2054,15 +2054,15 @@ bool DcPresetLib::loadPresetBinary(const QString &fileName,QList<DcMidiData>& da
 bool DcPresetLib::loadPresetBinary( const QString &fileName,DcMidiData& md )
 {
     _lastErrorMsgStr.clear();
-    QFile file(fileName); 
+    QFile file(fileName);
 
-    if (!file.open(QIODevice::ReadOnly)) 
-    { 
+    if (!file.open(QIODevice::ReadOnly))
+    {
         _lastErrorMsg << "Unable to open the file:\n" << fileName;
-        return false; 
-    } 
+        return false;
+    }
 
-    QDataStream in(&file); 
+    QDataStream in(&file);
 
     // Check the file size, is it at least one preset in length
     if(file.size() < _devDetails.PresetSize)
@@ -2079,7 +2079,7 @@ bool DcPresetLib::loadPresetBinary( const QString &fileName,DcMidiData& md )
     }
 
     QByteArray ba(_devDetails.PresetSize,'\0');
-    
+
     in.readRawData(ba.data(),ba.length());
 
      md = ba;
@@ -2092,23 +2092,23 @@ bool DcPresetLib::loadPresetBinary( const QString &fileName,DcMidiData& md )
 
     file.close();
 
-    return true; 
+    return true;
 }
 
 bool DcPresetLib::savePresetBinary(const QString &fileName,const QList<DcMidiData>& dataList)
-{ 
+{
     _lastErrorMsgStr.clear();
-    QFile file(fileName); 
+    QFile file(fileName);
 
-    if (!file.open(QIODevice::WriteOnly)) 
-    { 
+    if (!file.open(QIODevice::WriteOnly))
+    {
         _lastErrorMsg << "Unable to open the file:\n" << fileName;
-        return false; 
-    } 
+        return false;
+    }
 
     QDataStream out(&file);   // we will serialize the data into the file
-    
-    for (int i = 0; i < dataList.size(); ++i) 
+
+    for (int i = 0; i < dataList.size(); ++i)
     {
         const QByteArray& ba = dataList.at(i).toByteArray();
         out.writeRawData(ba.data(),ba.length());
@@ -2116,26 +2116,26 @@ bool DcPresetLib::savePresetBinary(const QString &fileName,const QList<DcMidiDat
 
     file.close();
     DCLOG() << "Presets saved to: " << fileName;
-    return true; 
+    return true;
 }
 
 //-------------------------------------------------------------------------
 bool DcPresetLib::savePresetBinary( const QString &fileName,const DcMidiData& md )
 {
     _lastErrorMsgStr.clear();
-    QFile file(fileName); 
+    QFile file(fileName);
 
-    if (!file.open(QIODevice::WriteOnly)) 
-    { 
+    if (!file.open(QIODevice::WriteOnly))
+    {
         _lastErrorMsg << "Unable to open the file:\n" << fileName;
-        return false; 
-    } 
+        return false;
+    }
     QDataStream out(&file);   // we will serialize the data into the file
     out.writeRawData(md.data(),md.length());
     file.close();
     DCLOG() << "Preset saved to: " << fileName;
 
-    return true; 
+    return true;
 
 }
 
@@ -2149,7 +2149,7 @@ void DcPresetLib::backupDeviceList()
 
         if(QDir().exists(_devlistBackupPath))
         {
-            savePresetBinary(fullPath,_deviceListData);  
+            savePresetBinary(fullPath,_deviceListData);
         }
     }
 
@@ -2165,7 +2165,7 @@ void DcPresetLib::backupWorklist()
 
         if(QDir().exists(_worklistBackupPath))
         {
-            savePresetBinary(fullPath,_workListData);  
+            savePresetBinary(fullPath,_workListData);
         }
     }
 }
@@ -2177,7 +2177,7 @@ bool DcPresetLib::checkSyncState()
 
     // compare the work list with the device list and update the dirty list
     int len = qMin(_workListData.length(),_deviceListData.length());
-    for (int i = 0; i < len; ++i) 
+    for (int i = 0; i < len; ++i)
     {
         if(_workListData.at(i).toByteArray() != _deviceListData.at(i).toByteArray())
         {
@@ -2318,21 +2318,21 @@ void DcPresetLib::updateWorkListFromDeviceList()
 }
 
 //-------------------------------------------------------------------------
-// Experimental 
+// Experimental
 bool DcPresetLib::loadSysexFile( const QString &fileName,QList<DcMidiData>& dataList, QList<DcMidiData>* pRejectDataList /* = 0 */)
 {
     bool result = true;
     _lastErrorMsgStr.clear();
 
-    QFile file(fileName); 
+    QFile file(fileName);
 
-    if (!file.open(QIODevice::ReadOnly)) 
-    { 
+    if (!file.open(QIODevice::ReadOnly))
+    {
         _lastErrorMsg << "Unable to open the file:\n" << fileName;
-        return false; 
-    } 
+        return false;
+    }
 
-    QDataStream in(&file); 
+    QDataStream in(&file);
 
     // Load one preset in, see if it matches the current Manufacture
     unsigned char byte;
@@ -2355,18 +2355,18 @@ bool DcPresetLib::loadSysexFile( const QString &fileName,QList<DcMidiData>& data
             if(byte == 0xF7)
             {
                 md.appendNum(byte);
-                
-                if(0 == pRejectDataList) 
+
+                if(0 == pRejectDataList)
                 {
                     dataList.append(md);
-                } 
-                else 
+                }
+                else
                 {
                     bool reject = false;
                     // Apply the filter
                     foreach(DcMidiData rejectMd,*pRejectDataList)
                     {
-                        if(md.contains(rejectMd)) 
+                        if(md.contains(rejectMd))
                         {
                             reject = true;
                             break;
@@ -2378,7 +2378,7 @@ bool DcPresetLib::loadSysexFile( const QString &fileName,QList<DcMidiData>& data
                         dataList.append(md);
                     }
                 }
-                
+
                 lookForStatusByte = true;
             }
             else if(byte == 0xF0)
@@ -2386,15 +2386,15 @@ bool DcPresetLib::loadSysexFile( const QString &fileName,QList<DcMidiData>& data
                 // Terminate the MIDI stream
                 md.appendNum(0xF7);
 
-                if(0 == pRejectDataList) 
-                {
-                    dataList.append(md);
-                } 
-                else if(!pRejectDataList->contains(md)) 
+                if(0 == pRejectDataList)
                 {
                     dataList.append(md);
                 }
-                
+                else if(!pRejectDataList->contains(md))
+                {
+                    dataList.append(md);
+                }
+
                 md.clear();
                 md.appendNum(0xF0);
             }
@@ -2413,7 +2413,7 @@ bool DcPresetLib::loadSysexFile( const QString &fileName,QList<DcMidiData>& data
 
     file.close();
 
-    return result ; 
+    return result ;
 }
 
 //-------------------------------------------------------------------------
@@ -2431,10 +2431,10 @@ bool DcPresetLib::enableMidiMonitor( bool enable )
         QObject::connect(&_midiIn, &DcMidiIn::dataIn, this, &DcPresetLib::midiDataInToConHandler);
         QObject::connect(&_midiOut, &DcMidiOut::dataOutMonitor, this, &DcPresetLib::midiDataOutToConHandler);
     }
-    
+
     settings.setValue("console/midimonitor",enable);
     DCLOG() << "MIDI Monitor is " << (enable ? "ON" : "OFF");
-    
+
     return prevState;
 }
 
@@ -2459,7 +2459,7 @@ void DcPresetLib::conCmd_MidiMonCtrl(DcConArgs args)
     {
         *_con << "invalid argument: " << args.at(1).toString() << "\n";
     }
-    
+
 }
 
 //-------------------------------------------------------------------------
@@ -2467,7 +2467,7 @@ void DcPresetLib::conCmd_Fetch( DcConArgs args )
 {
     if(ui.fetchButton->isEnabled())
     {
-        
+
         int pc = args.at(1,_devDetails.PresetCount).toInt();
         if(pc)
         {
@@ -2478,9 +2478,9 @@ void DcPresetLib::conCmd_Fetch( DcConArgs args )
             *_con << "preset count is invalid\n";
             return;
         }
-        
+
         _presetOffset = 0;
-        
+
         int poffset = -1;
         QString s = args.at(2,"").toString();
         if(isBankPresetString(s))
@@ -2551,20 +2551,20 @@ void DcPresetLib::midiDataInToConHandler( const DcMidiData &data )
     {
         DCLOG() << "RX: " << data.toString();
     }
-    
+
     if(_con->isVisible())
     {
         _con->incCounterDisplay(data.length());
-        
-        // We expect the parsing to be done, e.g. if the legal sequence 
+
+        // We expect the parsing to be done, e.g. if the legal sequence
         // B0 F8 01 03 this code will not see it.
-        // 
+        //
         if(data == "F8")
         {
              if(!_debugControls.showMidiClock)
                  return;
         }
-        
+
         if(data == "FE")
         {
             if(!_debugControls.showMidiActiveSense)
@@ -2604,7 +2604,7 @@ void DcPresetLib::conCmd_MidiWriteFile( DcConArgs args )
 {
     QString fileName;
     QSettings settings;
-    
+
     // check args
     if(args.argCount() == 0)
     {
@@ -2629,7 +2629,7 @@ void DcPresetLib::conCmd_MidiWriteFile( DcConArgs args )
     // If the user has provided any filter strings, set them up
     if(args.argCount() > 1)
     {
-        
+
         for (int idx = 0; idx < (args.argCount() - 1); idx++)
         {
         	filterList << args.at(idx + 2).toString();
@@ -2644,7 +2644,7 @@ void DcPresetLib::conCmd_MidiWriteFile( DcConArgs args )
         return;
     }
 
- 
+
     ioMidiListToDevice(sysexList);
 
     *_con << "wrote " << sysexList.count() << " sysex messages from " << fileName << "\n";
@@ -2668,11 +2668,11 @@ void DcPresetLib::conCmd_GetUrl( DcConArgs args )
     {
         _fileDownloader = new DcFileDownloader(url, this);
     }
-    
+
     connect(_fileDownloader, SIGNAL(downloaded()), SLOT(conDownloadDone()));
-    
+
    *_con << "starting download from " << args.at(1).toString() << "\n";
-    
+
 }
 
 void DcPresetLib::conCmd_DbgControl( DcConArgs args )
@@ -2686,34 +2686,34 @@ void DcPresetLib::conCmd_DbgControl( DcConArgs args )
         *_con <<  "      showMidiClock : " << (_debugControls.showMidiClock ? "true\n" : "false\n");
         *_con << "      iotrace: " << (_debugControls.iotrace ? "true\n" : "false\n");
     }
-    else 
+    else
     {
     	QString dbgVal = args.first().toString();
-        
+
         if(dbgVal == "fetchCrippled")
         {
-            if(args.argCount() > 1 ) 
+            if(args.argCount() > 1 )
                 _debugControls.fetchCrippled = args.second().toBool();
-            else 
+            else
                 *_con <<  (_debugControls.fetchCrippled ? "true\n" : "false\n");
         }
         else if(dbgVal == "logIO")
         {
-            if(args.argCount() > 1 ) 
+            if(args.argCount() > 1 )
                 _debugControls.logIO = args.second().toBool();
             else
                 *_con <<  (_debugControls.logIO ? "true\n" : "false\n");
         }
         else if(dbgVal == "showMidiActiveSense")
         {
-            if(args.argCount() > 1 ) 
+            if(args.argCount() > 1 )
                 _debugControls.showMidiActiveSense = args.second().toBool();
             else
                 *_con <<  (_debugControls.showMidiActiveSense ? "true\n" : "false\n");
         }
         else if(dbgVal == "showMidiClock")
         {
-            if(args.argCount() > 1 ) 
+            if(args.argCount() > 1 )
                 _debugControls.showMidiClock = args.second().toBool();
             else
                 *_con <<  (_debugControls.showMidiClock ? "true\n" : "false\n");
@@ -2781,17 +2781,17 @@ void DcPresetLib::setupConsole()
     _con->addCmd("uuid",this,SLOT(conCmd_uuid(DcConArgs)),"Return a UUID");
     _con->addCmd("outn",this,SLOT(conCmd_outn(DcConArgs)),"<count> <midi hex bytes> - write midi bytes to connected device 'count' times" );
     _con->addCmd("bench",this,SLOT(conCmd_timeCall(DcConArgs)),"<count> <command string> - executes the command 'count' times and reports the average run-time in ms." );
-    
+
     _con->addCmd("goboot",this,SLOT(conCmd_switchToBootcode(DcConArgs)),"Transition the Strymon device into boot code" );
     _con->addCmd("exitboot",this,SLOT(conCmd_exitBootcode(DcConArgs)),"Exit from boot code" );
     _con->addCmd("selectbank",this,SLOT(conCmd_changeActiveBootBank(DcConArgs)),"While in boot code, select bank 0 or bank 1" );
-    
+
     _con->addCmd("info",this,SLOT(conCmd_getBootCodeInfo(DcConArgs)),"Display information about the boot code the contents of the code banks" );
     _con->addCmd("ioconf",this,SLOT(conCmd_ioConfig(DcConArgs)),"[<max msg sz> <delay per msg in microseconds> [<'true' if 3rd arg true, set 'safe mode' defaults>]] Displays or configures MIDI OUT data rate." );
 
     _con->addCmd("lsdev",this,SLOT(conCmd_listdevs(DcConArgs)),"[<pattern>] List the MIDI interface port names" );
-    
-    
+
+
     _con->addCmd("sleep",this,SLOT(conCmd_delay(DcConArgs)),"<time in micro-seconds> - sleep for give time" );
 
     // Factory/developer commands
@@ -2808,7 +2808,7 @@ void DcPresetLib::setupConsole()
     _con->addCmd("printenv",this,SLOT(conCmd_PrintEnvi(DcConArgs))," print the system environment");
 
     _con->setBaseDir(_dataPath);
-    
+
     // Call the defld command
     _con->execCmd("defld default_defs.bin");
 
@@ -2922,7 +2922,7 @@ void DcPresetLib::conCmd_lswl( DcConArgs args )
     {
         for (int r = 0; r < ui.workList->count() ; r++)
         {
-            *_con << ui.workList->item(r)->text() << "\n";	
+            *_con << ui.workList->item(r)->text() << "\n";
         }
     }
 }
@@ -2944,7 +2944,7 @@ void DcPresetLib::conCmd_qss( DcConArgs args )
                 QString st = _styleHistory.takeFirst();
                 qApp->setStyleSheet(st);
             }
-            
+
         }
         else
         {
@@ -2954,7 +2954,7 @@ void DcPresetLib::conCmd_qss( DcConArgs args )
             _styleHistory << qApp->styleSheet();
             qApp->setStyleSheet(file.readAll());
         }
-        
+
     }
 }
 
@@ -3062,7 +3062,7 @@ void DcPresetLib::conCmd_timeCall( DcConArgs args )
             outCmd += args.at(idx).toString() + " ";
         }
         outCmd = outCmd.trimmed();
-        
+
         quint64 delta = 0;
         for (int CmdCnt = 0; CmdCnt < cnt ; CmdCnt++)
         {
@@ -3076,7 +3076,7 @@ void DcPresetLib::conCmd_timeCall( DcConArgs args )
             delta +=  stop_time - start_time;
             //_con->execCmd("echo");
         }
-        
+
         if(cnt > 0)
         {
             qApp->processEvents();
@@ -3135,7 +3135,7 @@ void DcPresetLib::conCmd_getBootCodeInfo( DcConArgs args )
 {
     Q_UNUSED(args);
     DcBootControl dcfu(_midiIn,_midiOut,_devDetails);
-    DcBootCodeInfo info;    
+    DcBootCodeInfo info;
 
     if( args.oneArg() && args.first().toString().contains( QRegExp( "(safe|blind)" ) ) )
     {
@@ -3213,12 +3213,12 @@ void DcPresetLib::conCmd_ioConfig( DcConArgs args )
 void DcPresetLib::copySelectedPresets( QString numAndBank )
 {
     QList<QListWidgetItem *> itemsToMove = ui.workList->selectedItems();
-    
+
     if(!itemsToMove.count())
     {
         return;
     }
-    
+
     if(!isBankPresetString(numAndBank))
     {
         return;
@@ -3233,7 +3233,7 @@ void DcPresetLib::copySelectedPresets( QString numAndBank )
         dispErrorMsgBox("The destination preset/bank is not with in the preset/bank range of the current worklist");
         return;
     }
-    
+
     // The destination is within the worklist, so this calculation will work:
     int dstIdx = dstPresetNum - firstPresetNumberInWL;
 
@@ -3260,13 +3260,13 @@ void DcPresetLib::copySelectedPresets( QString numAndBank )
 
 void DcPresetLib::initInvalidPresets()
 {
-    
+
     DcMidiData srcPreset = _workListData.at(ui.workList->currentRow());
 
     // compare the work list with the device list and update the dirty list
     int len = _workListData.length();
 
-    for (int i = 0; i < len; ++i) 
+    for (int i = 0; i < len; ++i)
     {
         if(_workListData.at(i).contains("F0 00 01 55 XX XX 62 XX XX 47 F7"))
         {
@@ -3334,10 +3334,10 @@ bool DcPresetLib::midiDataToTextFile( QString fileName, QList<DcMidiData> cmdLis
 
     foreach(DcMidiData md, cmdList)
     {
-        out << md.toString(' ') << "\n";            
+        out << md.toString(' ') << "\n";
     }
     fout.close();
-    
+
     return true;
 }
 
@@ -3354,7 +3354,7 @@ bool DcPresetLib::stringListToTextFile( QString fileName, QStringList strList )
 
     foreach(QString str, strList)
     {
-        out << str << "\n";            
+        out << str << "\n";
     }
     fout.close();
 
@@ -3370,8 +3370,8 @@ bool DcPresetLib::midiDataToTextFile( QString fileName, DcMidiData data )
     }
 
     QTextStream out(&fout);
-    out << data.toString(' ') << "\n";            
-    
+    out << data.toString(' ') << "\n";
+
     fout.close();
 
     return true;
@@ -3385,7 +3385,7 @@ bool DcPresetLib::midiDataToBinFile( QString fileName, DcMidiData data )
         return false;
     }
     fout.write(data.toByteArray());
-    
+
     fout.close();
 
     return true;
@@ -3421,7 +3421,7 @@ void DcPresetLib::conCmd_cpsel( DcConArgs args )
     {
         // Create a preset index from the input (input should be in Num/Bank format)
         QString numBank = args.first("").toString();
-        
+
         if(numBank.isEmpty())
         {
             *_con << "Specify the destination in the NUM/BANK format, e.g. 02A or 34C\n";
@@ -3465,7 +3465,7 @@ void DcPresetLib::conCmd_ExportWorklistPresets( DcConArgs args )
             QString name = location + "_" + presetName + (etype.isEmpty() ? "\n" : QString("_" + etype));
 
             name = QDir::toNativeSeparators(path + "/" + name + ".syx");
-            
+
             midiDataToBinFile(name,p);
         }
 
@@ -3515,12 +3515,12 @@ void DcPresetLib::setFamilyDetails( DcDeviceDetails &details )
     details.FactoryPresetWriteHdr   = details.SOXHdr + "65";
 
     details.PresetRdResponce_NACK.setPattern(details.SOXHdr.toString() + QLatin1String("(62....47|47)F7"));
-    
+
 
     details.PresetWr_NAK.setPattern(details.SOXHdr.toString() + QLatin1String("....46F7"));
     details.PresetWr_ACK.setPattern(details.SOXHdr.toString() + QLatin1String("....45F7"));
-                                                                  
-    
+
+
     details.PresetSize              = 650;
     details.PresetNumberOffset      = 7;
     details.PresetStartOfDataOffset = 9;
@@ -3565,7 +3565,7 @@ bool DcPresetLib::updateDeviceDetails( const DcMidiData &data,DcDeviceDetails& d
     {
         rtval = false;
     }
-    
+
     if( fastfetch_feature_thresh != 9999 && details.FwVerInt >= fastfetch_feature_thresh )
     {
         DCLOG() << "Fastfetch feature auto enabled";
@@ -3599,7 +3599,7 @@ QString DcPresetLib::getEffectType( const DcMidiData &data )
         ROOM,
         HALL,
         PLATE,
-        SPRING,	
+        SPRING,
         SWELL,
         NUM_EFFECT_TYPES
     } ;
@@ -3607,7 +3607,7 @@ QString DcPresetLib::getEffectType( const DcMidiData &data )
 
     int etype = data.at(_devDetails.PresetNumberOffset + 2);
     QString rtval = "Unknown";
-    
+
     if(data.contains("01551203"))
     {
         switch (etype)
@@ -3692,14 +3692,14 @@ void DcPresetLib::exportPresetBundleToPath( QString fileName, QString &destPath 
     QDir().mkpath(path);
 
     DcDeviceDetails d = _devDetails;
-    
+
     QFile fout(QDir::toNativeSeparators(path + "/" + "preset_info.csv"));
 
     if (!fout.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         return;
     }
-    
+
     QTextStream out(&fout);
     out << "Preset Name,Location,Type\n";
 
@@ -3712,9 +3712,9 @@ void DcPresetLib::exportPresetBundleToPath( QString fileName, QString &destPath 
         QString etype = getEffectType(p);
 
         out << presetName + "," + location + (etype.isEmpty() ? "\n" : QString("," + etype + "\n"));
-        
+
         QString name = location + "_" + presetName + (etype.isEmpty() ? "\n" : QString("_" + etype));
-                
+
         name = QDir::toNativeSeparators(path + "/" + name + ".syx");
 
         midiDataToBinFile(name,p);
@@ -3729,7 +3729,7 @@ void DcPresetLib::conCmd_exitBootcode( DcConArgs args )
 {
    Q_UNUSED(args);
    DcBootControl bootctrl(_midiIn,_midiOut,_devDetails);
-   
+
    if( args.oneArg() && args.first().toString().contains( QRegExp( "(safe|blind)" ) ) )
    {
        bootctrl.setBlindMode( true );
@@ -3749,7 +3749,7 @@ void DcPresetLib::conCmd_exitBootcode( DcConArgs args )
             _machine.postEvent(new VerifyDeviceConnection());
         }
     }
-    
+
 }
 
 //-------------------------------------------------------------------------
@@ -3954,7 +3954,7 @@ void DcPresetLib::UpdateFirmwareHelper(const QString& FirmwareFile)
     DcBootControl bctrl( _midiIn,_midiOut,_devDetails);
 
     DcUpdateDialogMgr* udmgr = new DcUpdateDialogMgr( _updatesPath,&bctrl,_devDetails,this );
-    
+
     DcUpdateDialogMgr::DcUpdate_Result result = FirmwareFile.isEmpty() ? udmgr->getLatestAndShowDialog() : udmgr->justDownloadFile( FirmwareFile );
 
     if( result == DcUpdateDialogMgr::DcUpdate_Failed )

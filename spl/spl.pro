@@ -1,4 +1,4 @@
-QT       += core gui network 
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += BAD_MIDI_WORKAROUND
@@ -48,9 +48,9 @@ HEADERS  += DcPresetLib.h \
             MoveDialog.h \
             IoProgressDialog.h \
             DcDeviceDetails.h \
-            DcMidiDevDefs.h \ 
+            DcMidiDevDefs.h \
             DcXferMachine.h \
-            DcConsoleForm.h \
+            dcconsoleform.h \
             DcFileDownloader.h \
             MidiSettings.h \
             DcConArgs.h \
@@ -79,7 +79,7 @@ win32 {
 }
 
 macx {
-        LIBS += -lz -framework Carbon 
+        LIBS += -lz -framework Carbon
 }
 
 # Include DcMidi
@@ -91,6 +91,3 @@ else:macx:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/libdcmidi.a
 else:unix:PRE_TARGETDEPS += $$LIB_OUT/DcMidi/$$DESTDIR/libdcmidi.a
 
 ### INCLUDEPATH += $$top_srcdir
-
-
-
