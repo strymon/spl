@@ -589,7 +589,7 @@
   <customwidget>
    <class>DcConsoleForm</class>
    <extends>QWidget</extends>
-   <header>DcConsoleForm.h</header>
+   <header>dcconsoleform.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
